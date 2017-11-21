@@ -24,9 +24,9 @@ public class subject {
         ratingSub = _rating;
     }
 
-    public void addGrade(int _grade, boolean _iswritten, int _ratingGrade){
+    public void addGrade(int _grade, boolean _iswritten, int _ratingGrade, String _note){
         //Adding new Grade
-        grades.add(new grade(_grade, _iswritten, _ratingGrade));
+        grades.add(new grade(_grade, _iswritten, _ratingGrade, _note));
     }
 
     //Returns the gradePointAverage

@@ -29,7 +29,7 @@ import de.tk.annapp.subject;
 public class gradesFragment extends Fragment {
     View root;
 
-    private SubjectManager subjectManager = new SubjectManager();
+    private SubjectManager subjectManager;
 
     RecyclerView recyclerView;
 
@@ -39,6 +39,9 @@ public class gradesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle("Noten");
         root = inflater.inflate(R.layout.fragment_grades, container, false);
+
+        //Get Singelton
+        subjectManager = SubjectManager.getInstance();
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -70,18 +73,18 @@ public class gradesFragment extends Fragment {
         subjectManager.addSubject("Mathe", 2);
         subjectManager.addSubject("Deutsch", 2);
 
-        subjectManager.getSubjectByName("Deutsch").addGrade(3, true, 1);
+        subjectManager.getSubjectByName("Deutsch").addGrade(3, true, 1, "grrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
 
         subject mathe = subjectManager.getSubjectByName("Mathe");
         System.out.println(mathe.name);
 
-        mathe.addGrade(4, true, 2);
-        mathe.addGrade(3, true, 1);
+        mathe.addGrade(4, true, 2, "KLAUSUR");
+        mathe.addGrade(3, true, 1, "weffffffffffffffffffffffffffffffffffffffffff");
 
         System.out.println(mathe.getGradePointAverage());
 
-        mathe.addGrade(1, false , 3);
-        mathe.addGrade(2, false, 1);
+        mathe.addGrade(1, false , 3, "wfeqqqqqtttttttttttttttttttttttt");
+        mathe.addGrade(2, false, 1, "gggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
 
         System.out.println(mathe.getGradePointAverage());
 

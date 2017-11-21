@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ms.square.android.expandabletextview.ExpandableTextView;
+
 import java.util.ArrayList;
 
 import de.tk.annapp.R;
@@ -31,7 +33,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     @Override
     public void onBindViewHolder(RecyclerVH holder, int position) {
         holder.gradeTxt.setText("" + grades.get(position).grade);
-        //holder.datetxt.setText(grades.get(position).date.toString());
+        holder.expandableTextView.setText(grades.get(position).note + " Wertung: " + grades.get(position).rating);
     }
 
     @Override
@@ -41,13 +43,13 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     //Viewholder Class
     public class RecyclerVH extends RecyclerView.ViewHolder{
-        TextView datetxt;
         TextView gradeTxt;
+        ExpandableTextView expandableTextView;
 
         public RecyclerVH(View itemView){
             super(itemView);
 
-            datetxt = itemView.findViewById(R.id.item_grade_date);
+            expandableTextView = itemView.findViewById(R.id.expandable_text_view);
             gradeTxt = itemView.findViewById(R.id.item_grade_grade);
         }
     }

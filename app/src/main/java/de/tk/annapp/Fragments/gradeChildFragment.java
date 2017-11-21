@@ -21,7 +21,7 @@ public class gradeChildFragment extends Fragment {
 
     RecyclerView recyclerView;
 
-    private SubjectManager subjectManager = new SubjectManager();
+    private SubjectManager subjectManager;
     private subject subject;
     private ArrayList<grade> grades = new ArrayList<>();
 
@@ -32,10 +32,12 @@ public class gradeChildFragment extends Fragment {
         getActivity().setTitle(subjectName);
         root = inflater.inflate(R.layout.fragment_gradeschild, container, false);
 
+        subjectManager = SubjectManager.getInstance();
+
         subjectManager.addSubject("Mathe", 2);
-        subjectManager.getSubjectByName(subjectName).addGrade(3,true, 1);
-        subjectManager.getSubjectByName(subjectName).addGrade(4,true, 1);
-        subjectManager.getSubjectByName(subjectName).addGrade(2,true, 1);
+        subjectManager.getSubjectByName(subjectName).addGrade(3,true, 1, "gffffffffffffffffffffffffffffffffffffffff");
+        subjectManager.getSubjectByName(subjectName).addGrade(4,true, 1, "gggggggggggggggggggggggggggggggggggg");
+        subjectManager.getSubjectByName(subjectName).addGrade(2,true, 1, "gggggggggggggggggggggggggggggggggggggg");
 
         subject = subjectManager.getSubjectByName(subjectName);
 

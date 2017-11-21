@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 
 import de.tk.annapp.R;
 
-/**
- * Created by Tobi on 20.09.2017.
- */
 
 public class GradeInputFragment extends Fragment {
     View root;
@@ -20,7 +17,7 @@ public class GradeInputFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().setTitle("AnnaNews");
-        root = inflater.inflate(R.layout.fragment_annanews, container, false);
+        root = inflater.inflate(R.layout.fragment_grade_input, container, false);
         return root;
     }
 }

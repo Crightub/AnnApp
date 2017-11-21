@@ -11,15 +11,14 @@ public class grade {
     //grade iswritten = true;
     boolean iswritten;
 
-    int rating;
+    public int rating;
 
-    //date when the grade was added
-    public Date date;
+    public String note;
 
-    public grade(int _grade, boolean _iswritten, int _rating){
+    public grade(int _grade, boolean _iswritten, int _rating, String _note){
         grade = _grade;
         iswritten = _iswritten;
         rating = _rating;
-        date = Calendar.getInstance().getTime();
+        note = _note;
     }
 }

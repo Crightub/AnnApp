@@ -5,6 +5,17 @@ import java.util.ArrayList;
 
 public class SubjectManager {
 
+    private static final SubjectManager subjectManager = new SubjectManager();
+
+    private SubjectManager(){
+        System.out.println("Create SubjetManager...");
+    }
+
+    //Returns the singelton subjectManager
+    public static SubjectManager getInstance(){
+        return subjectManager;
+    }
+
     //Contains all subjects
     ArrayList<subject> subjects = new ArrayList<>();
 
