@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_myday"
+            android:icon="@drawable/ic_myday"
+            android:title="Mein Tag" />
+        <item
+            android:id="@+id/nav_timetable"
+            android:icon="@drawable/ic_timetable"
+            android:title="Stundenplan" />
+        <item
+            android:id="@+id/nav_grades"
+            android:icon="@drawable/ic_grade"
+            android:title="Noten" />
+        <item
+            android:id="@+id/nav_tasks"
+            android:icon="@drawable/ic_task"
+            android:title="Aufgaben"/>
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/ic_calendar"
+            android:title="Schulkalender"/>
+        <item
+            android:id="@+id/nav_privattuition"
+            android:icon="@drawable/ic_privattuition"
+            android:title="Nachhilfe"/>
+        <item
+            android:id="@+id/nav_saleofschoolsupplies"
+            android:icon="@drawable/ic_saleofschoolsupplies"
+            android:title="Schulsachenverkauf"/>
+        <item
+            android:id="@+id/nav_loststuff"
+            android:icon="@drawable/ic_loststuff"
+            android:title="Fundsachen"/>
+        <item
+            android:id="@+id/nav_annanews"
+            android:title="AnnaNews"/>
+    </group>
+
+</menu>
