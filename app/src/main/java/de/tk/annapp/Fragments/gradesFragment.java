@@ -15,11 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 
 
 import java.util.ArrayList;
+
+import javax.security.auth.Subject;
 
 import de.tk.annapp.R;
 import de.tk.annapp.Recycler.RVAdapterSubjectList;
@@ -28,6 +32,8 @@ import de.tk.annapp.subject;
 
 public class gradesFragment extends Fragment {
     View root;
+
+    boolean isWrittenBool;
 
     private SubjectManager subjectManager;
 
@@ -102,10 +108,18 @@ public class gradesFragment extends Fragment {
 
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
         final  EditText ratingInput =(EditText) mView.findViewById(R.id.ratingInput);
+        final EditText note = (EditText) mView.findViewById(R.id.note);
 
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection);
 
         String[] subjectNames;
+
+
+        final RadioButton isWritten = (RadioButton) mView.findViewById(R.id.isWritten);
+
+        final RadioButton isNotWritten = (RadioButton) mView.findViewById(R.id.isNotWritten);
+
+
 
 
         ad      .setTitle("Note hinzufügen")
@@ -113,7 +127,15 @@ public class gradesFragment extends Fragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO adding grades to arrayList from Input to correct subject
+                        //testing which button is active for decicion whether your grade is written or wheter it's not
+                        if(isWritten.isChecked())
+                            isWrittenBool = true;
+                        else if(isNotWritten.isChecked())
+                            isWrittenBool = false;
+
+
+                        subject subject = subjectManager.getSubjectByName( "Mathe" /*later ... if spinner is working : subjectSelection.getSelectedItem().toString()*/);
+                        subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, Integer.valueOf(ratingInput.getText().toString()), note.getText().toString());
 
                     }
                 })
