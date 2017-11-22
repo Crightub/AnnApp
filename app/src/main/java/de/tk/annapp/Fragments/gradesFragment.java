@@ -102,8 +102,6 @@ public class gradesFragment extends Fragment {
 
         AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
 
-
-
         View mView = getLayoutInflater().inflate(R.layout.fragment_grade_input, null);
 
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
