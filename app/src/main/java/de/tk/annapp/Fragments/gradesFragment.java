@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -29,6 +30,9 @@ import de.tk.annapp.R;
 import de.tk.annapp.Recycler.RVAdapterSubjectList;
 import de.tk.annapp.SubjectManager;
 import de.tk.annapp.subject;
+
+import static android.R.layout.simple_spinner_dropdown_item;
+import static android.R.layout.simple_spinner_item;
 
 public class gradesFragment extends Fragment {
     View root;
@@ -110,9 +114,22 @@ public class gradesFragment extends Fragment {
         final  EditText ratingInput =(EditText) mView.findViewById(R.id.ratingInput);
         final EditText note = (EditText) mView.findViewById(R.id.note);
 
+        ArrayList<String> subjectNames = new ArrayList<>();
+
+        for (subject s :
+                subjects) {
+            subjectNames.add(s.name);
+        }
+
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection);
 
-        String[] subjectNames;
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, subjectNames);
+
+        subjectSelection.setAdapter(adapter);
+
+
+
+
 
 
         final RadioButton isWritten = (RadioButton) mView.findViewById(R.id.isWritten);
@@ -133,12 +150,38 @@ public class gradesFragment extends Fragment {
                         else if(isNotWritten.isChecked())
                             isWrittenBool = false;
 
+                        if(gradeInput.getText().toString().isEmpty() || ratingInput.getText().toString().isEmpty()){
+                            createAlertDialog("Achtung", "Bitte füllen Sie alle notwendigen Felder aus!");
+                            return;
+                        }
 
-                        subject subject = subjectManager.getSubjectByName( "Mathe" /*later ... if spinner is working : subjectSelection.getSelectedItem().toString()*/);
+
+
+                        subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, Integer.valueOf(ratingInput.getText().toString()), note.getText().toString());
 
                     }
                 })
+                .show();
+    }
+
+    void createAlertDialog(String title, String text){
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this.getContext());
+        }
+        builder.setTitle(title)
+                .setMessage(text)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            createInputDialog();
+                        }
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
 
