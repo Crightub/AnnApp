@@ -5,26 +5,20 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
 
 import java.util.ArrayList;
-
-import javax.security.auth.Subject;
 
 import de.tk.annapp.R;
 import de.tk.annapp.Recycler.RVAdapterSubjectList;
@@ -32,7 +26,6 @@ import de.tk.annapp.SubjectManager;
 import de.tk.annapp.subject;
 
 import static android.R.layout.simple_spinner_dropdown_item;
-import static android.R.layout.simple_spinner_item;
 
 public class gradesFragment extends Fragment {
     View root;
@@ -111,6 +104,14 @@ public class gradesFragment extends Fragment {
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
         final  EditText ratingInput =(EditText) mView.findViewById(R.id.ratingInput);
         final EditText note = (EditText) mView.findViewById(R.id.note);
+        final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnHelp);
+
+        btnHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createAlertDialog("Wertung", "Die Wertung ist der Betrag, der das Verhältnis zu den anderen Noten des selben Types bestimmt.\n\nz.B.:\nWertung: 2\nDie Note wird doppelt so stark einberechnet wie andere Noten.\n\nWertung: 0,5\nDie Note wird halb so stark einberechnet wie andere Noten.", 0);
+            }
+        });
 
         ArrayList<String> subjectNames = new ArrayList<>();
 
@@ -142,14 +143,14 @@ public class gradesFragment extends Fragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //testing which button is active for decicion whether your grade is written or wheter it's not
+                        //testing which button is active for decision whether your grade is written or whether it's not
                         if(isWritten.isChecked())
                             isWrittenBool = true;
                         else if(isNotWritten.isChecked())
                             isWrittenBool = false;
 
                         if(gradeInput.getText().toString().isEmpty() || ratingInput.getText().toString().isEmpty()){
-                            createAlertDialog("Achtung", "Bitte füllen Sie alle notwendigen Felder aus!");
+                            createAlertDialog("Achtung", "Bitte füllen Sie alle notwendigen Felder aus!", android.R.drawable.ic_dialog_alert);
                             return;
                         }
 
@@ -163,7 +164,7 @@ public class gradesFragment extends Fragment {
                 .show();
     }
 
-    void createAlertDialog(String title, String text){
+    void createAlertDialog(String title, String text, int ic){
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
@@ -179,7 +180,7 @@ public class gradesFragment extends Fragment {
                         }
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(ic)
                 .show();
     }
 
