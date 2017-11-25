@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#ff9800</color>
     <color name="colorAccent">#2196f3</color>
     <color name="rvItemColor">#616161</color>
+    <color name="colorPrimary2">#63FF00</color>
+    <color name="colorPrimaryDark2">#14E80C</color>
+    <color name="colorAccent2">#FFF90D</color>
 </resources>

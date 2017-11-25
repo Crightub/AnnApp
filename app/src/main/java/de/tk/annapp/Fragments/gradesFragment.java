@@ -50,7 +50,7 @@ public class gradesFragment extends Fragment {
         getActivity().setTitle("Noten");
         root = inflater.inflate(R.layout.fragment_grades, container, false);
 
-        //Get Singelton
+        //Get Singelton subjectManager
         subjectManager = SubjectManager.getInstance();
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd);
