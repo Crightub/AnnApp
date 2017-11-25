@@ -1,6 +1,10 @@
 package de.tk.annapp;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import java.util.ArrayList;
 
 public class SubjectManager {
@@ -9,6 +13,7 @@ public class SubjectManager {
 
     private SubjectManager(){
         System.out.println("Create SubjetManager...");
+        load();
     }
 
     //Returns the singelton subjectManager
@@ -47,5 +52,10 @@ public class SubjectManager {
         wholeGradeAverage /= subjects.size();
 
         return wholeGradeAverage;
+    }
+
+    public void load()
+    {
+
     }
 }

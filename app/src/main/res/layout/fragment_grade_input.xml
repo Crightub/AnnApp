@@ -25,29 +25,6 @@
             android:inputType="number"
             android:hint="Note"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/ratingInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Wertung"
-                android:inputType="numberDecimal" />
-
-            <ImageView
-                android:id="@+id/btnHelp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_help"
-                android:layout_centerVertical="true"
-                android:layout_margin="5dp"
-                android:text="Button"/>
-        </RelativeLayout>
-
         <EditText
             android:id="@+id/note"
             android:layout_width="match_parent"
@@ -58,7 +35,7 @@
 
         <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checkedButton="@+id/isNotWritten"
             android:orientation="horizontal">
@@ -78,6 +55,46 @@
                 android:text="schriftlich" />
 
         </RadioGroup>
+
+        <Button
+            android:id="@+id/btnExtra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:background="#00000000"
+            android:text="erweitert"
+            android:textColor="@color/colorAccent" />
+
+        <LinearLayout
+            android:id="@+id/extraLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/ratingInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Wertung"
+                    android:inputType="numberDecimal" />
+
+                <ImageView
+                    android:id="@+id/btnHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/ic_help"
+                    android:text="Button" />
+            </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 </FrameLayout>

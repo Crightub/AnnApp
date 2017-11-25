@@ -12,8 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
@@ -108,6 +110,18 @@ public class gradesFragment extends Fragment {
         final  EditText ratingInput =(EditText) mView.findViewById(R.id.ratingInput);
         final EditText note = (EditText) mView.findViewById(R.id.note);
         final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnHelp);
+        final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
+        final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
+
+        btnExtra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(extraLayout.getVisibility() != View.VISIBLE)
+                    extraLayout.setVisibility(View.VISIBLE);
+                else
+                    extraLayout.setVisibility(View.GONE);
+            }
+        });
 
         btnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,20 +155,26 @@ public class gradesFragment extends Fragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
+                        float rating = 1;
+
                         //testing which button is active for decision whether your grade is written or whether it's not
                         if(isWritten.isChecked())
                             isWrittenBool = true;
                         else if(isNotWritten.isChecked())
                             isWrittenBool = false;
 
-                        if(gradeInput.getText().toString().isEmpty() || ratingInput.getText().toString().isEmpty()){
+                        if(gradeInput.getText().toString().isEmpty()){
                             createAlertDialog("Achtung", "Bitte füllen Sie alle notwendigen Felder aus!", android.R.drawable.ic_dialog_alert);
                             return;
                         }
 
+                        if(!ratingInput.getText().toString().isEmpty())
+                            rating = Float.parseFloat(ratingInput.getText().toString());
+
 
                         subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
-                        subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, Float.valueOf(ratingInput.getText().toString()), note.getText().toString());
+                        subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
                         recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjects));
                     }
                 })
@@ -172,9 +192,7 @@ public class gradesFragment extends Fragment {
                 .setMessage(text)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            createInputDialog();
-                        }
+                        createInputDialog();
                     }
                 })
                 .setIcon(ic)
