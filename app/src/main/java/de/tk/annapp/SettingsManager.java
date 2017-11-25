@@ -1,18 +1,14 @@
 package de.tk.annapp;
 
-/**
- * Created by Tobias Kiehnlein on 25.11.2017.
- */
-
 public class SettingsManager {
 
     private static final SettingsManager settingsManager = new SettingsManager();
 
     private SettingsManager(){
-        System.out.println("Create SubjetManager...");
+        System.out.println("Create SettingsManager...");
     }
 
-    //Returns the singelton subjectManager
+    //Returns the singelton settingsManager
     public static SettingsManager getInstance(){
         return settingsManager;
     }

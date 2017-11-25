@@ -154,7 +154,7 @@ public class gradesFragment extends Fragment {
 
 
                         subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
-                        subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, Integer.valueOf(ratingInput.getText().toString()), note.getText().toString());
+                        subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, Float.valueOf(ratingInput.getText().toString()), note.getText().toString());
                         recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjects));
                     }
                 })
