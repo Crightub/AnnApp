@@ -61,7 +61,10 @@ public class gradesFragment extends Fragment {
 
         recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjects));
 
-        addTestGrades();
+        //addTestGrades();
+
+        subjectManager.addSubject("Mathe", 2);
+        subjectManager.addSubject("Deutsch", 2);
 
         subjects.add(subjectManager.getSubjectByName("Mathe"));
         subjects.add(subjectManager.getSubjectByName("Deutsch"));
@@ -69,7 +72,7 @@ public class gradesFragment extends Fragment {
         return root;
     }
 
-
+/*
     private void addTestGrades(){
         subjectManager.addSubject("Mathe", 2);
         subjectManager.addSubject("Deutsch", 2);
@@ -90,7 +93,7 @@ public class gradesFragment extends Fragment {
         System.out.println(mathe.getGradePointAverage());
 
         System.out.println("" + subjectManager.getWholeGradeAverage());
-    }
+    }*/
 
     public void createInputDialog(){
 
@@ -126,14 +129,9 @@ public class gradesFragment extends Fragment {
 
         subjectSelection.setAdapter(adapter);
 
+        final RadioButton isWritten = mView.findViewById(R.id.isWritten);
 
-
-
-
-
-        final RadioButton isWritten = (RadioButton) mView.findViewById(R.id.isWritten);
-
-        final RadioButton isNotWritten = (RadioButton) mView.findViewById(R.id.isNotWritten);
+        final RadioButton isNotWritten = mView.findViewById(R.id.isNotWritten);
 
 
 
@@ -155,10 +153,9 @@ public class gradesFragment extends Fragment {
                         }
 
 
-
                         subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, Integer.valueOf(ratingInput.getText().toString()), note.getText().toString());
-
+                        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjects));
                     }
                 })
                 .show();
@@ -183,5 +180,4 @@ public class gradesFragment extends Fragment {
                 .setIcon(ic)
                 .show();
     }
-
 }

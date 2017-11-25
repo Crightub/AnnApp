@@ -11,11 +11,11 @@ public class grade {
     //grade iswritten = true;
     boolean iswritten;
 
-    public int rating;
+    public float rating;
 
     public String note;
 
-    public grade(int _grade, boolean _iswritten, int _rating, String _note){
+    public grade(int _grade, boolean _iswritten, float _rating, String _note){
         grade = _grade;
         iswritten = _iswritten;
         rating = _rating;

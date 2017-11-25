@@ -24,7 +24,7 @@ public class subject {
         ratingSub = _rating;
     }
 
-    public void addGrade(int _grade, boolean _iswritten, int _ratingGrade, String _note){
+    public void addGrade(int _grade, boolean _iswritten, float _ratingGrade, String _note){
         //Adding new Grade
         grades.add(new grade(_grade, _iswritten, _ratingGrade, _note));
     }
@@ -72,6 +72,7 @@ public class subject {
         return ( (float) ( (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) ) ) / pow;
     }
 
+    //Returns all Grades
     public ArrayList<grade> getAllGrades(){
         return grades;
     }

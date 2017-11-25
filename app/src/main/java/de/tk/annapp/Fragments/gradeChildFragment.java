@@ -2,8 +2,6 @@ package de.tk.annapp.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,10 @@ import de.tk.annapp.Recycler.RVAdapterGradeList;
 import de.tk.annapp.SubjectManager;
 import de.tk.annapp.grade;
 import de.tk.annapp.subject;
+
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
 
 public class gradeChildFragment extends Fragment {
     View root;
@@ -34,11 +36,6 @@ public class gradeChildFragment extends Fragment {
 
         subjectManager = SubjectManager.getInstance();
 
-        subjectManager.addSubject("Mathe", 2);
-        subjectManager.getSubjectByName(subjectName).addGrade(3,true, 1, "gffffffffffffffffffffffffffffffffffffffff");
-        subjectManager.getSubjectByName(subjectName).addGrade(4,true, 1, "gggggggggggggggggggggggggggggggggggg");
-        subjectManager.getSubjectByName(subjectName).addGrade(2,true, 1, "gggggggggggggggggggggggggggggggggggggg");
-
         subject = subjectManager.getSubjectByName(subjectName);
 
         grades = this.subject.getAllGrades();
@@ -53,3 +50,4 @@ public class gradeChildFragment extends Fragment {
     }
 
 }
+
