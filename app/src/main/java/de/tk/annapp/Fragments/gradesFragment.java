@@ -58,9 +58,7 @@ public class gradesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 System.out.println("bla");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    createInputDialog();
-                }
+                createInputDialog();
             }
         });
 
@@ -101,14 +99,14 @@ public class gradesFragment extends Fragment {
         System.out.println("" + subjectManager.getWholeGradeAverage());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void createInputDialog(){
 
         AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
 
 
 
-        View mView = getLayoutInflater().inflate(R.layout.fragment_grade_input, null);
+        //View mView = getLayoutInflater().inflate(R.layout.fragment_grade_input, null);
+        View mView = View.inflate(this.getContext(), R.layout.fragment_grade_input, null);
 
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
         final  EditText ratingInput =(EditText) mView.findViewById(R.id.ratingInput);
