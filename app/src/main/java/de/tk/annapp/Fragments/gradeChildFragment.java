@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 import de.tk.annapp.R;
 import de.tk.annapp.Recycler.RVAdapterGradeList;
+import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
-import de.tk.annapp.grade;
-import de.tk.annapp.subject;
+import de.tk.annapp.Grade;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,8 +24,8 @@ public class gradeChildFragment extends Fragment {
     RecyclerView recyclerView;
 
     private SubjectManager subjectManager;
-    private subject subject;
-    private ArrayList<grade> grades = new ArrayList<>();
+    private Subject subject;
+    private ArrayList<Grade> grades = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

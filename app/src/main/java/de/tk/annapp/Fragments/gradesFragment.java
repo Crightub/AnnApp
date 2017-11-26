@@ -24,8 +24,8 @@ import java.util.ArrayList;
 
 import de.tk.annapp.R;
 import de.tk.annapp.Recycler.RVAdapterSubjectList;
+import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
-import de.tk.annapp.subject;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 
@@ -38,7 +38,7 @@ public class gradesFragment extends Fragment {
 
     RecyclerView recyclerView;
 
-    private ArrayList<subject> subjects = new ArrayList<>();
+    private ArrayList<Subject> subjects = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +47,8 @@ public class gradesFragment extends Fragment {
 
         //Get Singelton subjectManager
         subjectManager = SubjectManager.getInstance();
+
+        //TODO subjectManager.load(getContext(), "subjects");
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +83,7 @@ public class gradesFragment extends Fragment {
 
         subjectManager.getSubjectByName("Deutsch").addGrade(3, true, 1, "grrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
 
-        subject mathe = subjectManager.getSubjectByName("Mathe");
+        Subject mathe = subjectManager.getSubjectByName("Mathe");
         System.out.println(mathe.name);
 
         mathe.addGrade(4, true, 2, "KLAUSUR");
@@ -132,7 +134,7 @@ public class gradesFragment extends Fragment {
 
         ArrayList<String> subjectNames = new ArrayList<>();
 
-        for (subject s :
+        for (Subject s :
                 subjects) {
             subjectNames.add(s.name);
         }
@@ -158,7 +160,7 @@ public class gradesFragment extends Fragment {
 
                         float rating = 1;
 
-                        //testing which button is active for decision whether your grade is written or whether it's not
+                        //testing which button is active for decision whether your Grade is written or whether it's not
                         if(isWritten.isChecked())
                             isWrittenBool = true;
                         else if(isNotWritten.isChecked())
@@ -173,9 +175,10 @@ public class gradesFragment extends Fragment {
                             rating = Float.parseFloat(ratingInput.getText().toString());
 
 
-                        subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
+                        Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
                         recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjects));
+                        //TODO subjectManager.save(getContext(), "subjects");
                     }
                 })
                 .show();

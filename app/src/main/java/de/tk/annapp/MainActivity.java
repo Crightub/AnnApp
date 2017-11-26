@@ -15,18 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import de.tk.annapp.Fragments.annanewsFragment;
-import de.tk.annapp.Fragments.calendarFragment;
-import de.tk.annapp.Fragments.feedbackFragment;
-import de.tk.annapp.Fragments.gradeChildFragment;
-import de.tk.annapp.Fragments.gradesFragment;
-import de.tk.annapp.Fragments.loststuffFragment;
-import de.tk.annapp.Fragments.mydayFragment;
-import de.tk.annapp.Fragments.privatetuitionFragment;
-import de.tk.annapp.Fragments.saleofschoolsuppliesFragment;
-import de.tk.annapp.Fragments.settingsFragment;
-import de.tk.annapp.Fragments.tasksFragment;
-import de.tk.annapp.Fragments.timetableFragment;
+import de.tk.annapp.Fragments.*;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

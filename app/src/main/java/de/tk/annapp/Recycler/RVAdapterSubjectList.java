@@ -11,14 +11,14 @@ import java.util.ArrayList;
 
 import de.tk.annapp.R;
 
-import de.tk.annapp.subject;
+import de.tk.annapp.Subject;
 
 public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectList.RecyclerVH> {
 
     Context c;
-    private ArrayList<subject> subjects = new ArrayList<>();
+    private ArrayList<Subject> subjects = new ArrayList<>();
 
-    public RVAdapterSubjectList(Context _c,  ArrayList<subject> _subjects){
+    public RVAdapterSubjectList(Context _c,  ArrayList<Subject> _subjects){
         c = _c;
         subjects = _subjects;
     }

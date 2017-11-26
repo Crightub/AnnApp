@@ -11,15 +11,15 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.ArrayList;
 
+import de.tk.annapp.Grade;
 import de.tk.annapp.R;
-import de.tk.annapp.grade;
 
 public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.RecyclerVH> {
 
     Context c;
-    private ArrayList<grade> grades = new ArrayList<>();
+    private ArrayList<Grade> grades = new ArrayList<>();
 
-    public RVAdapterGradeList(Context _c, ArrayList<grade> _grades){
+    public RVAdapterGradeList(Context _c, ArrayList<Grade> _grades){
         c = _c;
         grades = _grades;
     }
