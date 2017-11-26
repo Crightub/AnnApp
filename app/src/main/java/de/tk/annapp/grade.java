@@ -9,7 +9,7 @@ public class grade {
     public int grade;
 
     //grade iswritten = true;
-    boolean iswritten;
+    public boolean iswritten;
 
     public float rating;
 

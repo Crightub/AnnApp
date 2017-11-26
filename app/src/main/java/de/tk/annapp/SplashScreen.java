@@ -10,16 +10,13 @@ import android.widget.VideoView;
 public class SplashScreen extends Activity {
 
     // Splash screen timer
-    private static int SPLASH_TIME_OUT = 4500;
+    private static int SPLASH_TIME_OUT = 800;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        //VideoView vw = (VideoView) findViewById(R.id.videoView);
-        //vw.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bootingscreen_annapp));
-        //vw.start();
 
         new Handler().postDelayed(new Runnable() {
 

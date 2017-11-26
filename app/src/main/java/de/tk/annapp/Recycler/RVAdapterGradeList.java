@@ -33,7 +33,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     @Override
     public void onBindViewHolder(RecyclerVH holder, int position) {
         holder.gradeTxt.setText("" + grades.get(position).grade);
-        holder.expandableTextView.setText(grades.get(position).note + " Wertung: " + grades.get(position).rating);
+        holder.expandableTextView.setText(grades.get(position).note + "\nWertung: " + grades.get(position).rating);
     }
 
     @Override
