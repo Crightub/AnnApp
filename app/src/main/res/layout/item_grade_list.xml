@@ -23,32 +23,30 @@
 
 
         <com.ms.square.android.expandabletextview.ExpandableTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/expandable_text_view"
-            appNs:maxCollapsedLines="1"
-            appNs:animDuration="200"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="12dp"
-            >
+            appNs:animDuration="200"
+            appNs:maxCollapsedLines="1">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/expandable_text"
-                android:textColor="@color/rvItemColor"
-                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="25dp"
-                />
+                android:textColor="@color/rvItemColor"
+                android:textSize="16sp" />
 
             <ImageButton
+                android:id="@+id/expand_collapse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/expand_collapse"
                 android:layout_gravity="end|bottom"
-                android:background="@android:color/transparent"
                 android:layout_marginEnd="5dp"
-                android:textAlignment="viewEnd"/>
+                android:background="@android:color/transparent"
+                android:textAlignment="viewEnd" />
 
         </com.ms.square.android.expandabletextview.ExpandableTextView>
 
