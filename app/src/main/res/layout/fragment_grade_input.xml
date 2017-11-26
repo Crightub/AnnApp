@@ -25,14 +25,6 @@
             android:inputType="number"
             android:hint="Note"/>
 
-        <EditText
-            android:id="@+id/note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Notiz"
-            android:inputType="textPersonName" />
-
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,6 +63,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="gone">
+
+            <EditText
+                android:id="@+id/note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Notiz"
+                android:inputType="textPersonName" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

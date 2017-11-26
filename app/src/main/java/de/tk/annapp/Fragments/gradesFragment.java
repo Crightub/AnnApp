@@ -48,7 +48,7 @@ public class gradesFragment extends Fragment {
         //Get Singelton subjectManager
         subjectManager = SubjectManager.getInstance();
 
-        //TODO subjectManager.load(getContext(), "subjects");
+        subjectManager.load(getContext(), "subjects");
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +178,7 @@ public class gradesFragment extends Fragment {
                         Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
                         recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjects));
-                        //TODO subjectManager.save(getContext(), "subjects");
+                        subjectManager.save(getContext(), "subjects");
                     }
                 })
                 .show();
