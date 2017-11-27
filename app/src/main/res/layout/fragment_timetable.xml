@@ -3,10 +3,26 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView3"
+    <EditText
+        android:id="@+id/subjectName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Timetable" />
+        android:ems="10"
+        android:hint="Name des Fachs"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/subjectRating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Wertung des Fachs"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/btnAddSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fach Hinzufügen" />
 
 </LinearLayout>

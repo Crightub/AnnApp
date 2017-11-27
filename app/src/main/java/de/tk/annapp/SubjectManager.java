@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class SubjectManager {
 
     private static final SubjectManager subjectManager = new SubjectManager();
+    public float overallGradePointAverage;
 
     private SubjectManager(){
         System.out.println("Create SubjetManager...");
@@ -23,6 +24,8 @@ public class SubjectManager {
 
     //Contains all subjects
     ArrayList<Subject> subjects = new ArrayList<>();
+
+    public ArrayList<Subject> getSubjects(){return subjects;}
 
     public void addSubject(String _name, int _rating){
         //Add a Subject to the subjects Arraylist
@@ -47,10 +50,12 @@ public class SubjectManager {
         //Goes through all subjects and get the GradePointaverage and adds it to the wholeAverageGrade
         for(Subject _subject : subjects){
             wholeGradeAverage += _subject.getGradePointAverage();
+            System.out.println(wholeGradeAverage);
         }
 
         wholeGradeAverage /= subjects.size();
-
+        System.out.println(wholeGradeAverage);
+        System.out.println("size: " + subjects.size());
         return wholeGradeAverage;
     }
 

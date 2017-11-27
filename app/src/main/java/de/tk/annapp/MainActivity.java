@@ -17,10 +17,15 @@ import android.widget.TextView;
 
 import de.tk.annapp.Fragments.*;
 
+import static java.security.AccessController.getContext;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private SubjectManager subjectManager;
+
+    TextView textViewGrade;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        textViewGrade = (TextView) findViewById(R.id.grade);
+
 
         //Creates instance of SubjectManager
         subjectManager = SubjectManager.getInstance();
@@ -125,6 +133,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new timetableFragment();
         } else if (id == R.id.nav_grades) {
             fragment = new gradesFragment();
+            setGradeTextView(true);
         } else if (id == R.id.nav_tasks) {
             fragment = new tasksFragment();
         } else if (id == R.id.nav_calendar) {
@@ -142,6 +151,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.action_feedback) {
             fragment = new feedbackFragment();
         }
+
+        if(id != R.id.nav_grades)
+            setGradeTextView(false);
 
         if (fragment == null) {
             System.out.println("Main Activity: Your button for the fragment has no fragment defined to put into the Layout");
@@ -176,5 +188,16 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment, "GradeChildFragment")
                 .commit();
+    }
+
+    public void setGradeTextView(boolean isVisible){
+        if(isVisible) {
+            textViewGrade.setVisibility(View.VISIBLE);
+
+            textViewGrade.setText(Float.toString(subjectManager.getWholeGradeAverage()));
+
+        }
+        else
+            textViewGrade.setVisibility(View.GONE);
     }
 }

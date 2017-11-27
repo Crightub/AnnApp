@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 
 import java.util.ArrayList;
@@ -38,12 +39,12 @@ public class gradesFragment extends Fragment {
 
     RecyclerView recyclerView;
 
-    private ArrayList<Subject> subjects = new ArrayList<>();
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle("Noten");
+
         root = inflater.inflate(R.layout.fragment_grades, container, false);
+
 
         //Get Singelton subjectManager
         subjectManager = SubjectManager.getInstance();
@@ -54,7 +55,6 @@ public class gradesFragment extends Fragment {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("bla");
                 createInputDialog();
             }
         });
@@ -63,15 +63,12 @@ public class gradesFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjects));
+        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));
 
         //addTestGrades();
 
-        subjectManager.addSubject("Mathe", 2);
-        subjectManager.addSubject("Deutsch", 2);
-
-        subjects.add(subjectManager.getSubjectByName("Mathe"));
-        subjects.add(subjectManager.getSubjectByName("Deutsch"));
+        //subjectManager.addSubject("Mathe", 2);
+        //subjectManager.addSubject("Deutsch", 2);
 
         return root;
     }
@@ -135,7 +132,7 @@ public class gradesFragment extends Fragment {
         ArrayList<String> subjectNames = new ArrayList<>();
 
         for (Subject s :
-                subjects) {
+                subjectManager.getSubjects()) {
             subjectNames.add(s.name);
         }
 
@@ -177,7 +174,7 @@ public class gradesFragment extends Fragment {
 
                         Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
-                        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjects));
+                        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));
                         subjectManager.save(getContext(), "subjects");
                     }
                 })
