@@ -173,6 +173,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //onClickListener for the Subject Item
+    //Opens the grades
     public void onClickRVItem(View view){
         Fragment fragment = new gradeChildFragment();
 

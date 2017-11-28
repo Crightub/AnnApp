@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -19,15 +19,25 @@
             android:textAlignment="viewStart"
             android:textColor="@color/rvItemColor"
             android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:clickable="false"/>
 
+        <ImageButton
+            android:id="@+id/item_grade_deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="top|end"
+            android:background="@android:drawable/ic_menu_edit" />
 
         <com.ms.square.android.expandabletextview.ExpandableTextView
             android:id="@+id/expandable_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="60dp"
             android:layout_marginTop="12dp"
+            android:paddingEnd="5dp"
             appNs:animDuration="200"
             appNs:maxCollapsedLines="1">
 
@@ -50,6 +60,6 @@
 
         </com.ms.square.android.expandabletextview.ExpandableTextView>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
