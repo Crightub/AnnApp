@@ -46,6 +46,7 @@ public class SubjectManager {
     //Gives back the average of all subjects
     public float getWholeGradeAverage(){
         float wholeGradeAverage = 0;
+        int emptySubjects = 0;
 
         //Goes through all subjects and get the GradePointaverage and adds it to the wholeAverageGrade
         for(Subject _subject : subjects){
@@ -53,7 +54,13 @@ public class SubjectManager {
             System.out.println(wholeGradeAverage);
         }
 
-        wholeGradeAverage /= subjects.size();
+        for(Subject _subject : subjects){
+            if(_subject.grades.isEmpty()){
+                emptySubjects += 1;
+            }
+        }
+
+        wholeGradeAverage /= (subjects.size() - emptySubjects);
         System.out.println(wholeGradeAverage);
         System.out.println("size: " + subjects.size());
         return wholeGradeAverage;
