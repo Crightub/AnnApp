@@ -43,7 +43,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         c = _c;
         subjectManager = SubjectManager.getInstance();
         subjectName = _subjectName;
-        grades = subjectManager.getSubjectByName(_subjectName).getAllGrades();
+        grades = subjectManager.getSubjectByName(subjectName).getAllGrades();
     }
 
     @Override
@@ -54,7 +54,8 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     @Override
     public void onBindViewHolder(RecyclerVH holder, final int position) {
-        holder.gradeTxt.setText("" + grades.get(position).grade);
+        grades = subjectManager.getSubjectByName(subjectName).getAllGrades();
+        holder.gradeTxt.setText(String.valueOf(grades.get(position).grade));
         holder.expandableTextView.setText(grades.get(position).note + "\nWertung: " + grades.get(position).rating);
 
         holder.editButton.setOnClickListener(new View.OnClickListener() {
@@ -187,10 +188,8 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                         /*Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());*/
 
-                        //TODO Edit your grade - "grade" is the grade you want to edit - "subject" is the mother (or father - you don't really know - wait it could be
-                        //TODO something other as well now) of the grade
-
-
+                        subject.editGrade(grade, Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
+                        notifyItemChanged(grades.indexOf(grade));
 
                         subjectManager.save(c, "subjects");
                     }
@@ -221,9 +220,9 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 .show();
     }
 
-    public void delete(Subject subject, Grade grade){
+    public void delete(final Subject subject, final Grade grade){
 
-        AlertDialog.Builder builder;
+        final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(c, android.R.style.Theme_Material_Dialog_Alert);
         } else {
@@ -233,7 +232,9 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 .setMessage("Wollen Sie diese Note wirklich löschen?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO deleting the Grade "grade" you're already asked wheter you would like to delete or not
+                        subject.removeGrade(grade);
+                        subjectManager.save(c,"subjects");
+                        notifyItemRemoved(grades.indexOf(grade));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
