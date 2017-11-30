@@ -32,6 +32,8 @@ public class SubjectManager {
         subjects.add(new Subject(_name, _rating));
     }
 
+
+
     //Goes through all subjects and gives the one with the same name back
     public Subject getSubjectByName(String _name){
         for(Subject _subject : subjects){

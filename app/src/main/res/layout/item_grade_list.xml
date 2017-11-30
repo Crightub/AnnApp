@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appNs="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -10,6 +11,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+
+        <ImageButton
+            android:id="@+id/item_grade_deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="top|end"
+            android:background="@android:drawable/ic_menu_edit"
+            android:contentDescription="btnEdit"
+            appNs:layout_constraintBottom_toBottomOf="parent"
+            appNs:layout_constraintEnd_toEndOf="parent"
+            appNs:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/item_grade_grade"
@@ -21,15 +35,6 @@
             android:textSize="30sp"
             android:textStyle="bold"
             android:clickable="false"/>
-
-        <ImageButton
-            android:id="@+id/item_grade_deleteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="top|end"
-            android:background="@android:drawable/ic_menu_edit" />
 
         <com.ms.square.android.expandabletextview.ExpandableTextView
             android:id="@+id/expandable_text_view"
@@ -45,18 +50,23 @@
                 android:id="@+id/expandable_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="25dp"
+                android:layout_weight="1"
                 android:textColor="@color/rvItemColor"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                appNs:layout_constraintBottom_toBottomOf="parent"
+                appNs:layout_constraintStart_toStartOf="parent"
+                appNs:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/expand_collapse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:textAlignment="viewEnd" />
+                android:textAlignment="viewEnd"
+                appNs:layout_constraintBottom_toBottomOf="parent"
+                appNs:layout_constraintEnd_toEndOf="parent" />
 
         </com.ms.square.android.expandabletextview.ExpandableTextView>
 
