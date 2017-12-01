@@ -192,9 +192,7 @@ public class gradesFragment extends Fragment {
         builder.setTitle(title)
                 .setMessage(text)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        createInputDialog();
-                    }
+                    public void onClick(DialogInterface dialog, int which) {}
                 })
                 .setIcon(ic)
                 .show();

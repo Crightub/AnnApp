@@ -38,6 +38,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     private String subjectName;
 
     boolean isWrittenBool;
+    AlertDialog adTrueDialog;
 
     public RVAdapterGradeList(Context _c, String _subjectName){
         c = _c;
@@ -56,7 +57,11 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     public void onBindViewHolder(RecyclerVH holder, final int position) {
         grades = subjectManager.getSubjectByName(subjectName).getAllGrades();
         holder.gradeTxt.setText(String.valueOf(grades.get(position).grade));
-        holder.expandableTextView.setText(grades.get(position).note + "\nWertung: " + grades.get(position).rating);
+
+        if(!grades.get(position).note.isEmpty())
+            holder.expandableTextView.setText(grades.get(position).note + "\nWertung: " + grades.get(position).rating);
+        else
+            holder.expandableTextView.setText(grades.get(position).note + "Wertung: " + grades.get(position).rating);
 
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,9 +203,11 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //Do nothing
+
                     }
-                })
-                .show();
+                });
+
+                adTrueDialog = ad.show();
     }
 
     void createAlertDialog(String title, String text, int ic){
@@ -232,9 +239,13 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 .setMessage("Wollen Sie diese Note wirklich löschen?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+
                         subject.removeGrade(grade);
                         subjectManager.save(c,"subjects");
                         notifyItemRemoved(grades.indexOf(grade));
+
+                        adTrueDialog.cancel();
+
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
