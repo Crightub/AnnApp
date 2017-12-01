@@ -240,9 +240,10 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
+                        notifyItemRemoved(grades.indexOf(grade));
+                        notifyItemRangeChanged(grades.indexOf(grade), getItemCount());
                         subject.removeGrade(grade);
                         subjectManager.save(c,"subjects");
-                        notifyItemRemoved(grades.indexOf(grade));
 
                         adTrueDialog.cancel();
 

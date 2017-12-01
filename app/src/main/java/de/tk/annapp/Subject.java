@@ -27,8 +27,8 @@ public class Subject implements Serializable {
         grades.add(new Grade(_grade, _iswritten, _ratingGrade, _note));
     }
 
-    public void removeGrade(Grade _grade){
-        grades.remove(_grade);
+    public void removeGrade(Grade _gradePosition){
+        grades.remove(grades.indexOf(_gradePosition));
     }
 
     public void editGrade(Grade _grade, int _grade_grade, boolean _iswritten, float _ratingGrade, String _note){
