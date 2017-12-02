@@ -18,7 +18,7 @@
     <string name="privateTuition">Nachhilfe</string>
     <string name="saleOfSchoolSupplies">Schulsachenverkauf</string>
     <string name="tasks">Aufgaben</string>
-    <string name="ratingList">Wertung:</string>
+    <string name="ratingList">"Wertung: "</string>
     <string name="editGrade">Note bearbeiten -</string>
     <string name="cancel">Abbrechen</string>
     <string name="deleteQuestion">Löschen?</string>

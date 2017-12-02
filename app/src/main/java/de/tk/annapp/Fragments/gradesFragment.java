@@ -56,7 +56,11 @@ public class gradesFragment extends Fragment {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createInputDialog();
+
+                if(subjectManager.getSubjects().isEmpty()) {
+                    createAlertDialog(getContext().getString(R.string.warning), "Bitte fügen Sie ein Fach hinzu!", android.R.drawable.ic_dialog_alert);
+                } else
+                    createInputDialog();
             }
         });
 

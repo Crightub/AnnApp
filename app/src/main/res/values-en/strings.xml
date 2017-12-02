@@ -14,4 +14,12 @@
     <string name="myDay">My Day</string>
     <string name="privateTuition">"private tuition "</string>
     <string name="ratingExplanation">The score is the amount that determines the ratio to other notes of the same type.  e. g.: Rating: 2  The grade is counted twice as much as other grades.  Rating: 0.5 The score is half as high as other grades.</string>
+    <string name="saleOfSchoolSupplies">sale of School Supplies</string>
+    <string name="tasks">Tasks</string>
+    <string name="ratingList">"Rating: "</string>
+    <string name="editGrade">Edit grades</string>
+    <string name="cancel">Cancel</string>
+    <string name="deleteQuestion">Delete?</string>
+    <string name="deleteQuestionMessage">Do you really want to delete this grade?</string>
+    <string name="shareAnnApp">Share AnnApp...</string>
 </resources>

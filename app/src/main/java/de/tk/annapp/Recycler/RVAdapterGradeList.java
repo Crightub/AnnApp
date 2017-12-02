@@ -59,9 +59,9 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         holder.gradeTxt.setText(String.valueOf(grades.get(position).grade));
 
         if(!grades.get(position).note.isEmpty())
-            holder.expandableTextView.setText(grades.get(position).note + c.getString(R.string.ratingList) + grades.get(position).rating);
+            holder.expandableTextView.setText(grades.get(position).note + "\n" +  c.getString(R.string.ratingList) + grades.get(position).rating);
         else
-            holder.expandableTextView.setText(grades.get(position).note + c.getString(R.string.ratingList) + grades.get(position).rating);
+            holder.expandableTextView.setText(grades.get(position).note +  c.getString(R.string.ratingList) + grades.get(position).rating);
 
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
