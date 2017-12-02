@@ -42,7 +42,7 @@ public class gradesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Noten");
+        getActivity().setTitle(getString(R.string.grades));
 
         root = inflater.inflate(R.layout.fragment_grades, container, false);
 
@@ -126,7 +126,7 @@ public class gradesFragment extends Fragment {
         btnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAlertDialog("Wertung", "Die Wertung ist der Betrag, der das Verhältnis zu den anderen Noten des selben Types bestimmt.\n\nz.B.:\nWertung: 2\nDie Note wird doppelt so stark einberechnet wie andere Noten.\n\nWertung: 0,5\nDie Note wird halb so stark einberechnet wie andere Noten.", 0);
+                createAlertDialog(getString(R.string.rating), getString(R.string.ratingExplanation), 0);
             }
         });
 
@@ -150,7 +150,7 @@ public class gradesFragment extends Fragment {
 
 
 
-        ad      .setTitle("Note hinzufügen")
+        ad      .setTitle(R.string.addGrade)
                 .setView(mView)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -165,7 +165,7 @@ public class gradesFragment extends Fragment {
                             isWrittenBool = false;
 
                         if(gradeInput.getText().toString().isEmpty()){
-                            createAlertDialog("Achtung", "Bitte füllen Sie alle notwendigen Felder aus!", android.R.drawable.ic_dialog_alert);
+                            createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
                             return;
                         }
 

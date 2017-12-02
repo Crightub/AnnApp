@@ -19,7 +19,7 @@ public class saleofschoolsuppliesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        getActivity().setTitle("Schulsachenverkauf");
+        getActivity().setTitle(getString(R.string.saleOfSchoolSupplies));
         root = inflater.inflate(R.layout.fragment_saleofschoolsupplies, container, false);
         return root;
     }

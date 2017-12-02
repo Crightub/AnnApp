@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AnnApp</string>
+    <string name="share">Share</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="settings">Settings</string>
+    <string name="addGrade">Add Grade</string>
+    <string name="rating">Rating</string>
+    <string name="warning">Warning</string>
+    <string name="warningMessage">Pleas fill in all needed Information.</string>
+    <string name="grades">Grdades</string>
+    <string name="lostStuff">Lost Stuff</string>
+    <string name="myDay">My Day</string>
+    <string name="privateTuition">"private tuition "</string>
+    <string name="ratingExplanation">The score is the amount that determines the ratio to other notes of the same type.  e. g.: Rating: 2  The grade is counted twice as much as other grades.  Rating: 0.5 The score is half as high as other grades.</string>
+</resources>

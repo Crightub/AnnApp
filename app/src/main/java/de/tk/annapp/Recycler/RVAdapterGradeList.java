@@ -59,9 +59,9 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         holder.gradeTxt.setText(String.valueOf(grades.get(position).grade));
 
         if(!grades.get(position).note.isEmpty())
-            holder.expandableTextView.setText(grades.get(position).note + "\nWertung: " + grades.get(position).rating);
+            holder.expandableTextView.setText(grades.get(position).note + c.getString(R.string.ratingList) + grades.get(position).rating);
         else
-            holder.expandableTextView.setText(grades.get(position).note + "Wertung: " + grades.get(position).rating);
+            holder.expandableTextView.setText(grades.get(position).note + c.getString(R.string.ratingList) + grades.get(position).rating);
 
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,7 +158,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         btnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAlertDialog("Wertung", "Die Wertung ist der Betrag, der das Verhältnis zu den anderen Noten des selben Types bestimmt.\n\nz.B.:\nWertung: 2\nDie Note wird doppelt so stark einberechnet wie andere Noten.\n\nWertung: 0,5\nDie Note wird halb so stark einberechnet wie andere Noten.", 0);
+                createAlertDialog(c.getString(R.string.rating), c.getString(R.string.ratingExplanation), 0);
             }
         });
 
@@ -167,7 +167,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
 
 
-        ad      .setTitle("Note bearbeiten - " + subject.name)
+        ad      .setTitle(c.getString(R.string.editGrade) + subject.name)
                 .setView(mView)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -182,7 +182,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                             isWrittenBool = false;
 
                         if(gradeInput.getText().toString().isEmpty()){
-                            createAlertDialog("Achtung", "Bitte füllen Sie alle notwendigen Felder aus!", android.R.drawable.ic_dialog_alert);
+                            createAlertDialog(c.getString(R.string.warning), c.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
                             return;
                         }
 
@@ -199,7 +199,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                         subjectManager.save(c, "subjects");
                     }
                 })
-                .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //Do nothing
@@ -235,8 +235,8 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         } else {
             builder = new AlertDialog.Builder(c);
         }
-        builder.setTitle("Löschen?")
-                .setMessage("Wollen Sie diese Note wirklich löschen?")
+        builder.setTitle(R.string.deleteQuestion)
+                .setMessage(c.getString(R.string.deleteQuestionMessage))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 

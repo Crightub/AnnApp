@@ -18,7 +18,7 @@ public class tasksFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        getActivity().setTitle("Aufgaben");
+        getActivity().setTitle(getString(R.string.tasks));
         root = inflater.inflate(R.layout.fragment_tasks, container, false);
         return root;
     }

@@ -19,7 +19,7 @@ public class loststuffFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        getActivity().setTitle("Verlorene Sachen");
+        getActivity().setTitle(getString(R.string.lostStuff));
         root = inflater.inflate(R.layout.fragment_loststuff, container, false);
         return root;
     }

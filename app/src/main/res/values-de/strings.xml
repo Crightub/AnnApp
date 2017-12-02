@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">AnnApp</string>
-    <string name="action_settings">Einstellungen</string>
-    <string name="navigation_drawer_close">Navigation schließen</string>
-    <string name="navigation_drawer_open">Navigation öffnen</string>
-    <string name="action_myday">Mein Tag</string>
-    <string name="share">Teilen</string>
-</resources>

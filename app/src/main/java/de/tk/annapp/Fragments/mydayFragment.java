@@ -19,7 +19,7 @@ public class mydayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
-        getActivity().setTitle("Mein Tag");
+        getActivity().setTitle(getString(R.string.myDay));
         root=inflater.inflate(R.layout.fragment_myday, container, false);
         return root;
 

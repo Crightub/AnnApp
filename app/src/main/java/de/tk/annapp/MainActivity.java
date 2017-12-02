@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
             i.setType("text/plain");
             i.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
             i.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.pax.qbt.annapp");
-            startActivity(Intent.createChooser(i, "AnnAppp teilen..."));
+            startActivity(Intent.createChooser(i, getString(R.string.shareAnnApp)));
 
         }
 
