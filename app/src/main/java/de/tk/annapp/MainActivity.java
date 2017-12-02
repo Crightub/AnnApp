@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,8 +16,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import de.tk.annapp.Fragments.*;
-
-import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +37,8 @@ public class MainActivity extends AppCompatActivity
 
         //Creates instance of SubjectManager
         subjectManager = SubjectManager.getInstance();
+
+        subjectManager.setTextView(textViewGrade);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -134,7 +133,6 @@ public class MainActivity extends AppCompatActivity
             fragment = new timetableFragment();
         } else if (id == R.id.nav_grades) {
             fragment = new gradesFragment();
-            setGradeTextView(true);
         } else if (id == R.id.nav_tasks) {
             fragment = new tasksFragment();
         } else if (id == R.id.nav_calendar) {
@@ -154,7 +152,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if(id != R.id.nav_grades)
-            setGradeTextView(false);
+            subjectManager.setGradeTextView(false);
 
         if (fragment == null) {
             System.out.println("Main Activity: Your button for the fragment has no fragment defined to put into the Layout");
@@ -193,14 +191,5 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
-    public void setGradeTextView(boolean isVisible){
-        if(isVisible) {
-            textViewGrade.setVisibility(View.VISIBLE);
 
-            textViewGrade.setText(Float.toString(subjectManager.getWholeGradeAverage()));
-
-        }
-        else
-            textViewGrade.setVisibility(View.GONE);
-    }
 }

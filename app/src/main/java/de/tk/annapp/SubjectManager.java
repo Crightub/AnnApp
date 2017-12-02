@@ -2,6 +2,8 @@ package de.tk.annapp;
 
 
 import android.content.Context;
+import android.view.View;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,6 +14,8 @@ public class SubjectManager {
 
     private static final SubjectManager subjectManager = new SubjectManager();
     public float overallGradePointAverage;
+
+    TextView textViewGrade;
 
     private SubjectManager(){
         System.out.println("Create SubjetManager...");
@@ -72,6 +76,7 @@ public class SubjectManager {
             ObjectInputStream ois = new ObjectInputStream(c.openFileInput(filename));
             subjects = (ArrayList<Subject>) ois.readObject();
             ois.close();
+            setGradeTextView(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,5 +90,21 @@ public class SubjectManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        setGradeTextView(true);
+    }
+
+    public void setTextView(TextView tw){
+        textViewGrade = tw;
+    }
+
+    public void setGradeTextView(boolean isVisible){
+        if(isVisible) {
+            textViewGrade.setVisibility(View.VISIBLE);
+
+            textViewGrade.setText(Float.toString(subjectManager.getWholeGradeAverage()));
+
+        }
+        else
+            textViewGrade.setVisibility(View.GONE);
     }
 }
