@@ -17,9 +17,12 @@
     <string name="saleOfSchoolSupplies">sale of School Supplies</string>
     <string name="tasks">Tasks</string>
     <string name="ratingList">"Rating: "</string>
-    <string name="editGrade">Edit grades</string>
+    <string name="editGrade">Edit grade -</string>
     <string name="cancel">Cancel</string>
     <string name="deleteQuestion">Delete?</string>
     <string name="deleteQuestionMessage">Do you really want to delete this grade?</string>
     <string name="shareAnnApp">Share AnnApp...</string>
+    <string name="subjectName">Name of subject</string>
+    <string name="ratingOfSubject">Rating of subject</string>
+    <string name="addSubject">Add subject</string>
 </resources>
