@@ -31,9 +31,9 @@ public class SubjectManager {
 
     public ArrayList<Subject> getSubjects(){return subjects;}
 
-    public void addSubject(String _name, int _rating){
+    public void addSubject(String _name, int _rating, String _teacher, String _room){
         //Add a Subject to the subjects Arraylist
-        subjects.add(new Subject(_name, _rating));
+        subjects.add(new Subject(_name, _rating, _teacher, _room));
     }
 
     //Goes through all subjects and gives the one with the same name back

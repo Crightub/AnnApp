@@ -17,7 +17,13 @@ public class Subject implements Serializable {
     //(1 or 2)
     int ratingSub;
 
-    public Subject(String _name, int _rating){
+    //name of the Teacher
+    public String teacher;
+
+    //Name of the room the subject normally takes place
+    public String room;
+
+    public Subject(String _name, int _rating, String teacher, String room){
         name = _name;
         ratingSub = _rating;
     }

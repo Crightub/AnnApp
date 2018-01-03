@@ -43,7 +43,7 @@ public class timetableFragment extends Fragment  {
                 }
 
 
-                subjectManager.addSubject(subjectName.getText().toString(), Integer.parseInt(subjectRating.getText().toString()));
+                subjectManager.addSubject(subjectName.getText().toString(), Integer.parseInt(subjectRating.getText().toString()), null, null);
                 subjectName.setText("");
                 subjectRating.setText("");
                 subjectManager.save(getContext(), "subjects");

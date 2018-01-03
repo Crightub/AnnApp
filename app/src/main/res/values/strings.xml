@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AnnApp</string>
+    <string name="app_name" translatable="false">AnnApp</string>
 
     <string name="share">Teilen</string>
 
