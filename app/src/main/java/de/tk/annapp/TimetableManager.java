@@ -37,6 +37,10 @@ public class TimetableManager {
         days.get(_day).setLesson(_subject, _room, _time);
     }
 
+    public ArrayList<Day> getDays(){
+        return days;
+    }
+
     public void load(Context c, String filename)
     {
         try {

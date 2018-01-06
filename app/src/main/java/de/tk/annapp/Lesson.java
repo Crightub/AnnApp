@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Lesson implements Serializable {
 
     //the subject of this lesson
-    Subject subject;
+    public Subject subject;
 
     //the room in which this very lesson takes place
     String room;

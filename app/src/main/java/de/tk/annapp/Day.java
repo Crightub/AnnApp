@@ -3,12 +3,9 @@ package de.tk.annapp;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by Tobias Kiehnlein on 03.01.2018.
- */
 
 public class Day implements Serializable{
-    ArrayList<Lesson> lessons = new ArrayList<>();
+    public ArrayList<Lesson> lessons = new ArrayList<>();
 
     public Day(){}
 

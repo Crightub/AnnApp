@@ -19,37 +19,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_edit" />
 
-    <EditText
-        android:id="@+id/subjectName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/subjectName"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <GridView
+        android:id="@+id/gridView_Timetable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnWidth="30dp"
+        android:gravity="center"
+        android:horizontalSpacing="1dp"
+        android:numColumns="6"
+        android:stretchMode="none"
+        android:verticalSpacing="1dp"
+        android:visibility="visible">
 
-    <EditText
-        android:id="@+id/subjectRating"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/ratingOfSubject"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subjectName" />
 
-    <Button
-        android:id="@+id/btnAddSubject"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:text="@string/addSubject"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/subjectRating" />
-
+    </GridView>
 
 </android.support.constraint.ConstraintLayout>

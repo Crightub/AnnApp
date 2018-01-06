@@ -8,18 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.Toast;
 
+import de.tk.annapp.Grid.GVAdapterTimeTable;
 import de.tk.annapp.R;
 import de.tk.annapp.SubjectManager;
-
-/**
- * Created by Tobi on 20.09.2017.
- */
 
 public class timetableFragment extends Fragment  {
     View root;
     SubjectManager subjectManager;
+
+    GridView gridView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,6 +30,12 @@ public class timetableFragment extends Fragment  {
         getActivity().setTitle("Stundenplan");
         root = inflater.inflate(R.layout.fragment_timetable, container, false);
 
+        gridView = root.findViewById(R.id.gridView_Timetable);
+        gridView.setAdapter(new GVAdapterTimeTable(getActivity()));
+
+
+
+        /*
         Button btnAddSubject = (Button) root.findViewById(R.id.btnAddSubject);
         final EditText subjectName = (EditText) root.findViewById(R.id.subjectName);
         final EditText subjectRating = (EditText) root.findViewById(R.id.subjectRating);
@@ -50,6 +56,7 @@ public class timetableFragment extends Fragment  {
                 Toast.makeText(getContext(), "Fach erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
             }
         });
+        */
 
         return root;
     }
