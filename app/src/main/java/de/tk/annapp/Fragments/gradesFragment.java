@@ -58,7 +58,7 @@ public class gradesFragment extends Fragment {
             public void onClick(View view) {
 
                 if(subjectManager.getSubjects().isEmpty()) {
-                    createAlertDialog(getContext().getString(R.string.warning), "Bitte fügen Sie ein Fach hinzu!", android.R.drawable.ic_dialog_alert);
+                     createAlertDialog(getContext().getString(R.string.warning), "Bitte fügen Sie ein Fach hinzu!", android.R.drawable.ic_dialog_alert);
                 } else
                     createInputDialog();
             }
@@ -107,11 +107,10 @@ public class gradesFragment extends Fragment {
 
 
 
-        //View mView = getLayoutInflater().inflate(R.layout.fragment_grade_input, null);
         View mView = View.inflate(this.getContext(), R.layout.fragment_grade_input, null);
 
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
-        final  EditText ratingInput =(EditText) mView.findViewById(R.id.ratingInput);
+        final EditText ratingInput =(EditText) mView.findViewById(R.id.ratingInput);
         final EditText note = (EditText) mView.findViewById(R.id.note);
         final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnHelp);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
@@ -188,16 +187,16 @@ public class gradesFragment extends Fragment {
 
     void createAlertDialog(String title, String text, int ic){
         AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
-        } else {
+        }
+        else{
             builder = new AlertDialog.Builder(this.getContext());
         }
         builder.setTitle(title)
                 .setMessage(text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {}
-                })
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener(){public void onClick(DialogInterface dialog, int which){}})
                 .setIcon(ic)
                 .show();
     }

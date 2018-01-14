@@ -18,7 +18,7 @@ public class SubjectManager {
     TextView textViewGrade;
 
     private SubjectManager(){
-        System.out.println("Create SubjetManager...");
+        System.out.println("Create SubjectManager...");
     }
 
     //Returns the singelton subjectManager

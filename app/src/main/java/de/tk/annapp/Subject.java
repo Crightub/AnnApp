@@ -8,6 +8,8 @@ public class Subject implements Serializable {
     //Contains all grades of one Subject
     ArrayList<Grade> grades = new ArrayList<>();
 
+    //Contains all tasks of one Subject
+    ArrayList<Task> tasks = new ArrayList<>();
 
     //name of the Subject
     public String name;
@@ -26,6 +28,23 @@ public class Subject implements Serializable {
     public Subject(String _name, int _rating, String teacher, String room){
         name = _name;
         ratingSub = _rating;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void addTask(String _task, String _date){
+        tasks.add(new Task(_task, _date));
+    }
+
+    public void removeTask(Task _taskPosition){
+        tasks.remove(tasks.indexOf(_taskPosition));
+    }
+
+    public void editTask(Task _task, String _task_task){
+        Task task = tasks.get(tasks.indexOf(_task));
+        task.task = _task_task;
     }
 
     public void addGrade(int _grade, boolean _iswritten, float _ratingGrade, String _note){
@@ -91,5 +110,9 @@ public class Subject implements Serializable {
     //Returns all Grades
     public ArrayList<Grade> getAllGrades(){
         return grades;
+    }
+
+    public ArrayList<Task> getAllTasks(){
+        return tasks;
     }
 }

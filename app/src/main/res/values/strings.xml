@@ -27,4 +27,5 @@
     <string name="subjectName">Name des Fachs</string>
     <string name="ratingOfSubject">Wertung des Fachs</string>
     <string name="addSubject">Fach Hinzufügen</string>
+    <string name="addTask">Aufgabe Hinzufügen</string>
 </resources>

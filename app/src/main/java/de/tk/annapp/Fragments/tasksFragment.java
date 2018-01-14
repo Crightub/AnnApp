@@ -1,12 +1,33 @@
 package de.tk.annapp.Fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.Spinner;
+
+import java.util.ArrayList;
 
 import de.tk.annapp.R;
+import de.tk.annapp.Recycler.RVAdapterSubjectList;
+import de.tk.annapp.Recycler.RVAdapterTaskList;
+import de.tk.annapp.Subject;
+import de.tk.annapp.SubjectManager;
+
+import static android.R.layout.simple_spinner_dropdown_item;
 
 /**
  * Created by Tobi on 20.09.2017.
@@ -14,12 +35,98 @@ import de.tk.annapp.R;
 
 public class tasksFragment extends Fragment  {
     View root;
+    private SubjectManager subjectManager;
+    RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         getActivity().setTitle(getString(R.string.tasks));
+
         root = inflater.inflate(R.layout.fragment_tasks, container, false);
+
+        subjectManager = SubjectManager.getInstance();
+        subjectManager.load(getContext(), "subjects");
+
+        FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd2);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                createInputDialog();
+            }
+        });
+
+        recyclerView = root.findViewById(R.id.recyclerViewTasksId);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(new RVAdapterTaskList(getActivity(), subjectManager.getSubjects()));
+
         return root;
+    }
+
+    public void createInputDialog(){
+        AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
+
+        View mView = View.inflate(this.getContext(), R.layout.fragment_task_input, null);
+
+        final EditText task = (EditText) mView.findViewById(R.id.task);
+        final EditText date = mView.findViewById(R.id.date);
+
+        ArrayList<String> subjectNames = new ArrayList<>();
+        ArrayList<String> kind = new ArrayList<>();
+        kind.add("Hausaufgabe");
+        kind.add("Schulaufgabe");
+        kind.add("Notiz");
+
+        for (Subject s :
+                subjectManager.getSubjects()) {
+            subjectNames.add(s.name);
+        }
+
+        final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection2);
+        final Spinner kindSelection = mView.findViewById(R.id.kindInput);
+
+        ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, kind);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, subjectNames);
+
+        subjectSelection.setAdapter(adapter);
+        kindSelection.setAdapter(adapterKind);
+
+        ad      .setTitle(R.string.addTask)
+                .setView(mView)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        if(task.getText().toString().isEmpty()){
+                            createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                            return;
+                        }
+
+                        if(date.getText().toString().isEmpty()){
+                            createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                            return;
+                        }
+
+                        Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
+                        subject.addTask(task.getText().toString(), date.getText().toString());
+                        recyclerView.setAdapter(new RVAdapterTaskList(getActivity(), subjectManager.getSubjects()));
+                        subjectManager.save(getContext(), "subjects");
+                    }
+                })
+                .show();
+    }
+
+    void createAlertDialog(String title, String text, int ic){
+        AlertDialog.Builder builder;
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
+        }
+        else{
+            builder = new AlertDialog.Builder(this.getContext());
+        }
+        builder.setTitle(title)
+                .setMessage(text)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener(){public void onClick(DialogInterface dialog, int which){}})
+                .setIcon(ic)
+                .show();
     }
 }
