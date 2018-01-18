@@ -11,15 +11,19 @@ public class Day implements Serializable{
 
     public void setLesson(Subject _subject, String _room, int _time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/) {
         String room;
-        if (_room.isEmpty())
+
+
+        if (_room == null)
             room = _subject.room;
         else
             room = _room;
 
         Lesson lesson = new Lesson(_subject, room);
 
-        while (lessons.size() > _time)
+        while (lessons.size() <= _time)
             lessons.add(null);
+
+        System.out.println(lessons.size());
 
         lessons.set(_time, lesson);
     }

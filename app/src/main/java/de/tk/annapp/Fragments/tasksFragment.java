@@ -37,6 +37,7 @@ public class tasksFragment extends Fragment  {
     View root;
     private SubjectManager subjectManager;
     RecyclerView recyclerView;
+    RVAdapterTaskList adapterTaskList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,7 +57,8 @@ public class tasksFragment extends Fragment  {
 
         recyclerView = root.findViewById(R.id.recyclerViewTasksId);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new RVAdapterTaskList(getActivity(), subjectManager.getSubjects()));
+        adapterTaskList = new RVAdapterTaskList(getActivity(), subjectManager.getSubjects());
+        recyclerView.setAdapter(adapterTaskList);
 
         return root;
     }
@@ -67,9 +69,9 @@ public class tasksFragment extends Fragment  {
         View mView = View.inflate(this.getContext(), R.layout.fragment_task_input, null);
 
         final EditText task = (EditText) mView.findViewById(R.id.task);
-        final EditText date = mView.findViewById(R.id.date);
+        final EditText date = (EditText) mView.findViewById(R.id.date);
 
-        ArrayList<String> subjectNames = new ArrayList<>();
+        final ArrayList<String> subjectNames = new ArrayList<>();
         ArrayList<String> kind = new ArrayList<>();
         kind.add("Hausaufgabe");
         kind.add("Schulaufgabe");
@@ -84,9 +86,9 @@ public class tasksFragment extends Fragment  {
         final Spinner kindSelection = mView.findViewById(R.id.kindInput);
 
         ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, kind);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, subjectNames);
+        ArrayAdapter<String> adapterSubject = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, subjectNames);
 
-        subjectSelection.setAdapter(adapter);
+        subjectSelection.setAdapter(adapterSubject);
         kindSelection.setAdapter(adapterKind);
 
         ad      .setTitle(R.string.addTask)
@@ -95,19 +97,19 @@ public class tasksFragment extends Fragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        if(task.getText().toString().isEmpty()){
+                        if(task.getText().toString().isEmpty() || date.getText().toString().isEmpty()){
                             createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
                             return;
                         }
 
-                        if(date.getText().toString().isEmpty()){
-                            createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
-                            return;
-                        }
+                        if(subjectNames.isEmpty())
+                            createAlertDialog(getString(R.string.warning), "Bitte fügen Sie zuerst ein neues Fach hinzu!", android.R.drawable.ic_dialog_alert);
 
                         Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addTask(task.getText().toString(), date.getText().toString());
-                        recyclerView.setAdapter(new RVAdapterTaskList(getActivity(), subjectManager.getSubjects()));
+
+
+                        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));
                         subjectManager.save(getContext(), "subjects");
                     }
                 })

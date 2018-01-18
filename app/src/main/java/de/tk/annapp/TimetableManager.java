@@ -18,6 +18,13 @@ public class TimetableManager {
     ArrayList<Day> days = new ArrayList<>();
     private TimetableManager(){
         System.out.println("Create TimetableManager...");
+
+        days.add(new Day());
+        days.add(new Day());
+        days.add(new Day());
+        days.add(new Day());
+        days.add(new Day());
+
     }
 
     //Returns the singelton subjectManager
@@ -27,7 +34,9 @@ public class TimetableManager {
 
     public void setLesson(Subject _subject, String _room, int _time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/, int _day){
         String room;
-        if (_room.isEmpty())
+
+
+        if (_room == null)
             room = _subject.room;
         else
             room = _room;
