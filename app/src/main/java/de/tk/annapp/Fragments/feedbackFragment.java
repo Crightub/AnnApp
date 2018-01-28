@@ -53,7 +53,7 @@ public class feedbackFragment extends Fragment {
 
         Intent i = new Intent(Intent.ACTION_SENDTO);
         i.setData(Uri.parse("mailto:"));
-        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"gbsa1531@gmail.com"});
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"gbsanna1531@gmail.com"});
         //TODO Set name from actual user into the subject of the feedbackMessage
         i.putExtra(Intent.EXTRA_SUBJECT, "FEEDBACK - AnnApp");
         i.putExtra(Intent.EXTRA_TEXT, feedbackText.getText().toString());
