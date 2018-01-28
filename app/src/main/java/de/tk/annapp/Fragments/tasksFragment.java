@@ -26,6 +26,7 @@ import de.tk.annapp.Recycler.RVAdapterSubjectList;
 import de.tk.annapp.Recycler.RVAdapterTaskList;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
+import de.tk.annapp.Task;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 
@@ -56,9 +57,10 @@ public class tasksFragment extends Fragment  {
         });
 
         recyclerView = root.findViewById(R.id.recyclerViewTasksId);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapterTaskList = new RVAdapterTaskList(getActivity(), subjectManager.getSubjects());
-        recyclerView.setAdapter(adapterTaskList);
+
+        recyclerView.setAdapter(new RVAdapterTaskList(getActivity()));
 
         return root;
     }
@@ -108,8 +110,11 @@ public class tasksFragment extends Fragment  {
                         Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addTask(task.getText().toString(), date.getText().toString());
 
+                        for(Task task : subject.getAllTasks()){
+                            System.out.println("Task: " + task.task + ", " + task.date);
+                        }
 
-                        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));
+                        recyclerView.setAdapter(new RVAdapterTaskList(getActivity()));
                         subjectManager.save(getContext(), "subjects");
                     }
                 })

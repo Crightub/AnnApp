@@ -22,6 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import de.tk.annapp.R;
@@ -51,6 +53,10 @@ public class gradesFragment extends Fragment {
         subjectManager = SubjectManager.getInstance();
 
         subjectManager.load(getContext(), "subjects");
+
+        TextView missingSubjectsWarning = (TextView) root.findViewById(R.id.missingSubjectsWarning);
+        if(subjectManager.getSubjects().isEmpty())
+            missingSubjectsWarning.setVisibility(View.VISIBLE);
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -168,7 +174,7 @@ public class gradesFragment extends Fragment {
                             isWrittenBool = false;
 
                         if(gradeInput.getText().toString().isEmpty()){
-                            createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                            gradeInput.setError("Input Text");
                             return;
                         }
 

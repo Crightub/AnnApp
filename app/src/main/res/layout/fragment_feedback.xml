@@ -3,9 +3,17 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
+    <EditText
+        android:id="@+id/feedbackText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Feedback" />
+        android:ems="10"
+        android:hint="FEEDBACK"
+        android:inputType="textNoSuggestions" />
+
+    <Button
+        android:id="@+id/btnSend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SEND feedback" />
 </LinearLayout>

@@ -3,6 +3,7 @@ package de.tk.annapp.Fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
-
-import de.tk.annapp.Grid.GVAdapterTimeTable;
 import de.tk.annapp.R;
 import de.tk.annapp.SubjectManager;
 
 public class timetableFragment extends Fragment  {
     View root;
     SubjectManager subjectManager;
+
+    FloatingActionButton fab;
 
     GridView gridView;
 
@@ -30,8 +31,14 @@ public class timetableFragment extends Fragment  {
         getActivity().setTitle("Stundenplan");
         root = inflater.inflate(R.layout.fragment_timetable, container, false);
 
-        gridView = root.findViewById(R.id.gridView_Timetable);
-        gridView.setAdapter(new GVAdapterTimeTable(getActivity()));
+        fab = (FloatingActionButton) root.findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO Start editing
+            }
+        });
 
 
 
