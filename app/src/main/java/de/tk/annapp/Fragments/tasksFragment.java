@@ -32,9 +32,6 @@ import de.tk.annapp.Task;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 
-/**
- * Created by Tobi on 20.09.2017.
- */
 
 public class tasksFragment extends Fragment  {
     View root;

@@ -29,6 +29,7 @@ import de.tk.annapp.Task;
 import de.tk.annapp.R;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
+import de.tk.annapp.Task;
 
 public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.RecyclerVHTask>{
     Context c;
@@ -203,7 +204,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         notifyItemRangeChanged(tasks.indexOf(task), getItemCount());
                         subject.removeTask(task);
                         subjectManager.save(c,"subjects");
+
                         adTrueDialog.cancel();
+
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

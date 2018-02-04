@@ -2,10 +2,17 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
+    <com.evrencoskun.tableview.TableView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/timetable_tableview">
+
+
+    </com.evrencoskun.tableview.TableView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -18,20 +25,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_edit" />
-
-    <GridView
-        android:id="@+id/gridView_Timetable"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnWidth="30dp"
-        android:gravity="center"
-        android:horizontalSpacing="1dp"
-        android:numColumns="6"
-        android:stretchMode="none"
-        android:verticalSpacing="1dp"
-        android:visibility="visible">
-
-
-    </GridView>
 
 </android.support.constraint.ConstraintLayout>
