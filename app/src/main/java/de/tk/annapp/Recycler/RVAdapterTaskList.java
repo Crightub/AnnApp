@@ -213,5 +213,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 })
                 .setIcon(android.R.drawable.ic_delete)
                 .show();
+
+        //TODO: reload activity
     }
 }
