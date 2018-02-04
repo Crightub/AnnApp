@@ -19,7 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.tk.annapp.R;
 import de.tk.annapp.Recycler.RVAdapterSubjectList;
@@ -74,18 +76,17 @@ public class tasksFragment extends Fragment  {
         final EditText date = (EditText) mView.findViewById(R.id.date);
 
         final ArrayList<String> subjectNames = new ArrayList<>();
-        ArrayList<String> kind = new ArrayList<>();
+        final ArrayList<String> kind = new ArrayList<>();
         kind.add("Hausaufgabe");
         kind.add("Schulaufgabe");
         kind.add("Notiz");
 
-        for (Subject s :
-                subjectManager.getSubjects()) {
+        for (Subject s : subjectManager.getSubjects()) {
             subjectNames.add(s.name);
         }
 
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection2);
-        final Spinner kindSelection = mView.findViewById(R.id.kindInput);
+        final Spinner kindSelection = (Spinner) mView.findViewById(R.id.kindInput);
 
         ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, kind);
         ArrayAdapter<String> adapterSubject = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, subjectNames);
@@ -108,10 +109,24 @@ public class tasksFragment extends Fragment  {
                             createAlertDialog(getString(R.string.warning), "Bitte fügen Sie zuerst ein neues Fach hinzu!", android.R.drawable.ic_dialog_alert);
 
                         Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
-                        subject.addTask(task.getText().toString(), date.getText().toString());
+                        String shortKind;
+                        if(kindSelection.getSelectedItem().toString().equals("Hausaufgabe")){
+                            shortKind = "HA";
+                        }
+                        else if(kindSelection.getSelectedItem().toString().equals("Schulaufgabe")){
+                            shortKind = "SA";
+                        }
+                        else if(kindSelection.getSelectedItem().toString().equals("Notiz")){
+                            shortKind = "No";
+                        }
+                        else{
+                            shortKind = "";
+                            createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                        }
+                        subject.addTask(task.getText().toString(), date.getText().toString(), shortKind);
 
                         for(Task task : subject.getAllTasks()){
-                            System.out.println("Task: " + task.task + ", " + task.date);
+                            System.out.println("Task: " + task.task + ", " + task.date + ", " + task.kind);
                         }
 
                         recyclerView.setAdapter(new RVAdapterTaskList(getActivity()));

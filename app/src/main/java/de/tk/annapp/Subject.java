@@ -2,6 +2,7 @@ package de.tk.annapp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Subject implements Serializable {
 
@@ -34,17 +35,18 @@ public class Subject implements Serializable {
         return name;
     }
 
-    public void addTask(String _task, String _date){
-        tasks.add(new Task(_task, _date));
+    public void addTask(String _task, String _date, String _kind){
+        tasks.add(new Task(_task, _date, _kind, this.getName()));
     }
 
     public void removeTask(Task _taskPosition){
         tasks.remove(tasks.indexOf(_taskPosition));
     }
 
-    public void editTask(Task _task, String _task_task){
+    public void editTask(Task _task, String _task_task, String _date){
         Task task = tasks.get(tasks.indexOf(_task));
         task.task = _task_task;
+        task.date = _date;
     }
 
     public void addGrade(int _grade, boolean _iswritten, float _ratingGrade, String _note){
