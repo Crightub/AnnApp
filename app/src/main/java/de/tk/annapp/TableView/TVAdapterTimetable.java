@@ -29,7 +29,7 @@ public class TVAdapterTimetable extends AbstractTableAdapter<ColumnHeader, RowHe
     public RecyclerView.ViewHolder onCreateCellViewHolder(ViewGroup parent, int viewType) {
 
         // Get Cell xml Layout
-        View layout = LayoutInflater.from(m_jContext).inflate(R.layout.cell_timetable_layout, parent, false);
+        View layout = LayoutInflater.from(m_jContext).inflate(R.layout.table_view_cell_layout, parent, false);
 
         // Create a Cell ViewHolder
         return new CellViewHolder(layout);

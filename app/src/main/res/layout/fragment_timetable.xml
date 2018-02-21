@@ -9,7 +9,9 @@
     <com.evrencoskun.tableview.TableView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/timetable_tableview">
+        android:id="@+id/timetable_tableview"
+        app:column_header_height="40dp"
+        app:row_header_width="40dp">
 
 
     </com.evrencoskun.tableview.TableView>

@@ -27,6 +27,7 @@ import java.util.List;
 import de.tk.annapp.Day;
 import de.tk.annapp.R;
 import de.tk.annapp.SubjectManager;
+import de.tk.annapp.TableView.MyTableViewListener;
 import de.tk.annapp.TableView.TVAdapterTimetable;
 import de.tk.annapp.TableView.model.Cell;
 import de.tk.annapp.TableView.model.ColumnHeader;
@@ -50,6 +51,7 @@ public class timetableFragment extends Fragment  {
     public static final int ROW_SIZE = 10;
 
     private String[] nameDays = {"Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"};
+    private String[] nameLessons= {"8.00 - 8.45", "8.45 - 9.30", "9.45 - 10.30", "10.30 - 11.15", "11.30 - 12.15", "12.15 - 13.00", "13.00 - 13.45", "13.45 - 14.30", "14.30 - 15.15", "15.25 - 16.10", "16.10 - 16.55"};
 
 
     public timetableFragment() {
@@ -76,6 +78,8 @@ public class timetableFragment extends Fragment  {
         tableView = root.findViewById(R.id.timetable_tableview);
         mTableViewAdapter = new TVAdapterTimetable(getContext());
         tableView.setAdapter(mTableViewAdapter);
+
+        tableView.setTableViewListener(new MyTableViewListener());
 
         loadData();
 
@@ -134,7 +138,8 @@ public class timetableFragment extends Fragment  {
     private List<RowHeader> getRowHeaderList() {
         List<RowHeader> list = new ArrayList<>();
         for (int i = 0; i < ROW_SIZE; i++) {
-            RowHeader header = new RowHeader(String.valueOf(i), "Stunde " + i);
+            String title = nameLessons[i];
+            RowHeader header = new RowHeader(String.valueOf(i), title);
             list.add(header);
         }
 
@@ -159,11 +164,13 @@ public class timetableFragment extends Fragment  {
         for (int i = 0; i < ROW_SIZE; i++) {
             List<Cell> cellList = new ArrayList<>();
             for (int j = 0; j < COLUMN_SIZE; j++) {
-                String text = "cell " + j + " " + i;
-                if (j % 4 == 0 && i % 5 == 0) {
-                    text = "large cell " + j + " " + i + ".";
+                String text;
+                try{
+                   text = days.get(j).lessons.get(i).subject.name;
+                }catch (Exception e){
+                    text = "";
                 }
-                String id = j + "-" + i;
+                String id = j + " - " + i;
 
                 Cell cell = new Cell(id, text);
                 cellList.add(cell);
