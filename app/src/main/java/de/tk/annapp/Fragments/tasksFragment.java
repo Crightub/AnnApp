@@ -20,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -71,25 +72,55 @@ public class tasksFragment extends Fragment  {
 
         final EditText task = (EditText) mView.findViewById(R.id.task);
         final EditText date = (EditText) mView.findViewById(R.id.date);
+        final LinearLayout extra = (LinearLayout) mView.findViewById(R.id.extraLayout2);
+        final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra2);
 
         final ArrayList<String> subjectNames = new ArrayList<>();
+        final ArrayList<String> time = new ArrayList<>();
         final ArrayList<String> kind = new ArrayList<>();
+
         kind.add("Hausaufgabe");
         kind.add("Schulaufgabe");
         kind.add("Notiz");
+
+        time.add("Montag");
+        time.add("Dienstag");
+        time.add("Mittwoch");
+        time.add("Donnerstag");
+        time.add("Freitag");
+        time.add("Samstag");
+        time.add("Sonntag");
+
 
         for (Subject s : subjectManager.getSubjects()) {
             subjectNames.add(s.name);
         }
 
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection2);
+        final Spinner timeSelection = (Spinner) mView.findViewById(R.id.time);
         final Spinner kindSelection = (Spinner) mView.findViewById(R.id.kindInput);
 
         ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, kind);
         ArrayAdapter<String> adapterSubject = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, subjectNames);
+        ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, time);
 
         subjectSelection.setAdapter(adapterSubject);
+        timeSelection.setAdapter(adapterTime);
         kindSelection.setAdapter(adapterKind);
+
+        btnExtra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(extra.getVisibility() != View.VISIBLE){
+                    extra.setVisibility(View.VISIBLE);
+                    timeSelection.setVisibility(View.GONE);
+                }
+                else{
+                    extra.setVisibility(View.GONE);
+                    timeSelection.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         ad      .setTitle(R.string.addTask)
                 .setView(mView)
@@ -97,7 +128,7 @@ public class tasksFragment extends Fragment  {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        if(task.getText().toString().isEmpty() || date.getText().toString().isEmpty()){
+                        if(task.getText().toString().isEmpty()){
                             createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
                             return;
                         }
@@ -106,6 +137,57 @@ public class tasksFragment extends Fragment  {
                             createAlertDialog(getString(R.string.warning), "Bitte fügen Sie zuerst ein neues Fach hinzu!", android.R.drawable.ic_dialog_alert);
 
                         Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
+
+                        String shortTime;
+                        if(timeSelection.getSelectedItem().toString().equals("Montag")){
+                            shortTime = "Mo";
+                        }
+                        else if(timeSelection.getSelectedItem().toString().equals("Dienstag")){
+                            shortTime = "Di";
+                        }
+                        else if(timeSelection.getSelectedItem().toString().equals("Mittwoch")){
+                            shortTime = "Mi";
+                        }
+                        else if(timeSelection.getSelectedItem().toString().equals("Donnerstag")){
+                            shortTime = "Do";
+                        }
+                        else if(timeSelection.getSelectedItem().toString().equals("Freitag")){
+                            shortTime = "Fr";
+                        }
+                        else if(timeSelection.getSelectedItem().toString().equals("Samstag")){
+                            shortTime = "Sa";
+                        }
+                        else if(timeSelection.getSelectedItem().toString().equals("Sonntag")){
+                            shortTime = "So";
+                        }
+                        else{
+                            shortTime = "";
+                            createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                        }
+
+                        if(timeSelection.getVisibility() == View.GONE){
+                            if(date.getText().toString().isEmpty()){
+                                createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                                return;
+                            }
+                            char[] c = date.getText().toString().toCharArray();
+                            for(int x = 0; x < c.length; x++){
+                                if(c[x] == '/' || c[x] == '-'){
+                                    createAlertDialog(getString(R.string.warning), "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
+                                    return;
+                                }
+                            }
+                            if(c.length != 6){
+                                createAlertDialog(getString(R.string.warning), "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
+                                return;
+                            }
+                            if(c[2] != '.' || c[5] != '.'){
+                                createAlertDialog(getString(R.string.warning), "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
+                                return;
+                            }
+                            shortTime = date.getText().toString();
+                        }
+
                         String shortKind;
                         if(kindSelection.getSelectedItem().toString().equals("Hausaufgabe")){
                             shortKind = "HA";
@@ -120,7 +202,8 @@ public class tasksFragment extends Fragment  {
                             shortKind = "";
                             createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
                         }
-                        subject.addTask(task.getText().toString(), date.getText().toString(), shortKind);
+
+                        subject.addTask(task.getText().toString(), shortTime, shortKind);
 
                         for(Task task : subject.getAllTasks()){
                             System.out.println("Task: " + task.task + ", " + task.date + ", " + task.kind);

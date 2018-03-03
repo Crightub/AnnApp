@@ -17,13 +17,35 @@
             android:inputType="text"
             android:hint="Aufgabe"/>
 
-        <EditText
-            android:id="@+id/dateInput"
+        <Spinner
+            android:id="@+id/timeInput"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnExtra3"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="date"
-            android:hint="Termin"/>
+            android:layout_gravity="left"
+            android:background="#00000000"
+            android:text="anderes datum"
+            android:textColor="@color/colorAccent" />
+
+        <LinearLayout
+            android:id="@+id/extraLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/dateInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="date"
+                android:hint="Datum (dd.MM.)" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
