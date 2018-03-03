@@ -17,6 +17,6 @@ public class CellViewHolder extends AbstractViewHolder {
     public CellViewHolder(View itemView) {
         super(itemView);
         cell_textview = (TextView) itemView.findViewById(R.id.cell_data);
-        cell_container = itemView.findViewById(R.id.cell_container);
+        cell_container = (LinearLayout) itemView.findViewById(R.id.cell_container);
     }
 }

@@ -21,33 +21,39 @@ import de.tk.annapp.TableView.model.RowHeader;
 
 public class TVAdapterTimetable extends AbstractTableAdapter<ColumnHeader, RowHeader, Cell> {
 
-    public TVAdapterTimetable(Context p_jContext) {
-        super(p_jContext);
+    public TVAdapterTimetable(Context context) {
+        super(context);
+
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateCellViewHolder(ViewGroup parent, int viewType) {
+        // Get cell xml layout
+        View layout = LayoutInflater.from(mContext).inflate(R.layout.table_view_cell_layout,
+                parent, false);
 
-        // Get Cell xml Layout
-        View layout = LayoutInflater.from(m_jContext).inflate(R.layout.table_view_cell_layout, parent, false);
+        System.out.println("Create Cell View Holder...");
 
-        // Create a Cell ViewHolder
+        // Create a Custom ViewHolder for a Cell item.
         return new CellViewHolder(layout);
     }
 
     @Override
-    public void onBindCellViewHolder(AbstractViewHolder holder, Object cellItemModel, int columnPosition, int rowPosition) {
+    public void onBindCellViewHolder(AbstractViewHolder holder, Object cellItemModel, int
+            columnPosition, int rowPosition) {
         Cell cell = (Cell) cellItemModel;
+
+        System.out.println("Set Attributes for the Cell");
 
         // Get the holder to update cell item text
         CellViewHolder viewHolder = (CellViewHolder) holder;
-        viewHolder.cell_textview.setText(String.valueOf(cell.getData()));
+        viewHolder.cell_textview.setText(cell.getData().toString());
 
         // If your TableView should have auto resize for cells & columns.
         // Then you should consider the below lines. Otherwise, you can ignore them.
 
         // It is necessary to remeasure itself.
-        viewHolder.cell_container.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        viewHolder.itemView.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
         viewHolder.cell_textview.requestLayout();
     }
 
@@ -55,63 +61,83 @@ public class TVAdapterTimetable extends AbstractTableAdapter<ColumnHeader, RowHe
     public RecyclerView.ViewHolder onCreateColumnHeaderViewHolder(ViewGroup parent, int viewType) {
 
         // Get Column Header xml Layout
-        View layout = LayoutInflater.from(m_jContext).inflate(R.layout.table_view_column_header_layout, parent, false);
+        View layout = LayoutInflater.from(mContext).inflate(R.layout
+                .table_view_column_header_layout, parent, false);
 
         // Create a ColumnHeader ViewHolder
         return new ColumnHeaderViewHolder(layout, getTableView());
     }
 
     @Override
-    public void onBindColumnHeaderViewHolder(AbstractViewHolder holder, Object columnHeaderItemModel, int columnPosition) {
+    public void onBindColumnHeaderViewHolder(AbstractViewHolder holder, Object columnHeaderItemModel, int
+            position) {
         ColumnHeader columnHeader = (ColumnHeader) columnHeaderItemModel;
 
         // Get the holder to update cell item text
         ColumnHeaderViewHolder columnHeaderViewHolder = (ColumnHeaderViewHolder) holder;
-        columnHeaderViewHolder.setColumnHeader(columnHeader);
+        columnHeaderViewHolder.column_header_textview.setText(columnHeader.getData().toString());
+
+        // If your TableView should have auto resize for cells & columns.
+        // Then you should consider the below lines. Otherwise, you can ignore them.
+
+        // It is necessary to remeasure itself.
+        columnHeaderViewHolder.column_header_container.getLayoutParams().width = LinearLayout
+                .LayoutParams.WRAP_CONTENT;
+        columnHeaderViewHolder.column_header_textview.requestLayout();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateRowHeaderViewHolder(ViewGroup parent, int viewType) {
 
         // Get Row Header xml Layout
-        View layout = LayoutInflater.from(m_jContext).inflate(R.layout.table_view_row_header_layout, parent, false);
+        View layout = LayoutInflater.from(mContext).inflate(R.layout
+                .table_view_row_header_layout, parent, false);
 
         // Create a Row Header ViewHolder
         return new RowHeaderViewHolder(layout);
     }
 
     @Override
-    public void onBindRowHeaderViewHolder(AbstractViewHolder holder, Object rowHeaderItemModel, int rowPosition) {
+    public void onBindRowHeaderViewHolder(AbstractViewHolder holder, Object rowHeaderItemModel, int
+            position) {
         RowHeader rowHeader = (RowHeader) rowHeaderItemModel;
 
         // Get the holder to update row header item text
         RowHeaderViewHolder rowHeaderViewHolder = (RowHeaderViewHolder) holder;
-        rowHeaderViewHolder.row_header_textview.setText(String.valueOf(rowHeader.getData()));
+        rowHeaderViewHolder.row_header_textview.setText(rowHeader.getData().toString());
     }
 
 
     @Override
     public View onCreateCornerView() {
         // Get Corner xml layout
-        return LayoutInflater.from(m_jContext).inflate(R.layout.table_view_corner_layout, null);
+        return LayoutInflater.from(mContext).inflate(R.layout.table_view_corner_layout, null);
     }
 
     @Override
-    public int getColumnHeaderItemViewType(int position) {
+    public int getColumnHeaderItemViewType(int columnPosition) {
+        // The unique ID for this type of column header item
+        // If you have different items for Cell View by X (Column) position,
+        // then you should fill this method to be able create different
+        // type of CellViewHolder on "onCreateCellViewHolder"
         return 0;
     }
 
     @Override
-    public int getRowHeaderItemViewType(int position) {
+    public int getRowHeaderItemViewType(int rowPosition) {
+        // The unique ID for this type of row header item
+        // If you have different items for Row Header View by Y (Row) position,
+        // then you should fill this method to be able create different
+        // type of RowHeaderViewHolder on "onCreateRowHeaderViewHolder"
         return 0;
     }
 
     @Override
-    public int getCellItemViewType(int position) {
+    public int getCellItemViewType(int columnPosition) {
+        // The unique ID for this type of cell item
+        // If you have different items for Cell View by X (Column) position,
+        // then you should fill this method to be able create different
+        // type of CellViewHolder on "onCreateCellViewHolder"
         return 0;
     }
 }
-
-
-
-

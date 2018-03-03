@@ -7,4 +7,13 @@
     <color name="colorPrimary2">#63FF00</color>
     <color name="colorPrimaryDark2">#14E80C</color>
     <color name="colorAccent2">#fff90d</color>
+
+    <color name="bg_line">#E7E7E7</color>
+    <color name="bg_color">#FF99DCD7</color>
+
+    <color name="cell_background_color">#ffffff</color>
+    <color name="cell_text_color">#1f1f1f</color>
+    <color name="header_line_color">@android:color/holo_red_light</color>
+
+    <color name="default_background_color">@color/cell_background_color</color>
 </resources>

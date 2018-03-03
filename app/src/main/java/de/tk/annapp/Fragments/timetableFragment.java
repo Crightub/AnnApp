@@ -1,61 +1,47 @@
 package de.tk.annapp.Fragments;
 
-import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.app.Fragment;
 
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import de.tk.annapp.Day;
 import de.tk.annapp.R;
-import de.tk.annapp.SubjectManager;
 import de.tk.annapp.TableView.MyTableViewListener;
 import de.tk.annapp.TableView.TVAdapterTimetable;
 import de.tk.annapp.TableView.model.Cell;
 import de.tk.annapp.TableView.model.ColumnHeader;
 import de.tk.annapp.TableView.model.RowHeader;
-import de.tk.annapp.TimetableManager;
 
-public class timetableFragment extends Fragment  {
-    View root;
-    TimetableManager timetableManager;
-    ArrayList<Day> days = new ArrayList<>();
 
-    TableView tableView;
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class timetableFragment extends Fragment {
+
+    public static final int COLUMN_SIZE = 100;
+    public static final int ROW_SIZE = 100;
 
     private List<RowHeader> mRowHeaderList;
     private List<ColumnHeader> mColumnHeaderList;
     private List<List<Cell>> mCellList;
 
     private AbstractTableAdapter mTableViewAdapter;
-
-    public static final int COLUMN_SIZE = 5;
-    public static final int ROW_SIZE = 10;
-
-    private String[] nameDays = {"Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"};
-    private String[] nameLessons= {"8.00 - 8.45", "8.45 - 9.30", "9.45 - 10.30", "10.30 - 11.15", "11.30 - 12.15", "12.15 - 13.00", "13.00 - 13.45", "13.45 - 14.30", "14.30 - 15.15", "15.25 - 16.10", "16.10 - 16.55"};
-
+    private TableView mTableView;
 
     public timetableFragment() {
-
+        // Required empty public constructor
     }
 
     @Override
@@ -65,49 +51,37 @@ public class timetableFragment extends Fragment  {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_timetable, container, false);
 
-        //Get Singelton subjectManager
-        timetableManager = TimetableManager.getInstance();
+        RelativeLayout fragment_container = root.findViewById(R.id.fragment_container);
 
-        days = timetableManager.getDays();
+        // Create Table view
+        mTableView = createTableView();
+        fragment_container.addView(mTableView);
 
-        getActivity().setTitle("Stundenplan");
-        root = inflater.inflate(R.layout.fragment_timetable, container, false);
+        loadData();
+        return root;
+    }
 
-        tableView = root.findViewById(R.id.timetable_tableview);
+    private TableView createTableView() {
+        TableView tableView = new TableView(getContext());
+
+        // Set adapter
         mTableViewAdapter = new TVAdapterTimetable(getContext());
         tableView.setAdapter(mTableViewAdapter);
 
-        tableView.setTableViewListener(new MyTableViewListener());
+        // Set layout params
+        FrameLayout.LayoutParams tlp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams
+                .MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        tableView.setLayoutParams(tlp);
 
-        loadData();
-
-        /*
-        Button btnAddSubject = (Button) root.findViewById(R.id.btnAddSubject);
-        final EditText subjectName = (EditText) root.findViewById(R.id.subjectName);
-        final EditText subjectRating = (EditText) root.findViewById(R.id.subjectRating);
-
-        btnAddSubject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(subjectName.getText().toString().isEmpty() || subjectRating.getText().toString().isEmpty()){
-                    Toast.makeText(view.getContext(), "Alle Felder ausfüllen!", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-
-                subjectManager.addSubject(subjectName.getText().toString(), Integer.parseInt(subjectRating.getText().toString()), null, null);
-                subjectName.setText("");
-                subjectRating.setText("");
-                subjectManager.save(getContext(), "subjects");
-                Toast.makeText(getContext(), "Fach erfolgreich hinzugefügt!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        */
-
-        return root;
+        // Set TableView listener
+        tableView.setTableViewListener(new MyTableViewListener(tableView));
+        return tableView;
     }
+
 
     private void initData() {
         mRowHeaderList = new ArrayList<>();
@@ -120,12 +94,11 @@ public class timetableFragment extends Fragment  {
 
     private void loadData() {
         List<RowHeader> rowHeaders = getRowHeaderList();
-        List<List<Cell>> cellList = getCellList();
-        List<ColumnHeader> columnHeaders = getColumnHeaderList();
+        List<List<Cell>> cellList = getCellListForSortingTest(); // getCellList();
+        List<ColumnHeader> columnHeaders = getColumnHeaderList(); //getRandomColumnHeaderList(); //
 
         mRowHeaderList.addAll(rowHeaders);
         for (int i = 0; i < cellList.size(); i++) {
-            System.out.println();
             mCellList.get(i).addAll(cellList.get(i));
         }
 
@@ -138,8 +111,20 @@ public class timetableFragment extends Fragment  {
     private List<RowHeader> getRowHeaderList() {
         List<RowHeader> list = new ArrayList<>();
         for (int i = 0; i < ROW_SIZE; i++) {
-            String title = nameLessons[i];
-            RowHeader header = new RowHeader(String.valueOf(i), title);
+            RowHeader header = new RowHeader(String.valueOf(i), "row " + i);
+            list.add(header);
+        }
+
+        return list;
+    }
+
+    /**
+     * This is a dummy model list test some cases.
+     */
+    public static List<RowHeader> getRowHeaderList(int startIndex) {
+        List<RowHeader> list = new ArrayList<>();
+        for (int i = 0; i < ROW_SIZE; i++) {
+            RowHeader header = new RowHeader(String.valueOf(i), "row " + (startIndex + i));
             list.add(header);
         }
 
@@ -150,8 +135,31 @@ public class timetableFragment extends Fragment  {
     private List<ColumnHeader> getColumnHeaderList() {
         List<ColumnHeader> list = new ArrayList<>();
 
-        for(int i = 0; i < nameDays.length; i++){
-            String title = nameDays[i];
+        for (int i = 0; i < COLUMN_SIZE; i++) {
+            String title = "column " + i;
+            if (i % 6 == 2) {
+                title = "large column " + i;
+            }
+            ColumnHeader header = new ColumnHeader(String.valueOf(i), title);
+            list.add(header);
+        }
+
+        return list;
+    }
+
+    /**
+     * This is a dummy model list test some cases.
+     */
+    private List<ColumnHeader> getRandomColumnHeaderList() {
+        List<ColumnHeader> list = new ArrayList<>();
+
+        for (int i = 0; i < COLUMN_SIZE; i++) {
+            String title = "column " + i;
+            int nRandom = new Random().nextInt();
+            if (nRandom % 4 == 0 || nRandom % 3 == 0 || nRandom == i) {
+                title = "large column " + i;
+            }
+
             ColumnHeader header = new ColumnHeader(String.valueOf(i), title);
             list.add(header);
         }
@@ -164,13 +172,11 @@ public class timetableFragment extends Fragment  {
         for (int i = 0; i < ROW_SIZE; i++) {
             List<Cell> cellList = new ArrayList<>();
             for (int j = 0; j < COLUMN_SIZE; j++) {
-                String text;
-                try{
-                   text = days.get(j).lessons.get(i).subject.name;
-                }catch (Exception e){
-                    text = "";
+                String text = "cell " + j + " " + i;
+                if (j % 4 == 0 && i % 5 == 0) {
+                    text = "large cell " + j + " " + i + ".";
                 }
-                String id = j + " - " + i;
+                String id = j + "-" + i;
 
                 Cell cell = new Cell(id, text);
                 cellList.add(cell);
@@ -179,5 +185,96 @@ public class timetableFragment extends Fragment  {
         }
 
         return list;
+    }
+
+    /**
+     * This is a dummy model list test some cases.
+     */
+    private List<List<Cell>> getCellListForSortingTest() {
+        List<List<Cell>> list = new ArrayList<>();
+        for (int i = 0; i < ROW_SIZE; i++) {
+            List<Cell> cellList = new ArrayList<>();
+            for (int j = 0; j < COLUMN_SIZE; j++) {
+                Object text = "cell " + j + " " + i;
+
+                if (j == 0) {
+                    text = i;
+                } else if (j == 1) {
+                    int random = new Random().nextInt();
+                    text = random;
+                }
+
+                // Create dummy id.
+                String id = j + "-" + i;
+
+                Cell cell = new Cell(id, text);
+                cellList.add(cell);
+            }
+            list.add(cellList);
+        }
+
+        return list;
+    }
+
+    /**
+     * This is a dummy model list test some cases.
+     */
+    private List<List<Cell>> getRandomCellList() {
+        List<List<Cell>> list = new ArrayList<>();
+        for (int i = 0; i < ROW_SIZE; i++) {
+            List<Cell> cellList = new ArrayList<>();
+            list.add(cellList);
+            for (int j = 0; j < COLUMN_SIZE; j++) {
+                String text = "cell " + j + " " + i;
+                int random = new Random().nextInt();
+                if (random % 2 == 0 || random % 5 == 0 || random == j) {
+                    text = "large cell  " + j + " " + i + getRandomString() + ".";
+                }
+
+                // Create dummy id.
+                String id = j + "-" + i;
+
+                Cell cell = new Cell(id, text);
+                cellList.add(cell);
+            }
+        }
+
+        return list;
+    }
+
+    /**
+     * This is a dummy model list test some cases.
+     */
+    public static List<List<Cell>> getRandomCellList(int startIndex) {
+        List<List<Cell>> list = new ArrayList<>();
+        for (int i = 0; i < ROW_SIZE; i++) {
+            List<Cell> cellList = new ArrayList<>();
+            list.add(cellList);
+            for (int j = 0; j < COLUMN_SIZE; j++) {
+                String text = "cell " + j + " " + (i + startIndex);
+                int random = new Random().nextInt();
+                if (random % 2 == 0 || random % 5 == 0 || random == j) {
+                    text = "large cell  " + j + " " + (i + startIndex) + getRandomString() + ".";
+                }
+
+                String id = j + "-" + (i + startIndex);
+
+                Cell cell = new Cell(id, text);
+                cellList.add(cell);
+            }
+        }
+
+        return list;
+    }
+
+
+    private static String getRandomString() {
+        Random r = new Random();
+        String str = " a ";
+        for (int i = 0; i < r.nextInt(); i++) {
+            str = str + " a ";
+        }
+
+        return str;
     }
 }

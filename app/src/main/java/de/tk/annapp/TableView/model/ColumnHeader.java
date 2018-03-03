@@ -1,4 +1,3 @@
-
 package de.tk.annapp.TableView.model;
 
 public class ColumnHeader extends Cell {
