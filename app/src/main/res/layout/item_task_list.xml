@@ -38,7 +38,7 @@
             android:id="@+id/item_task_task"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="70dp"
             android:layout_marginRight="100dp"
             android:layout_weight="1"
             android:textColor="@color/rvItemColor"
