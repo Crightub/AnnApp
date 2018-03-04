@@ -58,8 +58,15 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             tasks.add(new Task(null, c.getString(R.string.insertTask), null, null));
         }
 
-        for (Subject s : subjectsWithTasks) {
+        /*or (Subject s : subjectsWithTasks) {
             tasks.add(new Task(null, s.getName(), null, null));
+            for (Task t : s.getAllTasks()) {
+                tasks.add(t);
+            }
+        }*/
+
+        for (Subject s : subjectsWithTasks) {
+            tasks.add(new Task(null, null, null, s.getName()));
             for (Task t : s.getAllTasks()) {
                 tasks.add(t);
             }
@@ -77,8 +84,10 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         holder.dateTxt.setText((CharSequence) tasks.get(position).date);
         holder.taskTxt.setText(tasks.get(position).task);
         holder.kindTxt.setText(tasks.get(position).kind);
+        holder.subjectTxt.setText(tasks.get(position).subject);
         if(holder.taskTxt.getText().toString().isEmpty()) {
             holder.editButton.setVisibility(View.GONE);
+            holder.subjectTxt.setVisibility(View.VISIBLE);
         }
         else{
             holder.editButton.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +110,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         TextView taskTxt;
         TextView dateTxt;
         TextView kindTxt;
+        TextView subjectTxt;
         ImageButton editButton;
 
         public RecyclerVHTask(View itemView){
@@ -108,6 +118,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             dateTxt = itemView.findViewById(R.id.item_task_date);
             taskTxt = itemView.findViewById(R.id.item_task_task);
             kindTxt = itemView.findViewById(R.id.item_task_kind);
+            subjectTxt = itemView.findViewById(R.id.item_task_subject);
             editButton = itemView.findViewById(R.id.item_task_deleteButton);
         }
     }
