@@ -25,13 +25,10 @@ import de.tk.annapp.TableView.model.ColumnHeader;
 import de.tk.annapp.TableView.model.RowHeader;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class timetableFragment extends Fragment {
 
-    public static final int COLUMN_SIZE = 100;
-    public static final int ROW_SIZE = 100;
+    public static final int COLUMN_SIZE = 5;
+    public static final int ROW_SIZE = 6;
 
     private List<RowHeader> mRowHeaderList;
     private List<ColumnHeader> mColumnHeaderList;
@@ -39,6 +36,9 @@ public class timetableFragment extends Fragment {
 
     private AbstractTableAdapter mTableViewAdapter;
     private TableView mTableView;
+
+    private String[] daynames;
+    private String[] schoolhours;
 
     public timetableFragment() {
         // Required empty public constructor
@@ -60,6 +60,9 @@ public class timetableFragment extends Fragment {
         // Create Table view
         mTableView = createTableView();
         fragment_container.addView(mTableView);
+
+        daynames = getResources().getStringArray(R.array.day_names);
+        schoolhours = getResources().getStringArray(R.array.school_hours);
 
         loadData();
         return root;
@@ -94,10 +97,11 @@ public class timetableFragment extends Fragment {
 
     private void loadData() {
         List<RowHeader> rowHeaders = getRowHeaderList();
-        List<List<Cell>> cellList = getCellListForSortingTest(); // getCellList();
-        List<ColumnHeader> columnHeaders = getColumnHeaderList(); //getRandomColumnHeaderList(); //
+        List<List<Cell>> cellList = getCellListForSortingTest();
+        List<ColumnHeader> columnHeaders = getColumnHeaderList();
 
         mRowHeaderList.addAll(rowHeaders);
+
         for (int i = 0; i < cellList.size(); i++) {
             mCellList.get(i).addAll(cellList.get(i));
         }
@@ -111,7 +115,7 @@ public class timetableFragment extends Fragment {
     private List<RowHeader> getRowHeaderList() {
         List<RowHeader> list = new ArrayList<>();
         for (int i = 0; i < ROW_SIZE; i++) {
-            RowHeader header = new RowHeader(String.valueOf(i), "row " + i);
+            RowHeader header = new RowHeader(String.valueOf(i), schoolhours[i]);
             list.add(header);
         }
 
@@ -136,11 +140,7 @@ public class timetableFragment extends Fragment {
         List<ColumnHeader> list = new ArrayList<>();
 
         for (int i = 0; i < COLUMN_SIZE; i++) {
-            String title = "column " + i;
-            if (i % 6 == 2) {
-                title = "large column " + i;
-            }
-            ColumnHeader header = new ColumnHeader(String.valueOf(i), title);
+            ColumnHeader header = new ColumnHeader(String.valueOf(i), daynames[i]);
             list.add(header);
         }
 

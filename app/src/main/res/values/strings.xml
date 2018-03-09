@@ -31,4 +31,21 @@
     <string name="addSubject">Fach Hinzufügen</string>
     <string name="addTask">Aufgabe Hinzufügen</string>
     <string name="insertTask">Keine Aufgaben vorhanden</string>
+
+    <string-array name="day_names">
+        <item>Montag</item>
+        <item>Dienstag</item>
+        <item>Mittwoch</item>
+        <item>Donnerstag</item>
+        <item>Freitag</item>
+    </string-array>
+    
+    <string-array name="school_hours">
+        <item>8.00-8.45</item>
+        <item>8.45-9.30</item>
+        <item>9.45-10.30</item>
+        <item>10.30-11.15</item>
+        <item>11.30-12.15</item>
+        <item>12.15-13.00</item>
+    </string-array>
 </resources>

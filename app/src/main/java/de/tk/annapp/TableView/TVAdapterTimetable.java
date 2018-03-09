@@ -28,11 +28,11 @@ public class TVAdapterTimetable extends AbstractTableAdapter<ColumnHeader, RowHe
 
     @Override
     public RecyclerView.ViewHolder onCreateCellViewHolder(ViewGroup parent, int viewType) {
+        System.out.println("Create Cell View Holder...");
+
         // Get cell xml layout
         View layout = LayoutInflater.from(mContext).inflate(R.layout.table_view_cell_layout,
                 parent, false);
-
-        System.out.println("Create Cell View Holder...");
 
         // Create a Custom ViewHolder for a Cell item.
         return new CellViewHolder(layout);
@@ -41,6 +41,7 @@ public class TVAdapterTimetable extends AbstractTableAdapter<ColumnHeader, RowHe
     @Override
     public void onBindCellViewHolder(AbstractViewHolder holder, Object cellItemModel, int
             columnPosition, int rowPosition) {
+
         Cell cell = (Cell) cellItemModel;
 
         System.out.println("Set Attributes for the Cell");
@@ -59,6 +60,8 @@ public class TVAdapterTimetable extends AbstractTableAdapter<ColumnHeader, RowHe
 
     @Override
     public RecyclerView.ViewHolder onCreateColumnHeaderViewHolder(ViewGroup parent, int viewType) {
+
+        System.out.println("Create ColumnHeader View Holder...");
 
         // Get Column Header xml Layout
         View layout = LayoutInflater.from(mContext).inflate(R.layout
