@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +24,7 @@ import android.widget.Spinner;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import de.tk.annapp.R;
@@ -31,6 +34,7 @@ import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
 import de.tk.annapp.Task;
 
+import static android.R.layout.simple_expandable_list_item_2;
 import static android.R.layout.simple_spinner_dropdown_item;
 
 
@@ -39,6 +43,7 @@ public class tasksFragment extends Fragment  {
     private SubjectManager subjectManager;
     RecyclerView recyclerView;
     RVAdapterTaskList adapterTaskList;
+    private String selectedDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,8 +76,6 @@ public class tasksFragment extends Fragment  {
         View mView = View.inflate(this.getContext(), R.layout.fragment_task_input, null);
 
         final EditText task = (EditText) mView.findViewById(R.id.task);
-        final EditText date = (EditText) mView.findViewById(R.id.date);
-        final LinearLayout extra = (LinearLayout) mView.findViewById(R.id.extraLayout2);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra2);
 
         final ArrayList<String> subjectNames = new ArrayList<>();
@@ -111,12 +114,11 @@ public class tasksFragment extends Fragment  {
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(extra.getVisibility() != View.VISIBLE){
-                    extra.setVisibility(View.VISIBLE);
+                if(timeSelection.getVisibility() == View.VISIBLE){
+                    createInputDialogCalendar();
                     timeSelection.setVisibility(View.GONE);
                 }
                 else{
-                    extra.setVisibility(View.GONE);
                     timeSelection.setVisibility(View.VISIBLE);
                 }
             }
@@ -166,26 +168,7 @@ public class tasksFragment extends Fragment  {
                         }
 
                         if(timeSelection.getVisibility() == View.GONE){
-                            if(date.getText().toString().isEmpty()){
-                                createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
-                                return;
-                            }
-                            char[] c = date.getText().toString().toCharArray();
-                            for(int x = 0; x < c.length; x++){
-                                if(c[x] == '/' || c[x] == '-'){
-                                    createAlertDialog(getString(R.string.warning), "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
-                                    return;
-                                }
-                            }
-                            if(c.length != 6){
-                                createAlertDialog(getString(R.string.warning), "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
-                                return;
-                            }
-                            if(c[2] != '.' || c[5] != '.'){
-                                createAlertDialog(getString(R.string.warning), "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
-                                return;
-                            }
-                            shortTime = date.getText().toString();
+                            shortTime = selectedDate;
                         }
 
                         String shortKind;
@@ -202,7 +185,6 @@ public class tasksFragment extends Fragment  {
                             shortKind = "";
                             createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
                         }
-
                         subject.addTask(task.getText().toString(), shortTime, shortKind);
 
                         for(Task task : subject.getAllTasks()){
@@ -211,6 +193,38 @@ public class tasksFragment extends Fragment  {
 
                         recyclerView.setAdapter(new RVAdapterTaskList(getActivity()));
                         subjectManager.save(getContext(), "subjects");
+                    }
+                })
+                .show();
+    }
+
+    public void createInputDialogCalendar(){
+        AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
+
+        View mView = View.inflate(this.getContext(), R.layout.fragment_task_input_calendar, null);
+
+        final CalendarView calendar = (CalendarView) mView.findViewById(R.id.calendarViewTasks);
+
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
+                String month = i1 + 1 + "";
+                String day = i2 + "";
+                if(i2 < 10){
+                    day = "0" + day;
+                }
+                if(i1 < 9){
+                    month = "0" + month;
+                }
+                selectedDate = day + "." + month + ".";
+            }
+        });
+
+        ad      .setTitle("Datum auswählen")
+                .setView(mView)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 })
                 .show();

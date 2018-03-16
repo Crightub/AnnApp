@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,6 +26,7 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import de.tk.annapp.Grade;
@@ -41,6 +44,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private ArrayList<Subject> subjects = new ArrayList<>();
     private ArrayList<Subject> subjectsWithTasks = new ArrayList<>();
     private SubjectManager subjectManager;
+    private String selectedDate;
     AlertDialog adTrueDialog;
 
     public RVAdapterTaskList(Context _c){
@@ -58,17 +62,14 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             tasks.add(new Task(null, c.getString(R.string.insertTask), null, null));
         }
 
-        /*or (Subject s : subjectsWithTasks) {
-            tasks.add(new Task(null, s.getName(), null, null));
-            for (Task t : s.getAllTasks()) {
-                tasks.add(t);
-            }
-        }*/
-
-        for (Subject s : subjectsWithTasks) {
+        for (Subject s : subjectsWithTasks){
             tasks.add(new Task(null, null, null, s.getName()));
-            for (Task t : s.getAllTasks()) {
-                tasks.add(t);
+            for(int i = 0; i < 7; i++){
+                for(Task t : s.getAllTasks()){
+                    if(t.dateDiff() == i){
+                        tasks.add(t);
+                    }
+                }
             }
         }
     }
@@ -146,11 +147,12 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         timeSelection.setAdapter(adapterTime);
 
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra3);
-        final LinearLayout extra = (LinearLayout) mView.findViewById(R.id.extraLayout3);
 
-        final EditText dateInput =(EditText) mView.findViewById(R.id.dateInput);
         if(task.date != "Mo" && task.date != "Di" && task.date != "Mi" && task.date != "Do" && task.date != "Fr" && task.date != "Sa" && task.date != "So") {
-            dateInput.setText(String.valueOf(task.date));
+            timeSelection.setVisibility(View.GONE);
+        }
+        else{
+            timeSelection.setVisibility(View.VISIBLE);
         }
 
         final Button btnDelete = (Button) mView.findViewById(R.id.btnDeleteTask);
@@ -159,12 +161,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(extra.getVisibility() != View.VISIBLE){
-                    extra.setVisibility(View.VISIBLE);
+                if(timeSelection.getVisibility() == View.VISIBLE){
+                    createInputDialogCalendar();
                     timeSelection.setVisibility(View.GONE);
                 }
                 else{
-                    extra.setVisibility(View.GONE);
                     timeSelection.setVisibility(View.VISIBLE);
                 }
             }
@@ -222,27 +223,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                             createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
                         }
 
+
                         if(timeSelection.getVisibility() == View.GONE){
-                            if(dateInput.getText().toString().isEmpty()){
-                                createAlertDialog(/*getString(R.string.warning)*/"Achtung", /*getString(R.string.warningMessage)*/"Bitte füllen Sie alle notwendigen Felder aus!", android.R.drawable.ic_dialog_alert);
-                                return;
-                            }
-                            char[] c = dateInput.getText().toString().toCharArray();
-                            for(int x = 0; x < c.length; x++){
-                                if(c[x] == '/' || c[x] == '-'){
-                                    createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
-                                    return;
-                                }
-                            }
-                            if(c.length != 6){
-                                createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
-                                return;
-                            }
-                            if(c[2] != '.' || c[5] != '.'){
-                                createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
-                                return;
-                            }
-                            shortTime = dateInput.getText().toString();
+                            shortTime = selectedDate;
                         }
 
 
@@ -261,6 +244,38 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 });
 
         adTrueDialog = ad.show();
+    }
+
+    public void createInputDialogCalendar(){
+        AlertDialog.Builder ad = new  AlertDialog.Builder(c);
+
+        View mView = View.inflate(c, R.layout.fragment_task_input_calendar, null);
+
+        final CalendarView calendar = (CalendarView) mView.findViewById(R.id.calendarViewTasks);
+
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
+                String month = i1 + 1 + "";
+                String day = i2 + "";
+                if(i2 < 10){
+                    day = "0" + day;
+                }
+                if(i1 < 9){
+                    month = "0" + month;
+                }
+                selectedDate = day + "." + month + ".";
+            }
+        });
+
+        ad      .setTitle("Datum auswählen")
+                .setView(mView)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .show();
     }
 
     void createAlertDialog(String title, String text, int ic){
