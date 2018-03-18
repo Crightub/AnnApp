@@ -59,17 +59,13 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
 
         if(subjectsWithTasks.isEmpty()){
-            tasks.add(new Task(null, c.getString(R.string.insertTask), null, null));
+            tasks.add(new Task(null, null, null, null, c.getString(R.string.insertTask), false));
         }
 
-        for (Subject s : subjectsWithTasks){
-            tasks.add(new Task(null, null, null, s.getName()));
-            for(int i = 0; i < 7; i++){
-                for(Task t : s.getAllTasks()){
-                    if(t.dateDiff() == i){
-                        tasks.add(t);
-                    }
-                }
+        for(Subject s : subjectsWithTasks){
+            tasks.add(new Task(null, null, null, s.getName(), null, false));
+            for(Task t : s.getAllTasksSorted()){
+                tasks.add(t);
             }
         }
     }

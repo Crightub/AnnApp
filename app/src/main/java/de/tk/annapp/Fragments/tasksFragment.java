@@ -43,7 +43,8 @@ public class tasksFragment extends Fragment  {
     private SubjectManager subjectManager;
     RecyclerView recyclerView;
     RVAdapterTaskList adapterTaskList;
-    private String selectedDate;
+    private Date selectedDate;
+    private boolean cal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,6 +95,8 @@ public class tasksFragment extends Fragment  {
         time.add("Samstag");
         time.add("Sonntag");
 
+        cal = false;
+
 
         for (Subject s : subjectManager.getSubjects()) {
             subjectNames.add(s.name);
@@ -117,9 +120,11 @@ public class tasksFragment extends Fragment  {
                 if(timeSelection.getVisibility() == View.VISIBLE){
                     createInputDialogCalendar();
                     timeSelection.setVisibility(View.GONE);
+                    cal = true;
                 }
                 else{
                     timeSelection.setVisibility(View.VISIBLE);
+                    cal = false;
                 }
             }
         });
@@ -167,10 +172,6 @@ public class tasksFragment extends Fragment  {
                             createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
                         }
 
-                        if(timeSelection.getVisibility() == View.GONE){
-                            shortTime = selectedDate;
-                        }
-
                         String shortKind;
                         if(kindSelection.getSelectedItem().toString().equals("Hausaufgabe")){
                             shortKind = "HA";
@@ -185,7 +186,7 @@ public class tasksFragment extends Fragment  {
                             shortKind = "";
                             createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
                         }
-                        subject.addTask(task.getText().toString(), shortTime, shortKind);
+                        subject.addTask(task.getText().toString(), selectedDate, shortKind, shortTime, cal);
 
                         for(Task task : subject.getAllTasks()){
                             System.out.println("Task: " + task.task + ", " + task.date + ", " + task.kind);
@@ -208,15 +209,7 @@ public class tasksFragment extends Fragment  {
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                String month = i1 + 1 + "";
-                String day = i2 + "";
-                if(i2 < 10){
-                    day = "0" + day;
-                }
-                if(i1 < 9){
-                    month = "0" + month;
-                }
-                selectedDate = day + "." + month + ".";
+                selectedDate = new Date(i, i1, i2);
             }
         });
 

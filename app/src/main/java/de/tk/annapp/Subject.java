@@ -12,6 +12,8 @@ public class Subject implements Serializable {
     //Contains all tasks of one Subject
     ArrayList<Task> tasks = new ArrayList<>();
 
+    ArrayList<Task> tasksSorted = new ArrayList<>();
+
     //name of the Subject
     public String name;
 
@@ -35,8 +37,8 @@ public class Subject implements Serializable {
         return name;
     }
 
-    public void addTask(String _task, String _date, String _kind){
-        tasks.add(new Task(_task, _date, _kind, this.getName()));
+    public void addTask(String _task, Date _date, String _kind, String _day, boolean _cal){
+        tasks.add(new Task(_task, _date, _kind, this.getName(), _day, _cal));
     }
 
     public void removeTask(Task _taskPosition){
@@ -47,6 +49,29 @@ public class Subject implements Serializable {
         Task task = tasks.get(tasks.indexOf(_task));
         task.task = _task_task;
         task.date = _date;
+    }
+
+    public void sortTasks(){
+        ArrayList<Task> tasksLeft = new ArrayList<>();
+        Task lowest = new Task(null, null, null, null, null, false);
+        tasksSorted.clear();
+        for(Task t : tasks){
+            tasksLeft.add(t);
+        }
+        for(int x = 0; x < tasks.size(); x++) {
+            int i = 0;
+            for(Task left : tasksLeft) {
+                if (i == 0) {
+                    lowest = left;
+                    i++;
+                }
+                if (left.dateNumber < lowest.dateNumber) {
+                    lowest = left;
+                }
+            }
+            tasksSorted.add(lowest);
+            tasksLeft.remove(lowest);
+        }
     }
 
     public void addGrade(int _grade, boolean _iswritten, float _ratingGrade, String _note){
@@ -116,5 +141,10 @@ public class Subject implements Serializable {
 
     public ArrayList<Task> getAllTasks(){
         return tasks;
+    }
+
+    public ArrayList<Task> getAllTasksSorted(){
+        sortTasks();
+        return tasksSorted;
     }
 }

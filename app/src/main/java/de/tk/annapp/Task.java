@@ -19,38 +19,100 @@ public class Task implements Serializable {
     public String date;
     public String subject;
     public String kind;
-    public int dateDiff;
-    public int dateInt = 0;
+    public boolean weekday;
+    public long dateNumber;
 
-    public Task(String _task, String _date, String _kind, String _subject){
+    public Task(String _task, Date _date, String _kind, String _subject, String _day, boolean _cal){
         task = _task;
-        if(_date == "Mo")
-            dateInt = 2;
-        else if(_date == "Di")
-            dateInt = 3;
-        else if(_date == "Mi")
-            dateInt = 4;
-        else if(_date == "Do")
-            dateInt = 5;
-        else if(_date == "Fr")
-            dateInt = 6;
-        else if(_date == "Sa")
-            dateInt = 7;
-        else if(_date == "So")
-            dateInt = 1;
-        date = _date;
+        weekday = _cal;
+        if(!weekday){
+            date = _day;
+            dateDiff();
+        }
+        else{
+            dateNumber = _date.getTime();
+            date = _date.getDate() + "." + (_date.getMonth() + 1) + ".";
+        }
         kind = _kind;
         subject = _subject;
     }
 
-    public int dateDiff(){
+    public void dateDiff(){
         Calendar cal = new GregorianCalendar();
-        cal.setTime(new Date());
-        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-        dateDiff = dateInt - dayOfWeek;
-        if(dateDiff < 0){
-            dateDiff = dateDiff + 7;
+        int year = cal.getTime().getYear();
+        int day = cal.getTime().getDate();
+        int today = cal.getTime().getDay();
+        int month = cal.getTime().getMonth();
+        int dayInt = 0;
+        int dayDiff;
+        Date calInt;
+
+        if(date == "Mo"){
+            dayInt = 1;
         }
-        return 0;
+        else if(date == "Di"){
+            dayInt = 2;
+        }
+        else if(date == "Mi"){
+            dayInt = 3;
+        }
+        else if(date == "Do"){
+            dayInt = 4;
+        }
+        else if(date == "Fr"){
+            dayInt = 5;
+        }
+        else if(date == "Sa"){
+            dayInt = 6;
+        }
+        else if(date == "So"){
+            dayInt = 0;
+        }
+
+        dayDiff = dayInt - today;
+        if(dayDiff < 0){
+            dayDiff = dayDiff + 7;
+        }
+
+        int dayOfMonth = day + dayDiff;
+        int realYear = year + 1900;
+        //Jahres- und Monatsübergänge
+        if(month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11){
+            if(dayOfMonth > 31){
+                month = month + 1;
+                dayOfMonth = dayOfMonth - 31;
+            }
+        }
+        if(month == 3 || month == 5 || month == 8 || month == 10){
+            if(dayOfMonth > 30){
+                month = month + 1;
+                dayOfMonth = dayOfMonth - 30;
+            }
+        }
+        if(month == 1 && (realYear % 4) != 0){
+            if(dayOfMonth > 28){
+                month = month + 1;
+                dayOfMonth = dayOfMonth - 28;
+            }
+        }
+        if(month == 1 && (realYear % 4) == 0 && (realYear % 400) != 0){
+            if(dayOfMonth > 29){
+                month = month + 1;
+                dayOfMonth = dayOfMonth - 29;
+            }
+        }
+        if(month == 1 && (realYear % 4) == 0 && (realYear % 400) == 0){
+            if(dayOfMonth > 28){
+                month = month + 1;
+                dayOfMonth = dayOfMonth - 28;
+            }
+        }
+        if(month > 11){
+            realYear = realYear + 1;
+            month = 0;
+        }
+
+        calInt = new Date(realYear, month, dayOfMonth);
+        dateNumber = calInt.getTime();
     }
 }
