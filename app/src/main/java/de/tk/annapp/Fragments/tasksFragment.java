@@ -1,8 +1,12 @@
 package de.tk.annapp.Fragments;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -71,7 +75,24 @@ public class tasksFragment extends Fragment  {
         return root;
     }
 
+    @SuppressLint("NewApi")
+    public static final void recreateActivityCompat(final Activity a) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            a.recreate();
+        } else {
+            final Intent intent = a.getIntent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            a.finish();
+            a.overridePendingTransition(0, 0);
+            a.startActivity(intent);
+            a.overridePendingTransition(0, 0);
+        }
+    }
+
     public void createInputDialog(){
+
+
+
         AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
 
         View mView = View.inflate(this.getContext(), R.layout.fragment_task_input, null);

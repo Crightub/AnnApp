@@ -197,6 +197,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                         notifyItemChanged(grades.indexOf(grade));
 
                         subjectManager.save(c, "subjects");
+                        subjectManager.setGradeTextView(true, subject);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -244,6 +245,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                         notifyItemRangeChanged(grades.indexOf(grade), getItemCount());
                         subject.removeGrade(grade);
                         subjectManager.save(c,"subjects");
+                        subjectManager.setGradeTextView(true, subject);
 
                         adTrueDialog.cancel();
 

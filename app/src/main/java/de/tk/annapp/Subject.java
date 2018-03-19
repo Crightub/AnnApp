@@ -14,6 +14,8 @@ public class Subject implements Serializable {
 
     ArrayList<Task> tasksSorted = new ArrayList<>();
 
+    int position;
+
     //name of the Subject
     public String name;
 
@@ -49,6 +51,14 @@ public class Subject implements Serializable {
         Task task = tasks.get(tasks.indexOf(_task));
         task.task = _task_task;
         task.date = _date;
+    }
+
+    public void setPosition(int position){
+        this.position = position;
+    }
+
+    public int getPosition (){
+        return position;
     }
 
     public void sortTasks(){

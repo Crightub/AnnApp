@@ -1,11 +1,42 @@
 package de.tk.annapp;
 
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.database.DatabaseErrorHandler;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.UserHandle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.view.Display;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -14,6 +45,8 @@ public class SubjectManager {
 
     private static final SubjectManager subjectManager = new SubjectManager();
     public float overallGradePointAverage;
+
+    Context context;
 
     TextView textViewGrade;
 
@@ -34,6 +67,15 @@ public class SubjectManager {
     public void addSubject(String _name, int _rating, String _teacher, String _room){
         //Add a Subject to the subjects Arraylist
         subjects.add(new Subject(_name, _rating, _teacher, _room));
+        save(context, "subjects");
+    }
+
+    public void setContext(Context c){
+        context=c;
+    }
+
+    public Context getContext(){
+        return context;
     }
 
     //Goes through all subjects and gives the one with the same name back
@@ -76,7 +118,7 @@ public class SubjectManager {
             ObjectInputStream ois = new ObjectInputStream(c.openFileInput(filename));
             subjects = (ArrayList<Subject>) ois.readObject();
             ois.close();
-            setGradeTextView(true);
+            setGradeTextView(true, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,18 +132,21 @@ public class SubjectManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setGradeTextView(true);
+        setGradeTextView(true, null);
     }
 
     public void setTextView(TextView tw){
         textViewGrade = tw;
     }
 
-    public void setGradeTextView(boolean isVisible){
+    public void setGradeTextView(boolean isVisible, Subject subject){
         if(isVisible) {
             textViewGrade.setVisibility(View.VISIBLE);
 
-            textViewGrade.setText(Float.toString(subjectManager.getWholeGradeAverage()));
+            if(subject == null)
+                textViewGrade.setText(Float.toString(subjectManager.getWholeGradeAverage()));
+            else
+                textViewGrade.setText(Float.toString(subject.getGradePointAverage()));
 
         }
         else

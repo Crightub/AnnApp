@@ -53,6 +53,7 @@ public class timetableFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
+        getActivity().setTitle("Stundenplan");
         View root = inflater.inflate(R.layout.fragment_timetable, container, false);
 
         RelativeLayout fragment_container = root.findViewById(R.id.fragment_container);

@@ -46,10 +46,21 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private SubjectManager subjectManager;
     private String selectedDate;
     AlertDialog adTrueDialog;
+    int pos;
 
     public RVAdapterTaskList(Context _c){
+
         c = _c;
         subjectManager = SubjectManager.getInstance();
+        constructor();
+
+    }
+
+    void constructor(){
+        pos = -1;
+
+        subjectsWithTasks.clear();
+        tasks.clear();
         subjects = subjectManager.getSubjects();
 
         for (Subject sj : subjects){
@@ -64,8 +75,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         for(Subject s : subjectsWithTasks){
             tasks.add(new Task(null, null, null, s.getName(), null, false));
+            pos++;
+            s.setPosition(pos);
             for(Task t : s.getAllTasksSorted()){
                 tasks.add(t);
+                pos++;
             }
         }
     }
@@ -82,6 +96,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         holder.taskTxt.setText(tasks.get(position).task);
         holder.kindTxt.setText(tasks.get(position).kind);
         holder.subjectTxt.setText(tasks.get(position).subject);
+
         if(holder.taskTxt.getText().toString().isEmpty()) {
             holder.editButton.setVisibility(View.GONE);
             holder.subjectTxt.setVisibility(View.VISIBLE);
@@ -304,12 +319,23 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
+                        subject.removeTask(task);
+                        System.out.println("Remove task: " + task.task);
+
+                        //constructor();
+
+                        notifyItemRemoved(subjectManager.getSubjectByName(task.subject).getPosition());
+                        notifyItemRangeChanged(subjectManager.getSubjectByName(task.subject).getPosition(), getItemCount());
                         notifyItemRemoved(tasks.indexOf(task));
                         notifyItemRangeChanged(tasks.indexOf(task), getItemCount());
-                        subject.removeTask(task);
+
+                        constructor();
+
                         subjectManager.save(c,"subjects");
 
                         adTrueDialog.cancel();
+
+
 
                     }
                 })
@@ -321,6 +347,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 .setIcon(android.R.drawable.ic_delete)
                 .show();
 
-        //TODO: reload activity
+
     }
 }

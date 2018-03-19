@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
 
         //Creates instance of SubjectManager
         subjectManager = SubjectManager.getInstance();
+        subjectManager.setContext(this.getApplicationContext());
 
         subjectManager.setTextView(textViewGrade);
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity
         subjectManager.addSubject("Deutsch", 1, "fdsh", "hjsr");
         subjectManager.addSubject("Latein", 1, "fdsh", "hjsr");
         subjectManager.addSubject("Englisch", 1, "fdsh", "hjsr");
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -140,6 +142,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new timetableFragment();
         } else if (id == R.id.nav_grades) {
             fragment = new gradesFragment();
+            subjectManager.setGradeTextView(true, null);
         } else if (id == R.id.nav_tasks) {
             fragment = new tasksFragment();
         } else if (id == R.id.nav_calendar) {
@@ -159,7 +162,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if(id != R.id.nav_grades)
-            subjectManager.setGradeTextView(false);
+            subjectManager.setGradeTextView(false, null);
 
         if (fragment == null) {
             System.out.println("Main Activity: Your button for the fragment has no fragment defined to put into the Layout");
@@ -188,6 +191,8 @@ public class MainActivity extends AppCompatActivity
         TextView subjectTextName = view.findViewById(R.id.item_subject_name);
         System.out.print(subjectTextName.getText().toString());
         args.putString("subjectName", subjectTextName.getText().toString());
+
+        subjectManager.setGradeTextView(true, subjectManager.getSubjectByName(subjectTextName.getText().toString()));
 
         fragment.setArguments(args);
 
