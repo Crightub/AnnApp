@@ -46,7 +46,6 @@ public class tasksFragment extends Fragment  {
     View root;
     private SubjectManager subjectManager;
     RecyclerView recyclerView;
-    RVAdapterTaskList adapterTaskList;
     private Date selectedDate;
     private boolean cal;
 
@@ -63,6 +62,7 @@ public class tasksFragment extends Fragment  {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 createInputDialog();
+                subjectManager.save(root.getContext(), "subjects");
             }
         });
 

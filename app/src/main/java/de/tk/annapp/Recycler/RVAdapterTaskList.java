@@ -57,6 +57,14 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     }
 
     void constructor(){
+
+        try {
+            System.out.println("Some grade: " + subjects.get(0).getAllGrades().get(0));
+        }catch (Exception e){
+            System.out.println("Some weird error");
+            System.out.println(e);
+        }
+
         pos = -1;
 
         subjectsWithTasks.clear();
@@ -320,9 +328,15 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     public void onClick(DialogInterface dialog, int which) {
 
                         subject.removeTask(task);
-                        System.out.println("Remove task: " + task.task);
+                        //System.out.println("Remove task: " + task.task);
 
-                        //constructor();
+                        try {
+                            System.out.println("Some grade 334: " + subjects.get(0).getAllGrades().get(0));
+                        }catch (Exception e){
+                            System.out.println("Some weird error 334");
+                            System.out.println(e);
+                        }
+
 
                         notifyItemRemoved(subjectManager.getSubjectByName(task.subject).getPosition());
                         notifyItemRangeChanged(subjectManager.getSubjectByName(task.subject).getPosition(), getItemCount());
@@ -330,6 +344,13 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         notifyItemRangeChanged(tasks.indexOf(task), getItemCount());
 
                         constructor();
+
+                        try {
+                            System.out.println("Some grade 349: " + subjects.get(0).getAllGrades().get(0));
+                        }catch (Exception e){
+                            System.out.println("Some weird error 349");
+                            System.out.println(e);
+                        }
 
                         subjectManager.save(c,"subjects");
 

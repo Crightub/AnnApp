@@ -1,42 +1,11 @@
 package de.tk.annapp;
 
 
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.IntentSender;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.database.DatabaseErrorHandler;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.UserHandle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.view.Display;
 import android.view.View;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -46,9 +15,12 @@ public class SubjectManager {
     private static final SubjectManager subjectManager = new SubjectManager();
     public float overallGradePointAverage;
 
-    Context context;
+    Context c;
 
     TextView textViewGrade;
+
+    //Contains all subjects
+    ArrayList<Subject> subjects = new ArrayList<>();
 
     private SubjectManager(){
         System.out.println("Create SubjectManager...");
@@ -59,23 +31,20 @@ public class SubjectManager {
         return subjectManager;
     }
 
-    //Contains all subjects
-    ArrayList<Subject> subjects = new ArrayList<>();
-
     public ArrayList<Subject> getSubjects(){return subjects;}
 
     public void addSubject(String _name, int _rating, String _teacher, String _room){
         //Add a Subject to the subjects Arraylist
         subjects.add(new Subject(_name, _rating, _teacher, _room));
-        save(context, "subjects");
+        save(c, "subjects");
     }
 
     public void setContext(Context c){
-        context=c;
+        this.c =c;
     }
 
     public Context getContext(){
-        return context;
+        return c;
     }
 
     //Goes through all subjects and gives the one with the same name back
@@ -119,7 +88,9 @@ public class SubjectManager {
             subjects = (ArrayList<Subject>) ois.readObject();
             ois.close();
             setGradeTextView(true, null);
+            System.out.println("loading done ---------------------------------------------------------------------------------------------------------");
         } catch (Exception e) {
+            System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
             e.printStackTrace();
         }
     }
@@ -143,10 +114,20 @@ public class SubjectManager {
         if(isVisible) {
             textViewGrade.setVisibility(View.VISIBLE);
 
-            if(subject == null)
+            if(subject == null) {
+                if(Float.toString(subjectManager.getWholeGradeAverage()).equals("NaN")){
+                    setGradeTextView(false, null);
+                    return;
+                }
                 textViewGrade.setText(Float.toString(subjectManager.getWholeGradeAverage()));
-            else
-                textViewGrade.setText(Float.toString(subject.getGradePointAverage()));
+            } else {
+
+                if (Float.toString(subject.getGradePointAverage()).equals("NaN")){
+                    setGradeTextView(false, null);
+                    return;
+                } else
+                    textViewGrade.setText(Float.toString(subject.getGradePointAverage()));
+            }
 
         }
         else
