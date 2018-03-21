@@ -44,10 +44,10 @@ public class MainActivity extends AppCompatActivity
         subjectManager.setGradeTextView(false, null);
 
         //Add test subjects
-        /*subjectManager.addSubject("Mathe", 1, "fdsh", "hjsr");
+        subjectManager.addSubject("Mathe", 1, "fdsh", "hjsr");
         subjectManager.addSubject("Deutsch", 1, "fdsh", "hjsr");
         subjectManager.addSubject("Latein", 1, "fdsh", "hjsr");
-        subjectManager.addSubject("Englisch", 1, "fdsh", "hjsr");*/
+        subjectManager.addSubject("Englisch", 1, "fdsh", "hjsr");
 
 
 

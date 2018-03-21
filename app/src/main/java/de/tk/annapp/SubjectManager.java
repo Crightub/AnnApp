@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class SubjectManager {
 
     private static final SubjectManager subjectManager = new SubjectManager();
-    public float overallGradePointAverage;
 
     Context c;
 
@@ -35,6 +34,15 @@ public class SubjectManager {
 
     public void addSubject(String _name, int _rating, String _teacher, String _room){
         //Add a Subject to the subjects Arraylist
+        for(Subject s : subjects){
+            Subject newSubject = new Subject(_name, _rating, _teacher, _room);
+
+            if(newSubject.name.equals(s.name)){
+                System.out.println(getClass().getName() + ": Subject already exists. addSubject() failed.");
+                return;
+            }
+        }
+
         subjects.add(new Subject(_name, _rating, _teacher, _room));
         save(c, "subjects");
     }
@@ -78,7 +86,7 @@ public class SubjectManager {
         wholeGradeAverage /= (subjects.size() - emptySubjects);
         System.out.println(wholeGradeAverage);
         System.out.println("size: " + subjects.size());
-        return wholeGradeAverage;
+        return  Util.round(wholeGradeAverage, 2);
     }
 
     public void load(Context c, String filename)

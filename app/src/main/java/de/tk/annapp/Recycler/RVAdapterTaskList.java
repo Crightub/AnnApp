@@ -337,11 +337,14 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                             System.out.println(e);
                         }
 
-
-                        notifyItemRemoved(subjectManager.getSubjectByName(task.subject).getPosition());
-                        notifyItemRangeChanged(subjectManager.getSubjectByName(task.subject).getPosition(), getItemCount());
                         notifyItemRemoved(tasks.indexOf(task));
                         notifyItemRangeChanged(tasks.indexOf(task), getItemCount());
+
+                        //Only remove the Subject title if the subject has no tasks left
+                        if(subjectManager.getSubjectByName(task.subject).getAllTasks().isEmpty()) {
+                            notifyItemRemoved(subjectManager.getSubjectByName(task.subject).getPosition());
+                            notifyItemRangeChanged(subjectManager.getSubjectByName(task.subject).getPosition(), getItemCount());
+                        }
 
                         constructor();
 
