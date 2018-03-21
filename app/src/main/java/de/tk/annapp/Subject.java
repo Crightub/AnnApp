@@ -47,10 +47,18 @@ public class Subject implements Serializable {
         tasks.remove(tasks.indexOf(_taskPosition));
     }
 
-    public void editTask(Task _task, String _task_task, String _date){
+    public void editTask(Task _task, String _task_task, String _day, Date _date, boolean _cal){
         Task task = tasks.get(tasks.indexOf(_task));
         task.task = _task_task;
-        task.date = _date;
+        task.weekday = _cal;
+        if(!_cal){
+            task.date = _day;
+            task.dateDiff();
+        }
+        else{
+            task.dateNumber = _date.getTime();
+            task.date = _date.getDate() + "." + (_date.getMonth() + 1) + ".";
+        }
     }
 
     public void setPosition(int position){

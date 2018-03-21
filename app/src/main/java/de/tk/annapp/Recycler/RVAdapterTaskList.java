@@ -26,8 +26,10 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import de.tk.annapp.Grade;
 import de.tk.annapp.Task;
@@ -44,8 +46,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private ArrayList<Subject> subjects = new ArrayList<>();
     private ArrayList<Subject> subjectsWithTasks = new ArrayList<>();
     private SubjectManager subjectManager;
-    private String selectedDate;
+    private Date selectedDate;
     AlertDialog adTrueDialog;
+    private boolean cal;
     int pos;
 
     public RVAdapterTaskList(Context _c){
@@ -58,12 +61,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     void constructor(){
 
-        try {
-            System.out.println("Some grade: " + subjects.get(0).getAllGrades().get(0));
-        }catch (Exception e){
-            System.out.println("Some weird error");
-            System.out.println(e);
-        }
+        Calendar calend = new GregorianCalendar();
 
         pos = -1;
 
@@ -86,6 +84,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             pos++;
             s.setPosition(pos);
             for(Task t : s.getAllTasksSorted()){
+                if(t.dateNumber < calend.getTime().getTime()){
+                    delete(s, t);
+                }
+                //TODO: Delete Task, if it is in the past
+                //TODO: Change Task to "Mo", "Di", ..., if it is in less than one week
                 tasks.add(t);
                 pos++;
             }
@@ -169,9 +172,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         if(task.date != "Mo" && task.date != "Di" && task.date != "Mi" && task.date != "Do" && task.date != "Fr" && task.date != "Sa" && task.date != "So") {
             timeSelection.setVisibility(View.GONE);
+            cal = true;
         }
         else{
             timeSelection.setVisibility(View.VISIBLE);
+            cal = false;
         }
 
         final Button btnDelete = (Button) mView.findViewById(R.id.btnDeleteTask);
@@ -183,9 +188,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 if(timeSelection.getVisibility() == View.VISIBLE){
                     createInputDialogCalendar();
                     timeSelection.setVisibility(View.GONE);
+                    cal = true;
                 }
                 else{
                     timeSelection.setVisibility(View.VISIBLE);
+                    cal = false;
                 }
             }
         });
@@ -242,14 +249,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                             createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
                         }
 
-
-                        if(timeSelection.getVisibility() == View.GONE){
-                            shortTime = selectedDate;
-                        }
-
-
-                        subject.editTask(task, taskInput.getText().toString(), shortTime);
+                        subject.editTask(task, taskInput.getText().toString(), shortTime, selectedDate, cal);
                         notifyItemChanged(tasks.indexOf(task));
+
+                        constructor();
+                        //TODO: Change place of task if date changed
 
                         subjectManager.save(c, "tasks");
                     }
@@ -275,15 +279,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                String month = i1 + 1 + "";
-                String day = i2 + "";
-                if(i2 < 10){
-                    day = "0" + day;
-                }
-                if(i1 < 9){
-                    month = "0" + month;
-                }
-                selectedDate = day + "." + month + ".";
+                selectedDate = new Date(i, i1, i2);
             }
         });
 
@@ -330,13 +326,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         subject.removeTask(task);
                         //System.out.println("Remove task: " + task.task);
 
-                        try {
-                            System.out.println("Some grade 334: " + subjects.get(0).getAllGrades().get(0));
-                        }catch (Exception e){
-                            System.out.println("Some weird error 334");
-                            System.out.println(e);
-                        }
-
                         notifyItemRemoved(tasks.indexOf(task));
                         notifyItemRangeChanged(tasks.indexOf(task), getItemCount());
 
@@ -347,13 +336,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         }
 
                         constructor();
-
-                        try {
-                            System.out.println("Some grade 349: " + subjects.get(0).getAllGrades().get(0));
-                        }catch (Exception e){
-                            System.out.println("Some weird error 349");
-                            System.out.println(e);
-                        }
 
                         subjectManager.save(c,"subjects");
 
