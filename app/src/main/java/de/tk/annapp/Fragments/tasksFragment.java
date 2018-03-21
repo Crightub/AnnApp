@@ -1,10 +1,15 @@
 package de.tk.annapp.Fragments;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +28,7 @@ import android.widget.Spinner;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import de.tk.annapp.R;
@@ -31,6 +38,7 @@ import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
 import de.tk.annapp.Task;
 
+import static android.R.layout.simple_expandable_list_item_2;
 import static android.R.layout.simple_spinner_dropdown_item;
 
 
@@ -38,7 +46,8 @@ public class tasksFragment extends Fragment  {
     View root;
     private SubjectManager subjectManager;
     RecyclerView recyclerView;
-    RVAdapterTaskList adapterTaskList;
+    private Date selectedDate;
+    private boolean cal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +62,7 @@ public class tasksFragment extends Fragment  {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 createInputDialog();
+                subjectManager.save(root.getContext(), "subjects");
             }
         });
 
@@ -65,14 +75,29 @@ public class tasksFragment extends Fragment  {
         return root;
     }
 
+    @SuppressLint("NewApi")
+    public static final void recreateActivityCompat(final Activity a) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            a.recreate();
+        } else {
+            final Intent intent = a.getIntent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            a.finish();
+            a.overridePendingTransition(0, 0);
+            a.startActivity(intent);
+            a.overridePendingTransition(0, 0);
+        }
+    }
+
     public void createInputDialog(){
+
+
+
         AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
 
         View mView = View.inflate(this.getContext(), R.layout.fragment_task_input, null);
 
         final EditText task = (EditText) mView.findViewById(R.id.task);
-        final EditText date = (EditText) mView.findViewById(R.id.date);
-        final LinearLayout extra = (LinearLayout) mView.findViewById(R.id.extraLayout2);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra2);
 
         final ArrayList<String> subjectNames = new ArrayList<>();
@@ -90,6 +115,8 @@ public class tasksFragment extends Fragment  {
         time.add("Freitag");
         time.add("Samstag");
         time.add("Sonntag");
+
+        cal = false;
 
 
         for (Subject s : subjectManager.getSubjects()) {
@@ -111,13 +138,14 @@ public class tasksFragment extends Fragment  {
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(extra.getVisibility() != View.VISIBLE){
-                    extra.setVisibility(View.VISIBLE);
+                if(timeSelection.getVisibility() == View.VISIBLE){
+                    createInputDialogCalendar();
                     timeSelection.setVisibility(View.GONE);
+                    cal = true;
                 }
                 else{
-                    extra.setVisibility(View.GONE);
                     timeSelection.setVisibility(View.VISIBLE);
+                    cal = false;
                 }
             }
         });
@@ -165,29 +193,6 @@ public class tasksFragment extends Fragment  {
                             createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
                         }
 
-                        if(timeSelection.getVisibility() == View.GONE){
-                            if(date.getText().toString().isEmpty()){
-                                createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
-                                return;
-                            }
-                            char[] c = date.getText().toString().toCharArray();
-                            for(int x = 0; x < c.length; x++){
-                                if(c[x] == '/' || c[x] == '-'){
-                                    createAlertDialog(getString(R.string.warning), "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
-                                    return;
-                                }
-                            }
-                            if(c.length != 6){
-                                createAlertDialog(getString(R.string.warning), "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
-                                return;
-                            }
-                            if(c[2] != '.' || c[5] != '.'){
-                                createAlertDialog(getString(R.string.warning), "Bitte Datum im Format dd.MM. eigeben!", android.R.drawable.ic_dialog_alert);
-                                return;
-                            }
-                            shortTime = date.getText().toString();
-                        }
-
                         String shortKind;
                         if(kindSelection.getSelectedItem().toString().equals("Hausaufgabe")){
                             shortKind = "HA";
@@ -202,8 +207,7 @@ public class tasksFragment extends Fragment  {
                             shortKind = "";
                             createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
                         }
-
-                        subject.addTask(task.getText().toString(), shortTime, shortKind);
+                        subject.addTask(task.getText().toString(), selectedDate, shortKind, shortTime, cal);
 
                         for(Task task : subject.getAllTasks()){
                             System.out.println("Task: " + task.task + ", " + task.date + ", " + task.kind);
@@ -211,6 +215,30 @@ public class tasksFragment extends Fragment  {
 
                         recyclerView.setAdapter(new RVAdapterTaskList(getActivity()));
                         subjectManager.save(getContext(), "subjects");
+                    }
+                })
+                .show();
+    }
+
+    public void createInputDialogCalendar(){
+        AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
+
+        View mView = View.inflate(this.getContext(), R.layout.fragment_task_input_calendar, null);
+
+        final CalendarView calendar = (CalendarView) mView.findViewById(R.id.calendarViewTasks);
+
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
+                selectedDate = new Date(i, i1, i2);
+            }
+        });
+
+        ad      .setTitle("Datum auswählen")
+                .setView(mView)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 })
                 .show();

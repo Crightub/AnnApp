@@ -67,6 +67,8 @@ public class gradesFragment extends Fragment {
                      createAlertDialog(getContext().getString(R.string.warning), "Bitte fügen Sie ein Fach hinzu!", android.R.drawable.ic_dialog_alert);
                 } else
                     createInputDialog();
+
+                subjectManager.save(root.getContext(), "subjects");
             }
         });
 
@@ -174,7 +176,7 @@ public class gradesFragment extends Fragment {
                             isWrittenBool = false;
 
                         if(gradeInput.getText().toString().isEmpty()){
-                            gradeInput.setError("Input Text");
+                            createAlertDialog("Error!", "Please fill in all needed information", 0);
                             return;
                         }
 
@@ -184,9 +186,8 @@ public class gradesFragment extends Fragment {
 
                         Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
-                        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));
                         subjectManager.save(getContext(), "subjects");
-                    }
+                        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));                    }
                 })
                 .show();
     }

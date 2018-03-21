@@ -42,20 +42,5 @@
         android:text="anderes datum"
         android:textColor="@color/colorAccent" />
 
-    <LinearLayout
-        android:id="@+id/extraLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="date"
-            android:hint="Datum (dd.MM.)" />
-    </LinearLayout>
 </LinearLayout>
 </FrameLayout>

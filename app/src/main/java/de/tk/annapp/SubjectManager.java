@@ -15,7 +15,12 @@ public class SubjectManager {
     private static final SubjectManager subjectManager = new SubjectManager();
     public float overallGradePointAverage;
 
+    Context c;
+
     TextView textViewGrade;
+
+    //Contains all subjects
+    ArrayList<Subject> subjects = new ArrayList<>();
 
     private SubjectManager(){
         System.out.println("Create SubjectManager...");
@@ -26,14 +31,20 @@ public class SubjectManager {
         return subjectManager;
     }
 
-    //Contains all subjects
-    ArrayList<Subject> subjects = new ArrayList<>();
-
     public ArrayList<Subject> getSubjects(){return subjects;}
 
     public void addSubject(String _name, int _rating, String _teacher, String _room){
         //Add a Subject to the subjects Arraylist
         subjects.add(new Subject(_name, _rating, _teacher, _room));
+        save(c, "subjects");
+    }
+
+    public void setContext(Context c){
+        this.c =c;
+    }
+
+    public Context getContext(){
+        return c;
     }
 
     //Goes through all subjects and gives the one with the same name back
@@ -76,8 +87,10 @@ public class SubjectManager {
             ObjectInputStream ois = new ObjectInputStream(c.openFileInput(filename));
             subjects = (ArrayList<Subject>) ois.readObject();
             ois.close();
-            setGradeTextView(true);
+            setGradeTextView(true, null);
+            System.out.println("loading done ---------------------------------------------------------------------------------------------------------");
         } catch (Exception e) {
+            System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
             e.printStackTrace();
         }
     }
@@ -90,18 +103,31 @@ public class SubjectManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setGradeTextView(true);
+        setGradeTextView(true, null);
     }
 
     public void setTextView(TextView tw){
         textViewGrade = tw;
     }
 
-    public void setGradeTextView(boolean isVisible){
+    public void setGradeTextView(boolean isVisible, Subject subject){
         if(isVisible) {
             textViewGrade.setVisibility(View.VISIBLE);
 
-            textViewGrade.setText(Float.toString(subjectManager.getWholeGradeAverage()));
+            if(subject == null) {
+                if(Float.toString(subjectManager.getWholeGradeAverage()).equals("NaN")){
+                    setGradeTextView(false, null);
+                    return;
+                }
+                textViewGrade.setText(Float.toString(subjectManager.getWholeGradeAverage()));
+            } else {
+
+                if (Float.toString(subject.getGradePointAverage()).equals("NaN")){
+                    setGradeTextView(false, null);
+                    return;
+                } else
+                    textViewGrade.setText(Float.toString(subject.getGradePointAverage()));
+            }
 
         }
         else
