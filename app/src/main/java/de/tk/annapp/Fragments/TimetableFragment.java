@@ -2,12 +2,19 @@ package de.tk.annapp.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.INotificationSideChannel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.app.Fragment;
+import android.widget.Space;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
@@ -17,37 +24,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import de.tk.annapp.Day;
+import de.tk.annapp.Lesson;
 import de.tk.annapp.R;
+import de.tk.annapp.SubjectManager;
 import de.tk.annapp.TableView.MyTableViewListener;
 import de.tk.annapp.TableView.TVAdapterTimetable;
 import de.tk.annapp.TableView.model.Cell;
 import de.tk.annapp.TableView.model.ColumnHeader;
 import de.tk.annapp.TableView.model.RowHeader;
+import de.tk.annapp.TimetableManager;
 
 
-public class timetableFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class TimetableFragment extends Fragment {
 
-    public static final int COLUMN_SIZE = 5;
-    public static final int ROW_SIZE = 6;
+    //public static final int COLUMN_SIZE = 5;
+    //public static final int ROW_SIZE = 11;
 
     private List<RowHeader> mRowHeaderList;
     private List<ColumnHeader> mColumnHeaderList;
     private List<List<Cell>> mCellList;
 
-    private AbstractTableAdapter mTableViewAdapter;
-    private TableView mTableView;
+    //private AbstractTableAdapter mTableViewAdapter;
+    //private TableView mTableView;
 
-    private String[] daynames;
-    private String[] schoolhours;
+    TableLayout tableLayout;
 
-    public timetableFragment() {
+    TimetableManager timetableManager;
+    SubjectManager subjectManager;
+
+    public TimetableFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initData();
+        //setRowSize();
+        //initData();
+    }
+
+    void setRowSize(){
+
     }
 
     @Override
@@ -56,19 +77,179 @@ public class timetableFragment extends Fragment {
         getActivity().setTitle("Stundenplan");
         View root = inflater.inflate(R.layout.fragment_timetable, container, false);
 
-        RelativeLayout fragment_container = root.findViewById(R.id.fragment_container);
+        timetableManager = TimetableManager.getInstance();
+        subjectManager = SubjectManager.getInstance();
+
+        //RelativeLayout fragment_container = root.findViewById(R.id.fragment_container);
+
+        tableLayout = root.findViewById(R.id.tableLayout);
+
+        initializeTableView();
 
         // Create Table view
-        mTableView = createTableView();
-        fragment_container.addView(mTableView);
+        //mTableView = createTableView();
+        //fragment_container.addView(mTableView);
 
-        daynames = getResources().getStringArray(R.array.day_names);
-        schoolhours = getResources().getStringArray(R.array.school_hours);
-
-        loadData();
+        //loadData();
         return root;
     }
 
+
+
+    void initializeTableView(){
+
+        //default spacing
+        int spacing = 10;
+
+        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 201", 11, 4);
+
+        for(int i = 0; i<(getLongestDaysNumberOfLessons()); i++){
+            TableRow tableRow = new TableRow(this.getContext());
+
+
+            if(i==0){
+                Button b = getHeaderButton();
+                tableRow.addView(b);
+                Space spa = new Space(this.getContext());
+                spa.setMinimumWidth(spacing);
+                tableRow.addView(spa);
+
+                //TODO Register Rowheaders
+                int f = 0;
+                for (Day d :
+                        timetableManager.getDays()) {
+                    Button btn = getHeaderButton();
+
+                    switch (f){
+                        case (0):
+                            btn.setText("Montag");
+                            break;
+                        case (1) :
+                            btn.setText("Dienstag");
+                            break;
+                        case (2):
+                            btn.setText("Mittwoch");
+                            break;
+                        case (3) :
+                            btn.setText("Donnerstag");
+                            break;
+                        case (4):
+                            btn.setText("Freitag");
+                            break;
+                        default:
+                            btn.setText("Unnamed Day");
+                            break;
+                    }
+                    f++;
+
+
+
+                    tableRow.addView(btn);
+
+                    //horizontal space between buttons
+                    Space space = new Space(this.getContext());
+                    space.setMinimumWidth(spacing);
+                    space.setMinimumHeight(spacing);
+                    tableRow.addView(space);
+
+                }
+            }else{
+                //TODO Register Columnheaders and Cells
+
+                //vertical space between buttons
+                Space sp = new Space(this.getContext());
+                sp.setMinimumHeight(spacing);
+                TableRow t = new TableRow(this.getContext());
+                t.addView(sp);
+                tableLayout.addView(t);
+
+                //add row header
+                Button btn = getHeaderButton();
+                btn.setText(i +". Stunde");
+                tableRow.addView(btn);
+
+                for (Day d :
+                        timetableManager.getDays()) {
+
+                    String cellName;
+
+                    View cell;
+                    try {
+                        cellName = d.lessons.get(i).subject.getName();
+                        //add cell
+                        cell = getCellButton();
+                        ((Button)cell).setText(cellName);
+                    } catch (Exception e){
+                        cell = new Space(this.getContext());
+                        cell.setMinimumWidth(spacing);
+                        System.out.println(e);
+                    }
+
+                    //add spacing
+                    Space v = new Space(this.getContext());
+                    v.setMinimumWidth(spacing);
+                    tableRow.addView(v);
+
+                    tableRow.addView(cell);
+                }
+
+            }
+
+
+            tableLayout.addView(tableRow);
+        }
+
+
+    }
+
+    Button getHeaderButton(){
+        Button btn = new Button(this.getContext());
+
+        //general Settings for headers
+        btn.setTextColor(getResources().getColor(R.color.colorPrimary));
+        btn.setBackgroundColor(getResources().getColor(R.color.bg_line));
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Clicked ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return btn;
+    }
+
+    Button getCellButton(){
+        Button btn = new Button(this.getContext());
+
+        //general Settings for Cells
+        //btn.setTextColor(getResources().getColor(R.color.colorPrimary));
+        btn.setBackgroundColor(getResources().getColor(R.color.bg_line));
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Clicked ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return btn;
+    }
+
+    int getLongestDaysNumberOfLessons(){
+        ArrayList<Day> days = timetableManager.getDays();
+        int x = 0;
+        for (Day d : days) {
+            int i=0;
+            for (Lesson l : d.lessons)
+                i++;
+            if(i>x)
+                x=i;
+        }
+        return x;
+    }
+
+/*
     private TableView createTableView() {
         TableView tableView = new TableView(getContext());
 
@@ -98,11 +279,10 @@ public class timetableFragment extends Fragment {
 
     private void loadData() {
         List<RowHeader> rowHeaders = getRowHeaderList();
-        List<List<Cell>> cellList = getCellListForSortingTest();
-        List<ColumnHeader> columnHeaders = getColumnHeaderList();
+        List<List<Cell>> cellList = getCellListForSortingTest(); // getCellList();
+        List<ColumnHeader> columnHeaders = getColumnHeaderList(); //getRandomColumnHeaderList(); //
 
         mRowHeaderList.addAll(rowHeaders);
-
         for (int i = 0; i < cellList.size(); i++) {
             mCellList.get(i).addAll(cellList.get(i));
         }
@@ -116,7 +296,7 @@ public class timetableFragment extends Fragment {
     private List<RowHeader> getRowHeaderList() {
         List<RowHeader> list = new ArrayList<>();
         for (int i = 0; i < ROW_SIZE; i++) {
-            RowHeader header = new RowHeader(String.valueOf(i), schoolhours[i]);
+            RowHeader header = new RowHeader(String.valueOf(i), (i+1) + ". Stunde");
             list.add(header);
         }
 
@@ -125,7 +305,7 @@ public class timetableFragment extends Fragment {
 
     /**
      * This is a dummy model list test some cases.
-     */
+     */      /*
     public static List<RowHeader> getRowHeaderList(int startIndex) {
         List<RowHeader> list = new ArrayList<>();
         for (int i = 0; i < ROW_SIZE; i++) {
@@ -141,7 +321,22 @@ public class timetableFragment extends Fragment {
         List<ColumnHeader> list = new ArrayList<>();
 
         for (int i = 0; i < COLUMN_SIZE; i++) {
-            ColumnHeader header = new ColumnHeader(String.valueOf(i), daynames[i]);
+            String title;
+            if(i==0)
+                title = "Montag";
+            else if(i==1)
+                title = "Dienstag";
+            else if(i==2)
+                title = "Mittwoch";
+            else if(i==3)
+                title = "Donnerstag";
+            else if(i==4)
+                title = "Freitag";
+            else
+                title = "undefined Day";
+
+
+            ColumnHeader header = new ColumnHeader(String.valueOf(i), title);
             list.add(header);
         }
 
@@ -150,7 +345,7 @@ public class timetableFragment extends Fragment {
 
     /**
      * This is a dummy model list test some cases.
-     */
+     */    /*
     private List<ColumnHeader> getRandomColumnHeaderList() {
         List<ColumnHeader> list = new ArrayList<>();
 
@@ -190,7 +385,7 @@ public class timetableFragment extends Fragment {
 
     /**
      * This is a dummy model list test some cases.
-     */
+     */    /*
     private List<List<Cell>> getCellListForSortingTest() {
         List<List<Cell>> list = new ArrayList<>();
         for (int i = 0; i < ROW_SIZE; i++) {
@@ -219,7 +414,7 @@ public class timetableFragment extends Fragment {
 
     /**
      * This is a dummy model list test some cases.
-     */
+     */   /*
     private List<List<Cell>> getRandomCellList() {
         List<List<Cell>> list = new ArrayList<>();
         for (int i = 0; i < ROW_SIZE; i++) {
@@ -245,7 +440,7 @@ public class timetableFragment extends Fragment {
 
     /**
      * This is a dummy model list test some cases.
-     */
+     */    /*
     public static List<List<Cell>> getRandomCellList(int startIndex) {
         List<List<Cell>> list = new ArrayList<>();
         for (int i = 0; i < ROW_SIZE; i++) {
@@ -266,7 +461,7 @@ public class timetableFragment extends Fragment {
         }
 
         return list;
-    }
+    }*/
 
 
     private static String getRandomString() {
@@ -279,3 +474,4 @@ public class timetableFragment extends Fragment {
         return str;
     }
 }
+

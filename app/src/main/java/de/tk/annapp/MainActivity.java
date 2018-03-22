@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_myday) {
             fragment = new mydayFragment();
         } else if (id == R.id.nav_timetable) {
-            fragment = new timetableFragment();
+            fragment = new TimetableFragment();
         } else if (id == R.id.nav_grades) {
             fragment = new gradesFragment();
         } else if (id == R.id.nav_tasks) {
