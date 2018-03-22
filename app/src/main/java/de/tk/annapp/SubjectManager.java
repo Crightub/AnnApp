@@ -14,7 +14,7 @@ public class SubjectManager {
 
     private static final SubjectManager subjectManager = new SubjectManager();
 
-    Context c;
+    Context context;
 
     TextView textViewGrade;
 
@@ -32,11 +32,11 @@ public class SubjectManager {
 
     public ArrayList<Subject> getSubjects(){return subjects;}
 
-    public void addSubject(String _name, int _rating, String _teacher, String _room){
+    public void addSubject(String name, int rating, String teacher, String room){
         //Add a Subject to the subjects Arraylist
         System.out.println(subjects);
         for(Subject s : subjects){
-            Subject newSubject = new Subject(_name, _rating, _teacher, _room);
+            Subject newSubject = new Subject(name, rating, teacher, room);
 
             if(newSubject.name.equals(s.name)){
                 System.out.println(getClass().getName() + ": Subject already exists. addSubject() failed.");
@@ -44,23 +44,23 @@ public class SubjectManager {
             }
         }
 
-        subjects.add(new Subject(_name, _rating, _teacher, _room));
-        save(c, "subjects");
+        subjects.add(new Subject(name, rating, teacher, room));
+        save(context, "subjects");
     }
 
     public void setContext(Context c){
-        this.c =c;
+        this.context =c;
     }
 
     public Context getContext(){
-        return c;
+        return context;
     }
 
     //Goes through all subjects and gives the one with the same name back
-    public Subject getSubjectByName(String _name){
-        for(Subject _subject : subjects){
-            if(_subject.name.equals(_name)){
-                return _subject;
+    public Subject getSubjectByName(String name){
+        for(Subject subject : subjects){
+            if(subject.name.equals(name)){
+                return subject;
             }
         }
         //NO Subject with this name found
@@ -90,10 +90,10 @@ public class SubjectManager {
         return  Util.round(wholeGradeAverage, 2);
     }
 
-    public void load(Context c, String filename)
+    public void load(Context cntxt, String filename)
     {
         try {
-            ObjectInputStream ois = new ObjectInputStream(c.openFileInput(filename));
+            ObjectInputStream ois = new ObjectInputStream(cntxt.openFileInput(filename));
             subjects = (ArrayList<Subject>) ois.readObject();
             System.out.println(subjects);
             ois.close();
@@ -105,9 +105,9 @@ public class SubjectManager {
         }
     }
 
-    public void save(Context c, String filename){
+    public void save(Context cntxt, String filename){
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(c.openFileOutput(filename, Context.MODE_PRIVATE));
+            ObjectOutputStream oos = new ObjectOutputStream(cntxt.openFileOutput(filename, Context.MODE_PRIVATE));
             oos.writeObject(subjects);
             oos.close();
         } catch (IOException e) {

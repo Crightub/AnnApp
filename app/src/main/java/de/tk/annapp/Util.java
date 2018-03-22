@@ -16,6 +16,7 @@ public class Util {
         return ( (float) ( (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) ) ) / pow;
     }
 
+    //I'm against!
     public int getAccentColor(Context c){
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = c.getTheme();

@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        /*Default Fragment:*/ Fragment f = new mydayFragment();
+        /*Default Fragment:*/ Fragment f = new MyDayFragment();
         Bundle args = new Bundle();
         f.setArguments(args);
 
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         Fragment myFragment = getFragmentManager().findFragmentByTag("GradeChildFragment");
         if (myFragment != null && myFragment.isVisible()) {
 
-            Fragment fragment = new gradesFragment();
+            Fragment fragment = new GradesFragment();
 
             Bundle args = new Bundle();
             fragment.setArguments(args);
@@ -128,27 +128,27 @@ public class MainActivity extends AppCompatActivity
 
         //detects which item was selected -> initiating inserting of the fragment
         if (id == R.id.nav_myday) {
-            fragment = new mydayFragment();
+            fragment = new MyDayFragment();
         } else if (id == R.id.nav_timetable) {
             fragment = new TimetableFragment();
         } else if (id == R.id.nav_grades) {
-            fragment = new gradesFragment();
+            fragment = new GradesFragment();
         } else if (id == R.id.nav_tasks) {
-            fragment = new tasksFragment();
+            fragment = new TasksFragment();
         } else if (id == R.id.nav_calendar) {
-            fragment = new calendarFragment();
+            fragment = new CalendarFragment();
         } else if (id == R.id.nav_privattuition) {
-            fragment = new privatetuitionFragment();
+            fragment = new PrivateTuitionFragment();
         } else if (id == R.id.nav_saleofschoolsupplies) {
-            fragment = new saleofschoolsuppliesFragment();
+            fragment = new SaleOfSchoolSuppliesFragment();
         } else if (id == R.id.nav_loststuff) {
-            fragment = new loststuffFragment();
+            fragment = new LostStuffFragment();
         } else if (id == R.id.nav_annanews) {
-            fragment = new annanewsFragment();
+            fragment = new AnnanewsFragment();
         } else if (id == R.id.nav_settings) {
-            fragment = new settingsFragment();
+            fragment = new SettingsFragment();
         } else if (id == R.id.nav_feedback) {
-            fragment = new feedbackFragment();
+            fragment = new FeedbackFragment();
         } else if (id == R.id.nav_share){
             //sharing stuff
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity
     //onClickListener for the Subject Item
     //Opens the grades
     public void onClickRVItem(View view){
-        Fragment fragment = new gradeChildFragment();
+        Fragment fragment = new GradeChildFragment();
 
         Bundle args = new Bundle();
         TextView subjectTextName = view.findViewById(R.id.item_subject_name);

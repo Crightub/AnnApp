@@ -14,9 +14,9 @@ public class Lesson implements Serializable {
     //the room in which this very lesson takes place
     String room;
 
-    public Lesson (Subject _subject, String _room){
-        subject = _subject;
-        room = _room;
+    public Lesson (Subject subject, String room){
+        this.subject = subject;
+        this.room = room;
     }
 
 }

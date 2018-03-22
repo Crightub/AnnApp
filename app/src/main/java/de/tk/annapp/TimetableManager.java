@@ -21,7 +21,6 @@ public class TimetableManager {
 
     private TimetableManager(){
         System.out.println("Create TimetableManager...");
-
         days.add(new Day());
         days.add(new Day());
         days.add(new Day());
@@ -35,19 +34,11 @@ public class TimetableManager {
         return timetableManager;
     }
 
-    public void setLesson(Subject _subject, String _room, int _time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/, int _day){
-        String room;
+    //TODO Duplicate wit Day.setLesson
+    public void setLesson(Subject subject, String room, int time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/, int _day){
+        Lesson lesson = new Lesson(subject, room==null?subject.room:room);
 
-
-
-        if (_room == null)
-            room = _subject.room;
-        else
-            room = _room;
-
-        Lesson lesson = new Lesson(_subject, room);
-
-        days.get(_day).setLesson(_subject, _room, _time);
+        days.get(_day).setLesson(subject, room, time);
 
         save(context, "timetable");
     }
@@ -60,10 +51,10 @@ public class TimetableManager {
         return days;
     }
 
-    public void load(Context c, String filename)
+    public void load(Context cntxt, String filename)
     {
         try {
-            ObjectInputStream ois = new ObjectInputStream(c.openFileInput(filename));
+            ObjectInputStream ois = new ObjectInputStream(cntxt.openFileInput(filename));
             days = (ArrayList<Day>) ois.readObject();
             ois.close();
         } catch (Exception e) {
@@ -71,9 +62,9 @@ public class TimetableManager {
         }
     }
 
-    public void save(Context c, String filename){
+    public void save(Context cntxt, String filename){
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(c.openFileOutput(filename, Context.MODE_PRIVATE));
+            ObjectOutputStream oos = new ObjectOutputStream(cntxt.openFileOutput(filename, Context.MODE_PRIVATE));
             oos.writeObject(days);
             oos.close();
         } catch (IOException e) {

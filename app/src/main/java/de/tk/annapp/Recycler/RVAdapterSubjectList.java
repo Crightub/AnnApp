@@ -15,17 +15,17 @@ import de.tk.annapp.Subject;
 
 public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectList.RecyclerVH> {
 
-    Context c;
+    private Context context;
     private ArrayList<Subject> subjects = new ArrayList<>();
 
-    public RVAdapterSubjectList(Context _c,  ArrayList<Subject> _subjects){
-        c = _c;
-        subjects = _subjects;
+    public RVAdapterSubjectList(Context context,  ArrayList<Subject> subjects){
+        this.context = context;
+        this.subjects = subjects;
     }
 
     @Override
     public RecyclerVH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(c).inflate(R.layout.item_subject_list, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_subject_list, parent, false);
         return new RecyclerVH(v);
     }
 

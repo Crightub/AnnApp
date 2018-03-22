@@ -22,21 +22,22 @@ public class Task implements Serializable {
     public boolean weekday;
     public long dateNumber;
 
-    public Task(String _task, Date _date, String _kind, String _subject, String _day, boolean _cal){
-        task = _task;
-        weekday = _cal;
+    public Task(String task, Date date, String kind, String subject, String day, boolean cal){
+        this.task = task;
+        weekday = cal;
         if(!weekday){
-            date = _day;
+            this.date = day;
             dateDiff();
         }
         else{
-            dateNumber = _date.getTime();
-            date = _date.getDate() + "." + (_date.getMonth() + 1) + ".";
+            dateNumber = date.getTime();
+            this.date = date.getDate() + "." + (date.getMonth() + 1) + ".";
         }
-        kind = _kind;
-        subject = _subject;
+        this.kind = kind;
+        this.subject = subject;
     }
 
+    //TODO Check for shortening
     public void dateDiff(){
         Calendar cal = new GregorianCalendar();
         int year = cal.getTime().getYear();

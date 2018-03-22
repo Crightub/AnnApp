@@ -16,10 +16,10 @@ public class Grade implements Serializable{
 
     public String note;
 
-    public Grade(int _grade, boolean _iswritten, float _rating, String _note){
-        grade = _grade;
-        iswritten = _iswritten;
-        rating = _rating;
-        note = _note;
+    public Grade(int grade, boolean iswritten, float rating, String note){
+        this.grade = grade;
+        this.iswritten = iswritten;
+        this.rating = rating;
+        this.note = note;
     }
 }

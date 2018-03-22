@@ -33,5 +33,5 @@ dependencies {
     compile 'com.android.support:design:27.0.2'
     compile 'com.evrencoskun.library:tableview:0.8.6'
 
-    testCompile 'junit:junit:4.12'
+    //testCompile 'junit:junit:4.12' Das macht mir nur Probleme
 }

@@ -1,10 +1,8 @@
 package de.tk.annapp.Recycler;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -16,32 +14,23 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.ms.square.android.expandabletextview.ExpandableTextView;
-
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import de.tk.annapp.Grade;
 import de.tk.annapp.Task;
 import de.tk.annapp.R;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
-import de.tk.annapp.Task;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 
 public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.RecyclerVHTask>{
-    Context c;
+    private Context context;
     private ArrayList<Task> tasks = new ArrayList<>();
     private ArrayList<Subject> subjects = new ArrayList<>();
     private ArrayList<Subject> subjectsWithTasks = new ArrayList<>();
@@ -51,9 +40,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private boolean cal;
     int pos;
 
-    public RVAdapterTaskList(Context _c){
+    public RVAdapterTaskList(Context context){
 
-        c = _c;
+        this.context = context;
         subjectManager = SubjectManager.getInstance();
         constructor();
 
@@ -76,7 +65,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
 
         if(subjectsWithTasks.isEmpty()){
-            tasks.add(new Task(null, null, null, null, c.getString(R.string.insertTask), false));
+            tasks.add(new Task(null, null, null, null, context.getString(R.string.insertTask), false));
         }
 
         for(Subject s : subjectsWithTasks){
@@ -97,7 +86,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     @Override
     public RecyclerVHTask onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(c).inflate(R.layout.item_task_list, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_task_list, parent, false);
         return new RecyclerVHTask(v);
     }
 
@@ -146,11 +135,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
     }
 
-    public void createEditDialog(final String _subject, final Task task){
-        final Subject subject = subjectManager.getSubjectByName(_subject);
-        AlertDialog.Builder ad = new  AlertDialog.Builder(c);
+    public void createEditDialog(final String subjectname, final Task task){
+        final Subject subject = subjectManager.getSubjectByName(subjectname);
+        AlertDialog.Builder ad = new  AlertDialog.Builder(context);
 
-        View mView = View.inflate(c, R.layout.fragment_task_edit, null);
+        View mView = View.inflate(context, R.layout.fragment_task_edit, null);
 
         final ArrayList<String> time = new ArrayList<>();
         time.add("Montag");
@@ -165,7 +154,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         taskInput.setText(String.valueOf(task.task));
 
         final Spinner timeSelection = (Spinner) mView.findViewById(R.id.timeInput);
-        ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(c, simple_spinner_dropdown_item, time);
+        ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, time);
         timeSelection.setAdapter(adapterTime);
 
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra3);
@@ -211,14 +200,14 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             }
         });
 
-        ad      .setTitle(c.getString(R.string.editTask) + subject.name)
+        ad      .setTitle(context.getString(R.string.editTask) + subject.name)
                 .setView(mView)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         if(taskInput.getText().toString().isEmpty()){
-                            createAlertDialog(c.getString(R.string.warning), c.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                            createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
                             return;
                         }
 
@@ -255,7 +244,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         constructor();
                         //TODO: Change place of task if date changed
 
-                        subjectManager.save(c, "tasks");
+                        subjectManager.save(context, "tasks");
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -270,9 +259,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     }
 
     public void createInputDialogCalendar(){
-        AlertDialog.Builder ad = new  AlertDialog.Builder(c);
+        AlertDialog.Builder ad = new  AlertDialog.Builder(context);
 
-        View mView = View.inflate(c, R.layout.fragment_task_input_calendar, null);
+        View mView = View.inflate(context, R.layout.fragment_task_input_calendar, null);
 
         final CalendarView calendar = (CalendarView) mView.findViewById(R.id.calendarViewTasks);
 
@@ -296,9 +285,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     void createAlertDialog(String title, String text, int ic){
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(c, android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
         } else {
-            builder = new AlertDialog.Builder(c);
+            builder = new AlertDialog.Builder(context);
         }
         builder.setTitle(title)
                 .setMessage(text)
@@ -314,12 +303,12 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(c, android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
         } else {
-            builder = new AlertDialog.Builder(c);
+            builder = new AlertDialog.Builder(context);
         }
         builder.setTitle(R.string.deleteQuestion)
-                .setMessage(c.getString(R.string.deleteQuestionMessageTask))
+                .setMessage(context.getString(R.string.deleteQuestionMessageTask))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -337,7 +326,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
                         constructor();
 
-                        subjectManager.save(c,"subjects");
+                        subjectManager.save(context,"subjects");
 
                         adTrueDialog.cancel();
 

@@ -8,19 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
-import java.security.KeyStore;
 import java.util.ArrayList;
 
 import de.tk.annapp.R;
@@ -28,11 +25,9 @@ import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
 import de.tk.annapp.Grade;
 
-import static android.R.layout.simple_spinner_dropdown_item;
-
 public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.RecyclerVH> {
 
-    Context c;
+    Context context;
     private ArrayList<Grade> grades = new ArrayList<>();
     private SubjectManager subjectManager;
     private String subjectName;
@@ -40,16 +35,16 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     boolean isWrittenBool;
     AlertDialog adTrueDialog;
 
-    public RVAdapterGradeList(Context _c, String _subjectName){
-        c = _c;
+    public RVAdapterGradeList(Context context, String subjectName){
+        this.context = context;
         subjectManager = SubjectManager.getInstance();
-        subjectName = _subjectName;
-        grades = subjectManager.getSubjectByName(subjectName).getAllGrades();
+        this.subjectName = subjectName;
+        grades = subjectManager.getSubjectByName(this.subjectName).getAllGrades();
     }
 
     @Override
     public RecyclerVH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(c).inflate(R.layout.item_grade_list, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_grade_list, parent, false);
         return new RecyclerVH(v);
     }
 
@@ -59,9 +54,9 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         holder.gradeTxt.setText(String.valueOf(grades.get(position).grade));
 
         if(!grades.get(position).note.isEmpty())
-            holder.expandableTextView.setText(grades.get(position).note + "\n" +  c.getString(R.string.ratingList) + grades.get(position).rating);
+            holder.expandableTextView.setText(grades.get(position).note + "\n" +  context.getString(R.string.ratingList) + grades.get(position).rating);
         else
-            holder.expandableTextView.setText(grades.get(position).note +  c.getString(R.string.ratingList) + grades.get(position).rating);
+            holder.expandableTextView.setText(grades.get(position).note +  context.getString(R.string.ratingList) + grades.get(position).rating);
 
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,12 +91,12 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     public void createEditDialog(final Subject subject, final Grade grade){
 
-        AlertDialog.Builder ad = new  AlertDialog.Builder(c);
+        AlertDialog.Builder ad = new  AlertDialog.Builder(context);
 
 
 
         //View mView = getLayoutInflater().inflate(R.layout.fragment_grade_input, null);
-        View mView = View.inflate(c, R.layout.fragment_grade_edit, null);
+        View mView = View.inflate(context, R.layout.fragment_grade_edit, null);
 
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
         gradeInput.setText(String.valueOf(grade.grade));
@@ -158,7 +153,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         btnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAlertDialog(c.getString(R.string.rating), c.getString(R.string.ratingExplanation), 0);
+                createAlertDialog(context.getString(R.string.rating), context.getString(R.string.ratingExplanation), 0);
             }
         });
 
@@ -167,7 +162,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
 
 
-        ad      .setTitle(c.getString(R.string.editGrade) + subject.name)
+        ad      .setTitle(context.getString(R.string.editGrade) + subject.name)
                 .setView(mView)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -182,7 +177,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                             isWrittenBool = false;
 
                         if(gradeInput.getText().toString().isEmpty()){
-                            createAlertDialog(c.getString(R.string.warning), c.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                            createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
                             return;
                         }
 
@@ -196,7 +191,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                         subject.editGrade(grade, Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
                         notifyItemChanged(grades.indexOf(grade));
 
-                        subjectManager.save(c, "subjects");
+                        subjectManager.save(context, "subjects");
                         subjectManager.setGradeTextView(true, subject);
                     }
                 })
@@ -214,9 +209,9 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     void createAlertDialog(String title, String text, int ic){
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(c, android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
         } else {
-            builder = new AlertDialog.Builder(c);
+            builder = new AlertDialog.Builder(context);
         }
         builder.setTitle(title)
                 .setMessage(text)
@@ -232,19 +227,19 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
         final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(c, android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
         } else {
-            builder = new AlertDialog.Builder(c);
+            builder = new AlertDialog.Builder(context);
         }
         builder.setTitle(R.string.deleteQuestion)
-                .setMessage(c.getString(R.string.deleteQuestionMessage))
+                .setMessage(context.getString(R.string.deleteQuestionMessage))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                         notifyItemRemoved(grades.indexOf(grade));
                         notifyItemRangeChanged(grades.indexOf(grade), getItemCount());
                         subject.removeGrade(grade);
-                        subjectManager.save(c,"subjects");
+                        subjectManager.save(context,"subjects");
                         subjectManager.setGradeTextView(true, subject);
 
                         adTrueDialog.cancel();

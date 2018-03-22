@@ -30,55 +30,57 @@ public class Subject implements Serializable {
     //Name of the room the subject normally takes place
     public String room;
 
-    public Subject(String _name, int _rating, String teacher, String room){
-        name = _name;
-        ratingSub = _rating;
+    //Junge, junge, wer hat hier geschlampt?
+    public Subject(String name, int rating, String teacher, String room) {
+        this.name = name;
+        ratingSub = rating;
+        this.teacher = teacher;
+        this.room = room;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void addTask(String _task, Date _date, String _kind, String _day, boolean _cal){
-        tasks.add(new Task(_task, _date, _kind, this.getName(), _day, _cal));
+    public void addTask(String task, Date date, String kind, String day, boolean cal) {
+        tasks.add(new Task(task, date, kind, this.getName(), day, cal));
     }
 
-    public void removeTask(Task _taskPosition){
-        tasks.remove(tasks.indexOf(_taskPosition));
+    public void removeTask(Task task) {
+        tasks.remove(task);
     }
 
-    public void editTask(Task _task, String _task_task, String _day, Date _date, boolean _cal){
-        Task task = tasks.get(tasks.indexOf(_task));
-        task.task = _task_task;
-        task.weekday = _cal;
-        if(!_cal){
-            task.date = _day;
+    //TODO Relocate this method & Rewrite
+    public void editTask(Task task, String taskContent, String day, Date date, boolean cal) {
+        task.task = taskContent;
+        task.weekday = cal;
+        if (!cal) {
+            task.date = day;
             task.dateDiff();
-        }
-        else{
-            task.dateNumber = _date.getTime();
-            task.date = _date.getDate() + "." + (_date.getMonth() + 1) + ".";
+        } else {
+            task.dateNumber = date.getTime();
+            task.date = date.getDate() + "." + (date.getMonth() + 1) + ".";
         }
     }
 
-    public void setPosition(int position){
+    public void setPosition(int position) {
         this.position = position;
     }
 
-    public int getPosition (){
+    public int getPosition() {
         return position;
     }
 
-    public void sortTasks(){
+    public void sortTasks() {
         ArrayList<Task> tasksLeft = new ArrayList<>();
         Task lowest = new Task(null, null, null, null, null, false);
         tasksSorted.clear();
-        for(Task t : tasks){
+        for (Task t : tasks) {
             tasksLeft.add(t);
         }
-        for(int x = 0; x < tasks.size(); x++) {
+        for (int x = 0; x < tasks.size(); x++) {
             int i = 0;
-            for(Task left : tasksLeft) {
+            for (Task left : tasksLeft) {
                 if (i == 0) {
                     lowest = left;
                     i++;
@@ -92,16 +94,16 @@ public class Subject implements Serializable {
         }
     }
 
-    public void addGrade(int _grade, boolean _iswritten, float _ratingGrade, String _note){
+    public void addGrade(int _grade, boolean _iswritten, float _ratingGrade, String _note) {
         //Adding new Grade
         grades.add(new Grade(_grade, _iswritten, _ratingGrade, _note));
     }
 
-    public void removeGrade(Grade _gradePosition){
+    public void removeGrade(Grade _gradePosition) {
         grades.remove(grades.indexOf(_gradePosition));
     }
 
-    public void editGrade(Grade _grade, int _grade_grade, boolean _iswritten, float _ratingGrade, String _note){
+    public void editGrade(Grade _grade, int _grade_grade, boolean _iswritten, float _ratingGrade, String _note) {
         Grade grade = grades.get(grades.indexOf(_grade));
         grade.grade = _grade_grade;
         grade.iswritten = _iswritten;
@@ -110,7 +112,7 @@ public class Subject implements Serializable {
     }
 
     //Returns the gradePointAverage
-    public float getGradePointAverage(){
+    public float getGradePointAverage() {
         float gradePointAverage;
         float writtenGradeAverage = 0f;
         float writtenGrades = 0f;
@@ -118,12 +120,12 @@ public class Subject implements Serializable {
         float vocalGrades = 0f;
 
         //loops through all 'grades' in grades
-        for(Grade _grade : grades){
+        for (Grade _grade : grades) {
             //Adds the Grade to the average
-            if(_grade.iswritten){
+            if (_grade.iswritten) {
                 writtenGradeAverage += _grade.grade * _grade.rating;
                 writtenGrades += _grade.rating;
-            }else if(!_grade.iswritten){
+            } else if (!_grade.iswritten) {
                 vocalGradeAverage += _grade.grade * _grade.rating;
                 vocalGrades += _grade.rating;
             }
@@ -132,27 +134,27 @@ public class Subject implements Serializable {
         writtenGradeAverage /= writtenGrades;
         vocalGradeAverage /= vocalGrades;
 
-        if(Float.isNaN(writtenGradeAverage)){
+        if (Float.isNaN(writtenGradeAverage)) {
             gradePointAverage = vocalGradeAverage;
-        } else if(Float.isNaN(vocalGradeAverage)){
+        } else if (Float.isNaN(vocalGradeAverage)) {
             gradePointAverage = writtenGradeAverage;
         } else {
-            gradePointAverage = (ratingSub * writtenGradeAverage + vocalGradeAverage)/(ratingSub + 1);
+            gradePointAverage = (ratingSub * writtenGradeAverage + vocalGradeAverage) / (ratingSub + 1);
         }
 
         return Util.round(gradePointAverage, 2);
     }
 
     //Returns all Grades
-    public ArrayList<Grade> getAllGrades(){
+    public ArrayList<Grade> getAllGrades() {
         return grades;
     }
 
-    public ArrayList<Task> getAllTasks(){
+    public ArrayList<Task> getAllTasks() {
         return tasks;
     }
 
-    public ArrayList<Task> getAllTasksSorted(){
+    public ArrayList<Task> getAllTasksSorted() {
         sortTasks();
         return tasksSorted;
     }
