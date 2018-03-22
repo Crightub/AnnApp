@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private SubjectManager subjectManager;
+    TimetableManager timetableManager;
 
     TextView textViewGrade;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setTheme(R.style.AppTheme_green);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -42,6 +44,11 @@ public class MainActivity extends AppCompatActivity
 
         subjectManager.load(this.getApplicationContext(), "subjects");
         subjectManager.setGradeTextView(false, null);
+
+        //Creates instance of TimetableManager
+        timetableManager = TimetableManager.getInstance();
+        timetableManager.setContext(this.getApplicationContext());
+        timetableManager.load(this.getApplicationContext(), "timetable");
 
         //Add test subjects
         subjectManager.addSubject("Mathe", 1, "fdsh", "hjsr");
@@ -108,24 +115,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        //the option menue on the top right
-        int id = item.getItemId();
-
-        //detecting which item was selected -> initiating inserting of the fragment
-        if (id == R.id.action_settings) {
-            onNavigationItemSelected(item);
-        } else if (id==R.id.action_feedback) {
-            onNavigationItemSelected(item);
-        } else if (id==R.id.action_share){
-
-            //sharing stuff
-            Intent i = new Intent(Intent.ACTION_SEND);
-            i.setType("text/plain");
-            i.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
-            i.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.pax.qbt.annapp");
-            startActivity(Intent.createChooser(i, getString(R.string.shareAnnApp)));
-
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -156,10 +145,20 @@ public class MainActivity extends AppCompatActivity
             fragment = new loststuffFragment();
         } else if (id == R.id.nav_annanews) {
             fragment = new annanewsFragment();
-        } else if (id == R.id.action_settings) {
+        } else if (id == R.id.nav_settings) {
             fragment = new settingsFragment();
-        } else if (id == R.id.action_feedback) {
+        } else if (id == R.id.nav_feedback) {
             fragment = new feedbackFragment();
+        } else if (id == R.id.nav_share){
+            //sharing stuff
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
+            i.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.pax.qbt.annapp");
+            startActivity(Intent.createChooser(i, getString(R.string.shareAnnApp)));
+            return true;
         }
 
         if(id == R.id.nav_grades)

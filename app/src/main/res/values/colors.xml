@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ffb300</color>
-    <color name="colorPrimaryDark">#ff9800</color>
+    <color name="colorPrimaryDark">#ff9800</color>>
+    <!--color name="colorPrimary">#00eaff</color>
+    <color name="colorPrimaryDark">#6a00ff</color-->
     <color name="colorAccent">#2196f3</color>
+
+    <color name="colorPrimaryGreen">#63FF00</color>
+    <color name="colorPrimaryDarkGreen">#14E80C</color>
+    <color name="colorAccentGreen">#ff0d96</color>
+
     <color name="rvItemColor">#616161</color>
-    <color name="colorPrimary2">#63FF00</color>
-    <color name="colorPrimaryDark2">#14E80C</color>
-    <color name="colorAccent2">#fff90d</color>
 
     <color name="bg_line">#E7E7E7</color>
     <color name="bg_color">#FF99DCD7</color>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/topGroup">
         <item
             android:id="@+id/nav_myday"
             android:icon="@drawable/ic_myday"
@@ -38,5 +39,21 @@
             android:id="@+id/nav_annanews"
             android:title="AnnaNews"/>
     </group>
+
+
+    <group
+        android:id="@+id/bottomGroup">
+
+        <item
+            android:id="@+id/nav_share"
+            android:title="Teilen"/>
+        <item
+            android:id="@+id/nav_feedback"
+            android:title="Feedback"/>
+        <item
+            android:id="@+id/nav_settings"
+            android:title="Einstellungen"/>
+    </group>
+
 
 </menu>

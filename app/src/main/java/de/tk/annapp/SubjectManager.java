@@ -19,7 +19,7 @@ public class SubjectManager {
     TextView textViewGrade;
 
     //Contains all subjects
-    ArrayList<Subject> subjects = new ArrayList<>();
+    ArrayList<Subject> subjects = new ArrayList<Subject>();
 
     private SubjectManager(){
         System.out.println("Create SubjectManager...");
@@ -34,6 +34,7 @@ public class SubjectManager {
 
     public void addSubject(String _name, int _rating, String _teacher, String _room){
         //Add a Subject to the subjects Arraylist
+        System.out.println(subjects);
         for(Subject s : subjects){
             Subject newSubject = new Subject(_name, _rating, _teacher, _room);
 
@@ -94,6 +95,7 @@ public class SubjectManager {
         try {
             ObjectInputStream ois = new ObjectInputStream(c.openFileInput(filename));
             subjects = (ArrayList<Subject>) ois.readObject();
+            System.out.println(subjects);
             ois.close();
             setGradeTextView(true, null);
             System.out.println("loading done ---------------------------------------------------------------------------------------------------------");

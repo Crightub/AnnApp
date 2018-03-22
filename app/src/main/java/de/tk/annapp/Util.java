@@ -1,5 +1,9 @@
 package de.tk.annapp;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.util.TypedValue;
+
 //Utility Class
 public class Util {
 
@@ -10,5 +14,13 @@ public class Util {
             pow *= 10;
         float tmp = number * pow;
         return ( (float) ( (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) ) ) / pow;
+    }
+
+    public int getAccentColor(Context c){
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = c.getTheme();
+        theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
+
+        return typedValue.data;
     }
 }

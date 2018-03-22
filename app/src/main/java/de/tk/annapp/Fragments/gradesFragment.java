@@ -3,8 +3,11 @@ package de.tk.annapp.Fragments;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -55,7 +58,7 @@ public class gradesFragment extends Fragment {
         subjectManager.load(getContext(), "subjects");
 
         TextView missingSubjectsWarning = (TextView) root.findViewById(R.id.missingSubjectsWarning);
-        if(subjectManager.getSubjects().isEmpty())
+        if (subjectManager.getSubjects().isEmpty())
             missingSubjectsWarning.setVisibility(View.VISIBLE);
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd);
@@ -63,8 +66,8 @@ public class gradesFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(subjectManager.getSubjects().isEmpty()) {
-                     createAlertDialog(getContext().getString(R.string.warning), "Bitte fügen Sie ein Fach hinzu!", android.R.drawable.ic_dialog_alert);
+                if (subjectManager.getSubjects().isEmpty()) {
+                    createAlertDialog(getContext().getString(R.string.warning), "Bitte fügen Sie ein Fach hinzu!", android.R.drawable.ic_dialog_alert);
                 } else
                     createInputDialog();
 
@@ -109,25 +112,29 @@ public class gradesFragment extends Fragment {
         System.out.println("" + subjectManager.getWholeGradeAverage());
     }*/
 
-    public void createInputDialog(){
+    public void createInputDialog() {
 
-        AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
-
+        //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
+        BottomSheetDialog bsd = new BottomSheetDialog(getContext());
 
 
         View mView = View.inflate(this.getContext(), R.layout.fragment_grade_input, null);
+        //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        mView.setBackground(getResources().getDrawable(android.R.color.transparent));
+
 
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
-        final EditText ratingInput =(EditText) mView.findViewById(R.id.ratingInput);
+        final EditText ratingInput = (EditText) mView.findViewById(R.id.ratingInput);
         final EditText note = (EditText) mView.findViewById(R.id.note);
         final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnHelp);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
         final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
+        final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
 
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(extraLayout.getVisibility() != View.VISIBLE)
+                if (extraLayout.getVisibility() != View.VISIBLE)
                     extraLayout.setVisibility(View.VISIBLE);
                 else
                     extraLayout.setVisibility(View.GONE);
@@ -159,15 +166,45 @@ public class gradesFragment extends Fragment {
         final RadioButton isNotWritten = mView.findViewById(R.id.isNotWritten);
 
 
+        bsd.setTitle(R.string.addGrade);
+
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                float rating = 1;
+
+                //testing which button is active for decision whether your Grade is written or whether it's not
+                if(isWritten.isChecked())
+                    isWrittenBool = true;
+                else if(isNotWritten.isChecked())
+                    isWrittenBool = false;
+
+                if(gradeInput.getText().toString().isEmpty()){
+                    createAlertDialog("Error!", "Please fill in all needed information", 0);
+                    return;
+                }
+
+                if(!ratingInput.getText().toString().isEmpty())
+                    rating = Float.parseFloat(ratingInput.getText().toString());
 
 
-        ad      .setTitle(R.string.addGrade)
-                .setView(mView)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
+                subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
+                subjectManager.save(getContext(), "subjects");
+                recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));
+            }
+        });
 
-                        float rating = 1;
+
+        bsd.setContentView(mView);
+
+
+        bsd.show();
+    }
+
+
+
+    /*float rating = 1;
 
                         //testing which button is active for decision whether your Grade is written or whether it's not
                         if(isWritten.isChecked())
@@ -188,22 +225,22 @@ public class gradesFragment extends Fragment {
                         subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
                         subjectManager.save(getContext(), "subjects");
                         recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));                    }
-                })
-                .show();
-    }
+                })*/
 
-    void createAlertDialog(String title, String text, int ic){
+    void createAlertDialog(String title, String text, int ic) {
         AlertDialog.Builder builder;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
-        }
-        else{
+        } else {
             builder = new AlertDialog.Builder(this.getContext());
         }
         builder.setTitle(title)
                 .setMessage(text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener(){public void onClick(DialogInterface dialog, int which){}})
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
                 .setIcon(ic)
                 .show();
     }

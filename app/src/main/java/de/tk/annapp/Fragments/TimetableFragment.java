@@ -1,8 +1,12 @@
 package de.tk.annapp.Fragments;
 
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.INotificationSideChannel;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +38,7 @@ import de.tk.annapp.TableView.model.Cell;
 import de.tk.annapp.TableView.model.ColumnHeader;
 import de.tk.annapp.TableView.model.RowHeader;
 import de.tk.annapp.TimetableManager;
+import de.tk.annapp.Util;
 
 
 /**
@@ -100,15 +105,53 @@ public class TimetableFragment extends Fragment {
 
         //default spacing
         int spacing = 10;
+        timetableManager.load(getContext(), "timetable");
 
-        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 201", 11, 4);
+        /*timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 201", 11, 4);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",1,0);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 203",2,0);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",3,0);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",4,0);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",5,0);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",6,0);
+
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 213",1,1);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 213",2,1);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 213",3,1);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 213",4,1);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 213",5,1);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 213",6,1);
+
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 223",1,2);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 223",2,2);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 223",3,2);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 223",4,2);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 223",5,2);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 223",6,2);
+
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 233",1,3);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 233",2,3);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 233",3,3);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 233",4,3);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 233",5,3);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 233",6,3);
+
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",1,4);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 243",2,4);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",3,4);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",4,4);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",5,4);
+        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",6,4);*/
+
+
+        int accentColor = (new Util()).getAccentColor(getContext());
 
         for(int i = 0; i<(getLongestDaysNumberOfLessons()); i++){
             TableRow tableRow = new TableRow(this.getContext());
 
 
             if(i==0){
-                Button b = getHeaderButton();
+                Button b = getHeaderButton(accentColor);
                 tableRow.addView(b);
                 Space spa = new Space(this.getContext());
                 spa.setMinimumWidth(spacing);
@@ -118,7 +161,7 @@ public class TimetableFragment extends Fragment {
                 int f = 0;
                 for (Day d :
                         timetableManager.getDays()) {
-                    Button btn = getHeaderButton();
+                    Button btn = getHeaderButton(accentColor);
 
                     switch (f){
                         case (0):
@@ -164,7 +207,7 @@ public class TimetableFragment extends Fragment {
                 tableLayout.addView(t);
 
                 //add row header
-                Button btn = getHeaderButton();
+                Button btn = getHeaderButton(accentColor);
                 btn.setText(i +". Stunde");
                 tableRow.addView(btn);
 
@@ -177,7 +220,7 @@ public class TimetableFragment extends Fragment {
                     try {
                         cellName = d.lessons.get(i).subject.getName();
                         //add cell
-                        cell = getCellButton();
+                        cell = getCellButton(accentColor);
                         ((Button)cell).setText(cellName);
                     } catch (Exception e){
                         cell = new Space(this.getContext());
@@ -202,12 +245,13 @@ public class TimetableFragment extends Fragment {
 
     }
 
-    Button getHeaderButton(){
+    Button getHeaderButton(int accentColor){
         Button btn = new Button(this.getContext());
 
         //general Settings for headers
-        btn.setTextColor(getResources().getColor(R.color.colorPrimary));
-        btn.setBackgroundColor(getResources().getColor(R.color.bg_line));
+        btn.setTextColor(getResources().getColor(R.color.bg_line));
+        btn.setBackgroundColor(accentColor);
+        btn.setTypeface(null,Typeface.BOLD);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,12 +263,13 @@ public class TimetableFragment extends Fragment {
         return btn;
     }
 
-    Button getCellButton(){
+    Button getCellButton(int accentColor){
         Button btn = new Button(this.getContext());
 
         //general Settings for Cells
-        //btn.setTextColor(getResources().getColor(R.color.colorPrimary));
-        btn.setBackgroundColor(getResources().getColor(R.color.bg_line));
+        btn.setTextColor(getResources().getColor(R.color.bg_line));
+
+        btn.setBackgroundColor(accentColor);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

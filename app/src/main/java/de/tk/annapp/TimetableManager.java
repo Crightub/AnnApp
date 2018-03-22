@@ -16,6 +16,9 @@ public class TimetableManager {
     private static final TimetableManager timetableManager = new TimetableManager();
 
     ArrayList<Day> days = new ArrayList<>();
+    Context context;
+
+
     private TimetableManager(){
         System.out.println("Create TimetableManager...");
 
@@ -36,6 +39,7 @@ public class TimetableManager {
         String room;
 
 
+
         if (_room == null)
             room = _subject.room;
         else
@@ -44,6 +48,12 @@ public class TimetableManager {
         Lesson lesson = new Lesson(_subject, room);
 
         days.get(_day).setLesson(_subject, _room, _time);
+
+        save(context, "timetable");
+    }
+
+    public void setContext(Context context){
+        this.context = context;
     }
 
     public ArrayList<Day> getDays(){

@@ -5,9 +5,17 @@
     android:layout_margin="5dp"
     >
 
-    <Switch
-        android:id="@+id/switch1"
+    <EditText
+        android:id="@+id/theme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Switch" />
+        android:ems="10"
+        android:inputType="text"
+        android:hint="ThemeID"/>
+
+    <Button
+        android:id="@+id/btnTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change Theme" />
 </LinearLayout>

@@ -1,100 +1,113 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="de.tk.annapp.GradeInputFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-
-    <LinearLayout
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="#d30be6">
 
-        <Spinner
-            android:id="@+id/subjectSelection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/gradeInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:hint="Note"/>
-
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checkedButton="@+id/isNotWritten"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/isNotWritten"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="mündlich" />
-
-            <RadioButton
-                android:id="@+id/isWritten"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="schriftlich" />
-
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/btnExtra"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnOK"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:background="#00000000"
-            android:text="erweitert"
-            android:textColor="@color/colorAccent" />
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="-6dp"
+            android:clickable="true"
+            android:src="@drawable/ic_add"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id="@+id/extraLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:background="#00ffffff"
             android:orientation="vertical"
-            android:visibility="gone">
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Spinner
+                android:id="@+id/subjectSelection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <EditText
-                android:id="@+id/note"
+                android:id="@+id/gradeInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Notiz"
-                android:inputType="textPersonName" />
+                android:hint="Note"
+                android:inputType="number" />
 
-            <RelativeLayout
+            <RadioGroup
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checkedButton="@+id/isNotWritten"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/isNotWritten"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="mündlich" />
+
+                <RadioButton
+                    android:id="@+id/isWritten"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="schriftlich" />
+
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btnExtra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:background="#00000000"
+                android:text="erweitert"
+                android:textColor="@color/colorAccent" />
+
+            <LinearLayout
+                android:id="@+id/extraLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <EditText
-                    android:id="@+id/ratingInput"
+                    android:id="@+id/note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Wertung"
-                    android:inputType="numberDecimal" />
+                    android:hint="Notiz"
+                    android:inputType="textPersonName" />
 
-                <ImageView
-                    android:id="@+id/btnHelp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/ic_help"
-                    android:text="Button" />
-            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/ratingInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Wertung"
+                        android:inputType="numberDecimal" />
+
+                    <ImageView
+                        android:id="@+id/btnHelp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_help"
+                        android:text="Button" />
+                </RelativeLayout>
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
-</FrameLayout>
+    </android.support.constraint.ConstraintLayout>
