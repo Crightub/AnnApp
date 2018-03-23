@@ -1,5 +1,7 @@
 package de.tk.annapp;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -13,33 +15,67 @@ import java.util.GregorianCalendar;
  * Created by Jakob on 13.01.2018.
  */
 
-public class Task implements Serializable {
+public class Task implements Serializable, Comparable<Task>{
 
-    public String task;
-    public String date;
-    public String subject;
-    public String kind;
-    public boolean weekday;
-    public long dateNumber;
+    /*
+    I drastically changed this bullshit
+     */
+    private String task;
+    private Calendar date;
+    private Subject subject;
+    private String kind;
+    private Calendar due;
 
-    public Task(String task, Date date, String kind, String subject, String day, boolean cal){
+    public Task(String task, Calendar date, String kind, Subject subject, Calendar due){
         this.task = task;
-        weekday = cal;
-        if(!weekday){
-            this.date = day;
-            dateDiff();
-        }
-        else{
-            dateNumber = date.getTime();
-            this.date = date.getDate() + "." + (date.getMonth() + 1) + ".";
-        }
+        this.due = due;
         this.kind = kind;
         this.subject = subject;
     }
 
-    //TODO Check for shortening
-    public void dateDiff(){
-        Calendar cal = new GregorianCalendar();
+    public String getTask() {
+        return task;
+    }
+
+    public void setTask(String task) {
+        this.task = task;
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public void setDate(Calendar date) {
+        this.date = date;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public Calendar getDue() {
+        return due;
+    }
+
+    public void setDue(Calendar due) {
+        this.due = due;
+    }
+
+    //TODO Check for shortening Woatever this does
+    /*private void dateDiff(){
+        Calendar cal = Calendar.getInstance();
         int year = cal.getTime().getYear();
         int day = cal.getTime().getDate();
         int today = cal.getTime().getDay();
@@ -115,5 +151,12 @@ public class Task implements Serializable {
 
         calInt = new Date(realYear, month, dayOfMonth);
         dateNumber = calInt.getTime();
+    }*/
+
+
+    @Override
+    public int compareTo(@NonNull Task task) { //TODO Check order
+        return getDue().after(task.getDue())?1:
+                getDate().after(task.getDate())?1:0;
     }
 }

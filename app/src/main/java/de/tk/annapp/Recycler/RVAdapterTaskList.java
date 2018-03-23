@@ -1,6 +1,7 @@
 package de.tk.annapp.Recycler;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -9,9 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -26,6 +29,7 @@ import de.tk.annapp.Task;
 import de.tk.annapp.R;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
+import de.tk.annapp.Util;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 
@@ -50,7 +54,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     void constructor(){
 
-        Calendar calend = new GregorianCalendar();
+        Calendar now = Calendar.getInstance();
 
         pos = -1;
 
@@ -64,20 +68,19 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             }
         }
 
-        if(subjectsWithTasks.isEmpty()){
-            tasks.add(new Task(null, null, null, null, context.getString(R.string.insertTask), false));
+        if(subjectsWithTasks.isEmpty()){//TODO Default if nothing is added
+            //tasks.add(new Task(null, null, null, null, context.getString(R.string.insertTask)));
         }
 
         for(Subject s : subjectsWithTasks){
-            tasks.add(new Task(null, null, null, s.getName(), null, false));
+            tasks.add(null);
             pos++;
             s.setPosition(pos);
             for(Task t : s.getAllTasksSorted()){
-                if(t.dateNumber < calend.getTime().getTime()){
+                if(t.getDue().before(now)){
                     delete(s, t);
                 }
-                //TODO: Delete Task, if it is in the past
-                //TODO: Change Task to "Mo", "Di", ..., if it is in less than one week
+                //TODO: Delete Task, if it is in the past Done?!
                 tasks.add(t);
                 pos++;
             }
@@ -92,16 +95,18 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     @Override
     public void onBindViewHolder(RecyclerVHTask holder, final int position) {
-        holder.dateTxt.setText((CharSequence) tasks.get(position).date);
-        holder.taskTxt.setText(tasks.get(position).task);
-        holder.kindTxt.setText(tasks.get(position).kind);
-        holder.subjectTxt.setText(tasks.get(position).subject);
-
-        if(holder.taskTxt.getText().toString().isEmpty()) {
+        //TODO: Change Task to "Mo", "Di", ..., if it is in less than one week
+        if(tasks.get(position)==null){
             holder.editButton.setVisibility(View.GONE);
             holder.subjectTxt.setVisibility(View.VISIBLE);
+            holder.subjectTxt.setText(tasks.get(position).getSubject().getName());
+            return;
         }
-        else{
+        holder.dateTxt.setText(Util.getDateString(tasks.get(position).getDue())); //When the Task is due
+        holder.taskTxt.setText(tasks.get(position).getTask());
+        holder.kindTxt.setText(tasks.get(position).getKind());
+
+        /*else{ TODO Can someone look up, if this is really needed
             holder.editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -109,7 +114,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     createEditDialog(tasks.get(position).subject, tasks.get(position));
                 }
             });
-        }
+        }*/
     }
 
     @Override
@@ -141,50 +146,63 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         View mView = View.inflate(context, R.layout.fragment_task_edit, null);
 
-        final ArrayList<String> time = new ArrayList<>();
-        time.add("Montag");
-        time.add("Dienstag");
-        time.add("Mittwoch");
-        time.add("Donnerstag");
-        time.add("Freitag");
-        time.add("Samstag");
-        time.add("Sonntag");
+        Calendar now = Calendar.getInstance();
+        String[] pos;
+        if(task.getDue().get(Calendar.YEAR)==now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR)==now.get(Calendar.WEEK_OF_YEAR))
+            pos= new String[]{"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag","Datum auswählen"};
+        else
+            pos= new String[]{"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag",Util.getFullDate(task.getDue()),"Datum auswählen"};
 
         final EditText taskInput = (EditText) mView.findViewById(R.id.taskInput);
-        taskInput.setText(String.valueOf(task.task));
+        taskInput.setText(String.valueOf(task.getTask()));
 
         final Spinner timeSelection = (Spinner) mView.findViewById(R.id.timeInput);
-        ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, time);
+        ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, pos);
         timeSelection.setAdapter(adapterTime);
-
-        final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra3);
-
-        if(task.date != "Mo" && task.date != "Di" && task.date != "Mi" && task.date != "Do" && task.date != "Fr" && task.date != "Sa" && task.date != "So") {
-            timeSelection.setVisibility(View.GONE);
-            cal = true;
-        }
-        else{
-            timeSelection.setVisibility(View.VISIBLE);
-            cal = false;
-        }
-
-        final Button btnDelete = (Button) mView.findViewById(R.id.btnDeleteTask);
-        final Button btnDeleteIcon = (Button) mView.findViewById(R.id.btnDeleteIcon);
-
-        btnExtra.setOnClickListener(new View.OnClickListener() {
+        timeSelection.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                if(timeSelection.getVisibility() == View.VISIBLE){
-                    createInputDialogCalendar();
-                    timeSelection.setVisibility(View.GONE);
-                    cal = true;
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(((String)timeSelection.getItemAtPosition(i)).equals("Datum auswählen") | ((String)timeSelection.getItemAtPosition(i)).matches("\\d*\\.\\d*\\.\\d*")){
+                    Calendar date= Calendar.getInstance();
+                    if(((String)timeSelection.getItemAtPosition(i)).matches("\\d*\\.\\d*\\.\\d*")){
+                        date = Util.getCalendarFromFullString(((String)timeSelection.getItemAtPosition(i)));
+                    }
+                    DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener(){
+
+                        @Override
+                        public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                            String[] pos = new String[]{"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag",dayOfMonth+"."+monthOfYear+"."+year,"Datum auswählen"};
+                            ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, pos);
+                            timeSelection.setAdapter(adapterTime);
+                            timeSelection.setSelection(7);
+                            //TODO If nothing was selected
+                        }
+                    };
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(
+                            context, onDateSetListener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+                    datePickerDialog.setTitle("Datum auswählen");
+                    datePickerDialog.setCanceledOnTouchOutside(false);
                 }
-                else{
-                    timeSelection.setVisibility(View.VISIBLE);
-                    cal = false;
-                }
+
             }
         });
+        if(task.getDue().get(Calendar.YEAR)==now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR)==now.get(Calendar.WEEK_OF_YEAR))
+            switch (Util.getWeekDayShort(task.getDue())){
+                case "Mo": timeSelection.setSelection(0); break;
+                case "Di": timeSelection.setSelection(1); break;
+                case "Mi": timeSelection.setSelection(2); break;
+                case "Do": timeSelection.setSelection(3); break;
+                case "Fr": timeSelection.setSelection(4); break;
+                case "Sa": timeSelection.setSelection(5); break;
+                case "So": timeSelection.setSelection(6); break;
+            }
+            else
+                timeSelection.setSelection(7);
+
+
+        final Button btnDelete = (Button) mView.findViewById(R.id.btnDeleteTask);//TODO Remove next to edit!
+        final Button btnDeleteIcon = (Button) mView.findViewById(R.id.btnDeleteIcon);
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,35 +229,38 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                             return;
                         }
 
-                        String shortTime;
+                        Calendar due = Calendar.getInstance();
                         if(timeSelection.getSelectedItem().toString().equals("Montag")){
-                            shortTime = "Mo";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Dienstag")){
-                            shortTime = "Di";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.TUESDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Mittwoch")){
-                            shortTime = "Mi";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.WEDNESDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Donnerstag")){
-                            shortTime = "Do";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.THURSDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Freitag")){
-                            shortTime = "Fr";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Samstag")){
-                            shortTime = "Sa";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Sonntag")){
-                            shortTime = "So";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
                         }
-                        else{
-                            shortTime = "";
+                        else if(timeSelection.getSelectedItem().toString().matches("\\d*\\.\\d*\\.\\d*")){
+                            due = Util.getCalendarFromFullString(timeSelection.getSelectedItem().toString());
+                        }else{
                             createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                            return;
                         }
 
-                        subject.editTask(task, taskInput.getText().toString(), shortTime, selectedDate, cal);
-                        notifyItemChanged(tasks.indexOf(task));
+                        task.setDue(due);
+                        task.setTask(taskInput.getText().toString());
+                        notifyItemChanged(tasks.indexOf(task));//TODO Total reload?
 
                         constructor();
                         //TODO: Change place of task if date changed
@@ -258,7 +279,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         adTrueDialog = ad.show();
     }
 
-    public void createInputDialogCalendar(){
+    public void createInputDialogCalendar(){//TODO Remove
+
+        return ;
+        /*datePickerDialog.setTitle("Datum auswählen");
+        datePickerDialog.show();
         AlertDialog.Builder ad = new  AlertDialog.Builder(context);
 
         View mView = View.inflate(context, R.layout.fragment_task_input_calendar, null);
@@ -279,7 +304,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 })
-                .show();
+                .show();*/
     }
 
     void createAlertDialog(String title, String text, int ic){
@@ -319,9 +344,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         notifyItemRangeChanged(tasks.indexOf(task), getItemCount());
 
                         //Only remove the Subject title if the subject has no tasks left
-                        if(subjectManager.getSubjectByName(task.subject).getAllTasks().isEmpty()) {
-                            notifyItemRemoved(subjectManager.getSubjectByName(task.subject).getPosition());
-                            notifyItemRangeChanged(subjectManager.getSubjectByName(task.subject).getPosition(), getItemCount());
+                        if(task.getSubject().getAllTasks().isEmpty()) {
+                            notifyItemRemoved(task.getSubject().getPosition());
+                            notifyItemRangeChanged(task.getSubject().getPosition(), getItemCount());
                         }
 
                         constructor();

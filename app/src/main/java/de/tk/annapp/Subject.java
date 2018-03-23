@@ -2,7 +2,10 @@ package de.tk.annapp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 public class Subject implements Serializable {
 
@@ -11,8 +14,6 @@ public class Subject implements Serializable {
 
     //Contains all tasks of one Subject
     ArrayList<Task> tasks = new ArrayList<>();
-
-    ArrayList<Task> tasksSorted = new ArrayList<>();
 
     int position;
 
@@ -42,56 +43,26 @@ public class Subject implements Serializable {
         return name;
     }
 
-    public void addTask(String task, Date date, String kind, String day, boolean cal) {
-        tasks.add(new Task(task, date, kind, this.getName(), day, cal));
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
     public void removeTask(Task task) {
         tasks.remove(task);
     }
 
-    //TODO Relocate this method & Rewrite
-    public void editTask(Task task, String taskContent, String day, Date date, boolean cal) {
-        task.task = taskContent;
-        task.weekday = cal;
-        if (!cal) {
-            task.date = day;
-            task.dateDiff();
-        } else {
-            task.dateNumber = date.getTime();
-            task.date = date.getDate() + "." + (date.getMonth() + 1) + ".";
-        }
-    }
 
     public void setPosition(int position) {
         this.position = position;
     }
 
+    //TODO WOOOO?
     public int getPosition() {
         return position;
     }
 
     public void sortTasks() {
-        ArrayList<Task> tasksLeft = new ArrayList<>();
-        Task lowest = new Task(null, null, null, null, null, false);
-        tasksSorted.clear();
-        for (Task t : tasks) {
-            tasksLeft.add(t);
-        }
-        for (int x = 0; x < tasks.size(); x++) {
-            int i = 0;
-            for (Task left : tasksLeft) {
-                if (i == 0) {
-                    lowest = left;
-                    i++;
-                }
-                if (left.dateNumber < lowest.dateNumber) {
-                    lowest = left;
-                }
-            }
-            tasksSorted.add(lowest);
-            tasksLeft.remove(lowest);
-        }
+        //TODO replaxesdhfhbabuhldhfusbuhadfhsb Remove this f*** method
     }
 
     public void addGrade(int _grade, boolean _iswritten, float _ratingGrade, String _note) {
@@ -155,7 +126,8 @@ public class Subject implements Serializable {
     }
 
     public ArrayList<Task> getAllTasksSorted() {
-        sortTasks();
-        return tasksSorted;
+        Collections.sort(tasks);
+        //tasks.stream().sorted().collect(Collectors.toList())
+        return tasks;
     }
 }

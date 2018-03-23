@@ -15,17 +15,13 @@ public class TimetableManager {
 
     private static final TimetableManager timetableManager = new TimetableManager();
 
-    ArrayList<Day> days = new ArrayList<>();
+    Day[] days;
     Context context;
 
 
     private TimetableManager(){
         System.out.println("Create TimetableManager...");
-        days.add(new Day());
-        days.add(new Day());
-        days.add(new Day());
-        days.add(new Day());
-        days.add(new Day());
+        days = new Day[]{new Day(),new Day(),new Day(),new Day(),new Day()};
 
     }
 
@@ -34,12 +30,8 @@ public class TimetableManager {
         return timetableManager;
     }
 
-    //TODO Duplicate wit Day.setLesson
-    public void setLesson(Subject subject, String room, int time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/, int _day){
-        Lesson lesson = new Lesson(subject, room==null?subject.room:room);
-
-        days.get(_day).setLesson(subject, room, time);
-
+    public void setLesson(Subject subject, String room, int time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/, int day){
+        days[day].setLesson(subject, room, time);
         save(context, "timetable");
     }
 
@@ -47,7 +39,7 @@ public class TimetableManager {
         this.context = context;
     }
 
-    public ArrayList<Day> getDays(){
+    public Day[] getDays(){
         return days;
     }
 
@@ -55,7 +47,7 @@ public class TimetableManager {
     {
         try {
             ObjectInputStream ois = new ObjectInputStream(cntxt.openFileInput(filename));
-            days = (ArrayList<Day>) ois.readObject();
+            days = (Day[]) ois.readObject();
             ois.close();
         } catch (Exception e) {
             e.printStackTrace();

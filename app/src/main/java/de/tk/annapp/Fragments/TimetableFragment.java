@@ -72,7 +72,7 @@ public class TimetableFragment extends Fragment {
         //initData();
     }
 
-    void setRowSize(){
+    void setRowSize() {
 
     }
 
@@ -100,8 +100,7 @@ public class TimetableFragment extends Fragment {
     }
 
 
-
-    void initializeTableView(){
+    void initializeTableView() {
 
         //default spacing
         int spacing = 10;
@@ -146,11 +145,11 @@ public class TimetableFragment extends Fragment {
 
         int accentColor = (new Util()).getAccentColor(getContext());
 
-        for(int i = 0; i<(getLongestDaysNumberOfLessons()); i++){
+        for (int i = 0; i < (getLongestDaysNumberOfLessons()); i++) {
             TableRow tableRow = new TableRow(this.getContext());
 
 
-            if(i==0){
+            if (i == 0) {
                 Button b = getHeaderButton(accentColor);
                 tableRow.addView(b);
                 Space spa = new Space(this.getContext());
@@ -160,20 +159,20 @@ public class TimetableFragment extends Fragment {
                 //TODO Register Rowheaders
                 int f = 0;
                 for (Day d :
-                        timetableManager.getDays()) {
+                        timetableManager.getDays()) { //TODO d is not used: Really the right form?
                     Button btn = getHeaderButton(accentColor);
 
-                    switch (f){
+                    switch (f) {
                         case (0):
                             btn.setText("Montag");
                             break;
-                        case (1) :
+                        case (1):
                             btn.setText("Dienstag");
                             break;
                         case (2):
                             btn.setText("Mittwoch");
                             break;
-                        case (3) :
+                        case (3):
                             btn.setText("Donnerstag");
                             break;
                         case (4):
@@ -186,7 +185,6 @@ public class TimetableFragment extends Fragment {
                     f++;
 
 
-
                     tableRow.addView(btn);
 
                     //horizontal space between buttons
@@ -196,7 +194,7 @@ public class TimetableFragment extends Fragment {
                     tableRow.addView(space);
 
                 }
-            }else{
+            } else {
                 //TODO Register Columnheaders and Cells
 
                 //vertical space between buttons
@@ -208,7 +206,7 @@ public class TimetableFragment extends Fragment {
 
                 //add row header
                 Button btn = getHeaderButton(accentColor);
-                btn.setText(i +". Stunde");
+                btn.setText(i + ". Stunde");
                 tableRow.addView(btn);
 
                 for (Day d :
@@ -221,8 +219,8 @@ public class TimetableFragment extends Fragment {
                         cellName = d.lessons.get(i).subject.getName();
                         //add cell
                         cell = getCellButton(accentColor);
-                        ((Button)cell).setText(cellName);
-                    } catch (Exception e){
+                        ((Button) cell).setText(cellName);
+                    } catch (Exception e) {
                         cell = new Space(this.getContext());
                         cell.setMinimumWidth(spacing);
                         System.out.println(e);
@@ -245,13 +243,13 @@ public class TimetableFragment extends Fragment {
 
     }
 
-    Button getHeaderButton(int accentColor){
+    Button getHeaderButton(int accentColor) {
         Button btn = new Button(this.getContext());
 
         //general Settings for headers
         btn.setTextColor(getResources().getColor(R.color.bg_line));
         btn.setBackgroundColor(accentColor);
-        btn.setTypeface(null,Typeface.BOLD);
+        btn.setTypeface(null, Typeface.BOLD);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -263,7 +261,7 @@ public class TimetableFragment extends Fragment {
         return btn;
     }
 
-    Button getCellButton(int accentColor){
+    Button getCellButton(int accentColor) {
         Button btn = new Button(this.getContext());
 
         //general Settings for Cells
@@ -281,15 +279,12 @@ public class TimetableFragment extends Fragment {
         return btn;
     }
 
-    int getLongestDaysNumberOfLessons(){
-        ArrayList<Day> days = timetableManager.getDays();
+    int getLongestDaysNumberOfLessons() {
         int x = 0;
-        for (Day d : days) {
-            int i=0;
-            for (Lesson l : d.lessons)
-                i++;
-            if(i>x)
-                x=i;
+        for (Day d : timetableManager.getDays()) {
+            int i = d.lessons.size();
+            if (i > x)
+                x = i;
         }
         return x;
     }
