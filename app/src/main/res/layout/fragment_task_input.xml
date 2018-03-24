@@ -11,17 +11,17 @@
     android:orientation="vertical">
 
     <Spinner
-        android:id="@+id/subjectSelection2"
+        android:id="@+id/spinner_task_input_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Spinner
-        android:id="@+id/kindInput"
+        android:id="@+id/spinner_task_input_kind"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/task"
+        android:id="@+id/spinner_task_input_task"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -29,18 +29,10 @@
         android:hint="Aufgabe"/>
 
     <Spinner
-        android:id="@+id/time"
+        android:id="@+id/spinner_task_input_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/btnExtra2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:background="#00000000"
-        android:text="anderes datum"
-        android:textColor="@color/colorAccent" />
 
 </LinearLayout>
 </FrameLayout>

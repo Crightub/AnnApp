@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appNs="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,6 +9,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/button_item_task_delete"
         android:orientation="horizontal">
 
         <TextView
@@ -16,23 +18,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:clickable="false"
             android:textAlignment="viewStart"
             android:textColor="@color/rvItemColor"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:visibility="gone"
-            android:clickable="false"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/item_task_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
+            android:clickable="false"
             android:textAlignment="viewStart"
             android:textColor="@color/rvItemColor"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:clickable="false"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/item_task_task"
@@ -51,8 +53,8 @@
             android:id="@+id/item_task_kind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_marginLeft="270dp"
-            android:layout_marginRight="50dp"
             android:layout_weight="1"
             android:textColor="@color/rvItemColor"
             android:textSize="20sp"
@@ -63,7 +65,7 @@
     </RelativeLayout>
 
     <ImageButton
-        android:id="@+id/item_task_deleteButton"
+        android:id="@+id/button_item_task_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -74,8 +76,23 @@
         android:contentDescription="btnEdit"
         android:tint="@color/rvItemColor"
         appNs:layout_constraintBottom_toBottomOf="parent"
+        appNs:layout_constraintEnd_toEndOf="@id/button_item_task_edit"
+        appNs:layout_constraintTop_toTopOf="parent"
+        appNs:srcCompat="@drawable/ic_delete" />
+
+    <ImageButton
+        android:id="@+id/button_item_task_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top|end"
+        android:background="@android:color/transparent"
+        android:contentDescription="btnEdit"
+        android:tint="@color/rvItemColor"
+        appNs:layout_constraintBottom_toBottomOf="parent"
         appNs:layout_constraintEnd_toEndOf="parent"
         appNs:layout_constraintTop_toTopOf="parent"
         appNs:srcCompat="@drawable/ic_edit" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

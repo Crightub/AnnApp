@@ -28,6 +28,7 @@ public class Task implements Serializable, Comparable<Task>{
 
     public Task(String task, Calendar date, String kind, Subject subject, Calendar due){
         this.task = task;
+        this.date=date;
         this.due = due;
         this.kind = kind;
         this.subject = subject;
@@ -158,5 +159,16 @@ public class Task implements Serializable, Comparable<Task>{
     public int compareTo(@NonNull Task task) { //TODO Check order
         return getDue().after(task.getDue())?1:
                 getDate().after(task.getDate())?1:0;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "task='" + task + '\'' +
+                ", date=" + date +
+                ", subject=" + subject +
+                ", kind='" + kind + '\'' +
+                ", due=" + due +
+                '}';
     }
 }

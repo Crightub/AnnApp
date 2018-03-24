@@ -3,42 +3,35 @@ package de.tk.annapp.Fragments;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import de.tk.annapp.R;
-import de.tk.annapp.Recycler.RVAdapterSubjectList;
 import de.tk.annapp.Recycler.RVAdapterTaskList;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
 import de.tk.annapp.Task;
+import de.tk.annapp.Util;
 
-import static android.R.layout.simple_expandable_list_item_2;
 import static android.R.layout.simple_spinner_dropdown_item;
 
 
@@ -58,7 +51,7 @@ public class TasksFragment extends Fragment  {
         subjectManager = SubjectManager.getInstance();
         subjectManager.load(getContext(), "subjects");
 
-        FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd2);
+        FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAddTask);
         fabAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 createInputDialog();
@@ -95,60 +88,63 @@ public class TasksFragment extends Fragment  {
 
         AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
 
-        View mView = View.inflate(this.getContext(), R.layout.fragment_task_input, null);
+        View mView = View.inflate(this.getContext(), R.layout.fragment_task_input, null); //TODO EInes der Layouts elemenieren
 
-        final EditText task = (EditText) mView.findViewById(R.id.task);
-        final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra2);
+        String[] duedates = new String[]{"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag","Datum auswählen"};
 
-        final ArrayList<String> subjectNames = new ArrayList<>();
-        final ArrayList<String> time = new ArrayList<>();
-        final ArrayList<String> kind = new ArrayList<>();
+        String[] kinds = new String[]{"Hausaufgabe","Schulaufgabe","Notiz"};
 
-        kind.add("Hausaufgabe");
-        kind.add("Schulaufgabe");
-        kind.add("Notiz");
+        final EditText task = (EditText) mView.findViewById(R.id.spinner_task_input_task);
+        final ArrayList<Subject> subjects = subjectManager.getSubjects();
 
-        time.add("Montag");
-        time.add("Dienstag");
-        time.add("Mittwoch");
-        time.add("Donnerstag");
-        time.add("Freitag");
-        time.add("Samstag");
-        time.add("Sonntag");
-
-        cal = false;
-
-
-        for (Subject s : subjectManager.getSubjects()) {
-            subjectNames.add(s.name);
+        if(subjects.isEmpty()){
+            createAlertDialog(getString(R.string.warning), "Bitte fügen Sie zuerst ein neues Fach hinzu!", android.R.drawable.ic_dialog_alert);
+            return;
         }
 
-        final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection2);
-        final Spinner timeSelection = (Spinner) mView.findViewById(R.id.time);
-        final Spinner kindSelection = (Spinner) mView.findViewById(R.id.kindInput);
-
-        ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, kind);
-        ArrayAdapter<String> adapterSubject = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, subjectNames);
-        ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, time);
-
+        final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_subject);
+        ArrayAdapter<Subject> adapterSubject = new ArrayAdapter<>(getContext(), simple_spinner_dropdown_item,subjects);
         subjectSelection.setAdapter(adapterSubject);
-        timeSelection.setAdapter(adapterTime);
-        kindSelection.setAdapter(adapterKind);
 
-        btnExtra.setOnClickListener(new View.OnClickListener() {
+        final Spinner timeSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_time);
+        ArrayAdapter<String> adapterTime = new ArrayAdapter<>(this.getContext(), simple_spinner_dropdown_item, duedates);
+        timeSelection.setAdapter(adapterTime);
+        timeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                if(timeSelection.getVisibility() == View.VISIBLE){
-                    createInputDialogCalendar();
-                    timeSelection.setVisibility(View.GONE);
-                    cal = true;
-                }
-                else{
-                    timeSelection.setVisibility(View.VISIBLE);
-                    cal = false;
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(((String)timeSelection.getItemAtPosition(i)).equals("Datum auswählen")){
+                    Calendar date= Calendar.getInstance();
+                    if(((String)timeSelection.getItemAtPosition(i-1)).matches("\\d*\\.\\d*\\.\\d*")){
+                        date = Util.getCalendarFromFullString(((String)timeSelection.getItemAtPosition(i-1)));
+                    }
+                    DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener(){
+
+                        @Override
+                        public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                            String[] pos = new String[]{"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag",dayOfMonth+"."+monthOfYear+"."+year,"Datum auswählen"};
+                            ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(getContext(), simple_spinner_dropdown_item, pos);
+                            timeSelection.setAdapter(adapterTime);
+                            timeSelection.setSelection(7);
+                            //TODO If nothing was selected
+                        }
+                    };
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(
+                            getContext(), onDateSetListener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+                    datePickerDialog.setTitle("Datum auswählen");
+                    datePickerDialog.setCanceledOnTouchOutside(false);
+                    datePickerDialog.show();
                 }
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
+
+        final Spinner kindSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_kind);
+        ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, kinds);
+        kindSelection.setAdapter(adapterKind);
 
         ad      .setTitle(R.string.addTask)
                 .setView(mView)
@@ -161,36 +157,35 @@ public class TasksFragment extends Fragment  {
                             return;
                         }
 
-                        if(subjectNames.isEmpty())
-                            createAlertDialog(getString(R.string.warning), "Bitte fügen Sie zuerst ein neues Fach hinzu!", android.R.drawable.ic_dialog_alert);
+                        Subject subject = (Subject) subjectSelection.getSelectedItem();
 
-                        Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
-
-                        String shortTime;
+                        Calendar due = Calendar.getInstance();
                         if(timeSelection.getSelectedItem().toString().equals("Montag")){
-                            shortTime = "Mo";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Dienstag")){
-                            shortTime = "Di";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.TUESDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Mittwoch")){
-                            shortTime = "Mi";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.WEDNESDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Donnerstag")){
-                            shortTime = "Do";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.THURSDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Freitag")){
-                            shortTime = "Fr";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Samstag")){
-                            shortTime = "Sa";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY);
                         }
                         else if(timeSelection.getSelectedItem().toString().equals("Sonntag")){
-                            shortTime = "So";
+                            due.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
                         }
-                        else{
-                            shortTime = "";
-                            createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                        else if(timeSelection.getSelectedItem().toString().matches("\\d*\\.\\d*\\.\\d*")){
+                            due = Util.getCalendarFromFullString(timeSelection.getSelectedItem().toString());
+                        }else{
+                            createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                            return;
                         }
 
                         String shortKind;
@@ -207,13 +202,10 @@ public class TasksFragment extends Fragment  {
                             shortKind = "";
                             createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
                         }
-                        subject.addTask(task.getText().toString(), selectedDate, shortKind, shortTime, cal);
+                        Task newTask = new Task(task.getText().toString(),Calendar.getInstance(),shortKind,subject,due);
+                        subject.addTask(newTask);
 
-                        for(Task task : subject.getAllTasks()){
-                            System.out.println("Task: " + task.task + ", " + task.date + ", " + task.kind);
-                        }
-
-                        recyclerView.setAdapter(new RVAdapterTaskList(getActivity()));
+                        ((RVAdapterTaskList)recyclerView.getAdapter()).addTask(newTask);
                         subjectManager.save(getContext(), "subjects");
                     }
                 })
@@ -221,7 +213,7 @@ public class TasksFragment extends Fragment  {
     }
 
     public void createInputDialogCalendar(){
-        AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
+        /*AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
 
         View mView = View.inflate(this.getContext(), R.layout.fragment_task_input_calendar, null);
 
@@ -241,7 +233,7 @@ public class TasksFragment extends Fragment  {
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 })
-                .show();
+                .show();*/
     }
 
     void createAlertDialog(String title, String text, int ic){

@@ -126,8 +126,14 @@ public class Subject implements Serializable {
     }
 
     public ArrayList<Task> getAllTasksSorted() {
+        System.out.println(tasks);
         Collections.sort(tasks);
         //tasks.stream().sorted().collect(Collectors.toList())
         return tasks;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

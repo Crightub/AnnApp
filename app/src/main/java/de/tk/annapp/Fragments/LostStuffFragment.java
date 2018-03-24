@@ -63,7 +63,7 @@ public class LostStuffFragment extends Fragment {
         timetableManager.setLesson(s, null, 3, 0);
 
         for (Lesson l :
-                timetableManager.getDays().get(0).lessons) {
+                timetableManager.getDays()[0].lessons) {
             try {
                 System.out.println(l.subject.name);
             } catch(Exception e){
