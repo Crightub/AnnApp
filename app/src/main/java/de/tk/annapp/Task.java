@@ -17,9 +17,6 @@ import java.util.GregorianCalendar;
 
 public class Task implements Serializable, Comparable<Task>{
 
-    /*
-    I drastically changed this bullshit
-     */
     private String task;
     private Calendar date;
     private Subject subject;

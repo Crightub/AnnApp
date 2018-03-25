@@ -86,7 +86,6 @@ public class TimetableFragment extends Fragment {
 
         //default spacing
         int spacing = 10;
-        //TODO Why??? subjectManager.load();
 
         /*timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 201", 11, 4);
         timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",1,0);
@@ -140,8 +139,7 @@ public class TimetableFragment extends Fragment {
 
                 //TODO Register Rowheaders
                 int f = 0;
-                for (Day d :
-                        subjectManager.getDays()) { //TODO d is not used: Really the right form?
+                for (int d = 0; d<5; d++) {
                     Button btn = getHeaderButton(accentColor);
 
                     switch (f) {
@@ -203,8 +201,7 @@ public class TimetableFragment extends Fragment {
                         cell = getCellButton(accentColor);
                         ((Button) cell).setText(cellName);
                     } catch (Exception e) {
-                        cell = new Space(this.getContext());
-                        cell.setMinimumWidth(spacing);
+                        cell = getEmptyCellButton();
                         System.out.println(e);
                     }
 
@@ -230,7 +227,7 @@ public class TimetableFragment extends Fragment {
 
         //general Settings for headers
         btn.setTextColor(getResources().getColor(R.color.bg_line));
-        btn.setBackgroundColor(accentColor);
+        btn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         btn.setTypeface(null, Typeface.BOLD);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -257,6 +254,22 @@ public class TimetableFragment extends Fragment {
                 Toast.makeText(getContext(), "Clicked ", Toast.LENGTH_SHORT).show();
             }
         });
+
+        return btn;
+    }
+
+    Button getEmptyCellButton(){
+        Button btn = new Button(this.getContext());
+
+        //general Settings for empty cells
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Empty Cell pressed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         return btn;
     }
