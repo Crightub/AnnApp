@@ -176,12 +176,12 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         timeSelection.setAdapter(adapterTime);
         timeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (((String) timeSelection.getItemAtPosition(i)).equals("Datum auswählen")) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                if (((String) timeSelection.getItemAtPosition(pos)).equals("Datum auswählen")) {
                     timeSelection.setSelection(0);
                     Calendar date = Calendar.getInstance();
-                    if (((String) timeSelection.getItemAtPosition(i - 1)).matches("\\d*\\.\\d*\\.\\d*")) {
-                        date = Util.getCalendarFromFullString(((String) timeSelection.getItemAtPosition(i - 1)));
+                    if (((String) timeSelection.getItemAtPosition(pos - 1)).matches("\\d*\\.\\d*\\.\\d*")) {
+                        date = Util.getCalendarFromFullString(((String) timeSelection.getItemAtPosition(pos - 1)));
                     }
                     DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
@@ -284,6 +284,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         task.setDue(due);
                         task.setKind(shortKind);
                         task.setTask(taskInput.getText().toString());
+                        notifyItemChanged(tasks.indexOf(task));
                         int altindex = tasks.indexOf(task);
                         constructor();
                         int newindex = tasks.indexOf(task);

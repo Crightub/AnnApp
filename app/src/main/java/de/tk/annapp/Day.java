@@ -4,19 +4,34 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Day implements Serializable{
-    public ArrayList<Lesson> lessons = new ArrayList<>();
+public class Day implements Serializable {
 
-    public void setLesson(Subject subject, String room, int time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/) {
-        Lesson lesson = new Lesson(subject, room==null?subject.room:room);
+    int number;
+    private ArrayList<Lesson> lessons = new ArrayList<>();
 
-        while (lessons.size() <= time)
-            lessons.add(null);
-
-        System.out.println(lessons.size());
-
-        lessons.set(time, lesson);
+    public Day(int number) {
+        this.number = number;
     }
+
+    public void setLesson(Lesson lesson) {
+
+        while (lessons.size() <= lesson.getTime())
+            lessons.add(new Lesson(null, null,number, lessons.size()));
+
+        lessons.set(lesson.getTime(), lesson);
+    }
+
+    public Lesson getLesseon(int time) {
+        if (time < lessons.size())
+            return lessons.get(time);
+        return new Lesson(null, null,number, time);
+    }
+
+    public ArrayList<Lesson> getLessons() {
+        return lessons;
+    }
+
+
 }
 
 

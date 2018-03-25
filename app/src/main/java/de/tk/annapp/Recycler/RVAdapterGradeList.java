@@ -150,7 +150,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
 
 
-        ad      .setTitle(context.getString(R.string.editGrade) + subject.name)
+        ad      .setTitle(context.getString(R.string.editGrade) + subject.getName())
                 .setView(mView)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override

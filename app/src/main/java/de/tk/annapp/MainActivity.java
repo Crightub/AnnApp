@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         subjectManager.addSubject(new Subject("Deutsch", 1, "fdsh", "hjsr"));
         subjectManager.addSubject(new Subject("Latein", 1, "fdsh", "hjsr"));
         subjectManager.addSubject(new Subject("Englisch", 1, "fdsh", "hjsr"));
-        subjectManager.setLesson(subjectManager.getSubjects().get(0),"dsd",1,1);
+        subjectManager.setLesson(new Lesson(subjectManager.getSubjects().get(0),"dsd",1,1));
 
 
 

@@ -37,7 +37,7 @@ public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectL
 
     @Override
     public void onBindViewHolder(RecyclerVH holder, final int position) {
-        holder.nameTxt.setText(subjects.get(position).name);
+        holder.nameTxt.setText(subjects.get(position).getName());
         holder.rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

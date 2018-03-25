@@ -1,29 +1,47 @@
 package de.tk.annapp.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.app.Fragment;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Space;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import de.tk.annapp.Day;
+import de.tk.annapp.Lesson;
 import de.tk.annapp.R;
+import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
 import de.tk.annapp.TableView.model.Cell;
 import de.tk.annapp.TableView.model.ColumnHeader;
 import de.tk.annapp.TableView.model.RowHeader;
 import de.tk.annapp.Util;
+
+import static android.R.layout.simple_spinner_dropdown_item;
 
 
 /**
@@ -37,6 +55,12 @@ public class TimetableFragment extends Fragment {
     private List<RowHeader> mRowHeaderList;
     private List<ColumnHeader> mColumnHeaderList;
     private List<List<Cell>> mCellList;
+
+    //default spacing
+    int spacing = 5;
+
+    Subject lastSubject;
+    Subject uglyAsHellWayToCreateAOtherCoiseOption = new Subject("neues Fach", 0, null, null);
 
     //private AbstractTableAdapter mTableViewAdapter;
     //private TableView mTableView;
@@ -67,6 +91,10 @@ public class TimetableFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_timetable, container, false);
         subjectManager = SubjectManager.getInstance();
 
+        if (!subjectManager.getSubjects().isEmpty())
+            lastSubject = subjectManager.getSubjects().get(0);
+        else
+            lastSubject = uglyAsHellWayToCreateAOtherCoiseOption;
         //RelativeLayout fragment_container = root.findViewById(R.id.fragment_container);
 
         tableLayout = root.findViewById(R.id.tableLayout);
@@ -83,11 +111,6 @@ public class TimetableFragment extends Fragment {
 
 
     void initializeTableView() {
-
-        //default spacing
-        int spacing = 10;
-        //TODO Why??? subjectManager.load();
-
         /*timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 201", 11, 4);
         timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",1,0);
         timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 203",2,0);
@@ -124,24 +147,22 @@ public class TimetableFragment extends Fragment {
         timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",5,4);
         timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",6,4);*/
 
+        tableLayout.removeAllViews();
 
         int accentColor = (new Util()).getAccentColor(getContext());
 
-        for (int i = 0; i < (getLongestDaysNumberOfLessons()); i++) {
+        for (int i = 0; i < 12/*TODO Later you should be able to change this in the settings*/; i++) {
             TableRow tableRow = new TableRow(this.getContext());
 
 
             if (i == 0) {
                 Button b = getHeaderButton(accentColor);
                 tableRow.addView(b);
-                Space spa = new Space(this.getContext());
-                spa.setMinimumWidth(spacing);
-                tableRow.addView(spa);
+                tableRow.addView(getDefaultSpace());
 
                 //TODO Register Rowheaders
                 int f = 0;
-                for (Day d :
-                        subjectManager.getDays()) { //TODO d is not used: Really the right form?
+                for (int d = 0; d < 5; d++) {
                     Button btn = getHeaderButton(accentColor);
 
                     switch (f) {
@@ -170,20 +191,15 @@ public class TimetableFragment extends Fragment {
                     tableRow.addView(btn);
 
                     //horizontal space between buttons
-                    Space space = new Space(this.getContext());
-                    space.setMinimumWidth(spacing);
-                    space.setMinimumHeight(spacing);
-                    tableRow.addView(space);
+                    tableRow.addView(getDefaultSpace());
 
                 }
             } else {
                 //TODO Register Columnheaders and Cells
 
                 //vertical space between buttons
-                Space sp = new Space(this.getContext());
-                sp.setMinimumHeight(spacing);
                 TableRow t = new TableRow(this.getContext());
-                t.addView(sp);
+                t.addView(getDefaultSpace());
                 tableLayout.addView(t);
 
                 //add row header
@@ -191,27 +207,28 @@ public class TimetableFragment extends Fragment {
                 btn.setText(i + ". Stunde");
                 tableRow.addView(btn);
 
+                int x = 0;
+
                 for (Day d :
                         subjectManager.getDays()) {
 
+                    x++;
                     String cellName;
 
                     View cell;
+
+
                     try {
-                        cellName = d.lessons.get(i).subject.getName();
+                        cellName = d.getLesseon(i).getSubject().getName();
                         //add cell
-                        cell = getCellButton(accentColor);
+                        cell = getCellButton(accentColor, String.valueOf(x) + "#" + String.valueOf(i));
                         ((Button) cell).setText(cellName);
                     } catch (Exception e) {
-                        cell = new Space(this.getContext());
-                        cell.setMinimumWidth(spacing);
-                        System.out.println(e);
+                        cell = getEmptyCellButton(String.valueOf(x) + "#" + String.valueOf(i));
                     }
 
                     //add spacing
-                    Space v = new Space(this.getContext());
-                    v.setMinimumWidth(spacing);
-                    tableRow.addView(v);
+                    tableRow.addView(getDefaultSpace());
 
                     tableRow.addView(cell);
                 }
@@ -225,12 +242,19 @@ public class TimetableFragment extends Fragment {
 
     }
 
+    Space getDefaultSpace() {
+        Space s = new Space(this.getContext());
+        s.setMinimumWidth(spacing);
+        s.setMinimumHeight(spacing);
+        return s;
+    }
+
     Button getHeaderButton(int accentColor) {
         Button btn = new Button(this.getContext());
 
         //general Settings for headers
         btn.setTextColor(getResources().getColor(R.color.bg_line));
-        btn.setBackgroundColor(accentColor);
+        btn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         btn.setTypeface(null, Typeface.BOLD);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -243,7 +267,7 @@ public class TimetableFragment extends Fragment {
         return btn;
     }
 
-    Button getCellButton(int accentColor) {
+    Button getCellButton(int accentColor, String position) {
         Button btn = new Button(this.getContext());
 
         //general Settings for Cells
@@ -261,239 +285,216 @@ public class TimetableFragment extends Fragment {
         return btn;
     }
 
-    int getLongestDaysNumberOfLessons() {
-        int x = 0;
-        for (Day d : subjectManager.getDays()) {
-            int i = d.lessons.size();
-            if (i > x)
-                x = i;
-        }
-        return x;
-    }
+    Button getEmptyCellButton(String position) {
+        Button btn = new Button(this.getContext());
 
-/*
-    private TableView createTableView() {
-        TableView tableView = new TableView(getContext());
+        //general Settings for empty cells
+        btn.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
-        // Set adapter
-        mTableViewAdapter = new TVAdapterTimetable(getContext());
-        tableView.setAdapter(mTableViewAdapter);
+        btn.setTag(position);
 
-        // Set layout params
-        FrameLayout.LayoutParams tlp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams
-                .MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        tableView.setLayoutParams(tlp);
-
-        // Set TableView listener
-        tableView.setTableViewListener(new MyTableViewListener(tableView));
-        return tableView;
-    }
-
-
-    private void initData() {
-        mRowHeaderList = new ArrayList<>();
-        mColumnHeaderList = new ArrayList<>();
-        mCellList = new ArrayList<>();
-        for (int i = 0; i < ROW_SIZE; i++) {
-            mCellList.add(new ArrayList<Cell>());
-        }
-    }
-
-    private void loadData() {
-        List<RowHeader> rowHeaders = getRowHeaderList();
-        List<List<Cell>> cellList = getCellListForSortingTest(); // getCellList();
-        List<ColumnHeader> columnHeaders = getColumnHeaderList(); //getRandomColumnHeaderList(); //
-
-        mRowHeaderList.addAll(rowHeaders);
-        for (int i = 0; i < cellList.size(); i++) {
-            mCellList.get(i).addAll(cellList.get(i));
-        }
-
-        // Load all data
-        mColumnHeaderList.addAll(columnHeaders);
-        mTableViewAdapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList);
-
-    }
-
-    private List<RowHeader> getRowHeaderList() {
-        List<RowHeader> list = new ArrayList<>();
-        for (int i = 0; i < ROW_SIZE; i++) {
-            RowHeader header = new RowHeader(String.valueOf(i), (i+1) + ". Stunde");
-            list.add(header);
-        }
-
-        return list;
-    }
-
-    /**
-     * This is a dummy model list test some cases.
-     */      /*
-    public static List<RowHeader> getRowHeaderList(int startIndex) {
-        List<RowHeader> list = new ArrayList<>();
-        for (int i = 0; i < ROW_SIZE; i++) {
-            RowHeader header = new RowHeader(String.valueOf(i), "row " + (startIndex + i));
-            list.add(header);
-        }
-
-        return list;
-    }
-
-
-    private List<ColumnHeader> getColumnHeaderList() {
-        List<ColumnHeader> list = new ArrayList<>();
-
-        for (int i = 0; i < COLUMN_SIZE; i++) {
-            String title;
-            if(i==0)
-                title = "Montag";
-            else if(i==1)
-                title = "Dienstag";
-            else if(i==2)
-                title = "Mittwoch";
-            else if(i==3)
-                title = "Donnerstag";
-            else if(i==4)
-                title = "Freitag";
-            else
-                title = "undefined Day";
-
-
-            ColumnHeader header = new ColumnHeader(String.valueOf(i), title);
-            list.add(header);
-        }
-
-        return list;
-    }
-
-    /**
-     * This is a dummy model list test some cases.
-     */    /*
-    private List<ColumnHeader> getRandomColumnHeaderList() {
-        List<ColumnHeader> list = new ArrayList<>();
-
-        for (int i = 0; i < COLUMN_SIZE; i++) {
-            String title = "column " + i;
-            int nRandom = new Random().nextInt();
-            if (nRandom % 4 == 0 || nRandom % 3 == 0 || nRandom == i) {
-                title = "large column " + i;
+        btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                //Toast.makeText(getContext(), "Empty Cell pressed on Position" + view.getTag(), Toast.LENGTH_SHORT).show();
+                addLesson(view);
+                return false;
             }
+        });
 
-            ColumnHeader header = new ColumnHeader(String.valueOf(i), title);
-            list.add(header);
-        }
+        /*btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO create new lesson
+                Toast.makeText(getContext(), "Empty Cell pressed on Position" + view.getTag(), Toast.LENGTH_SHORT).show();
+            }
+        });*/
 
-        return list;
+
+        return btn;
     }
 
-    private List<List<Cell>> getCellList() {
-        List<List<Cell>> list = new ArrayList<>();
-        for (int i = 0; i < ROW_SIZE; i++) {
-            List<Cell> cellList = new ArrayList<>();
-            for (int j = 0; j < COLUMN_SIZE; j++) {
-                String text = "cell " + j + " " + i;
-                if (j % 4 == 0 && i % 5 == 0) {
-                    text = "large cell " + j + " " + i + ".";
+    void addLesson(View view) {
+        //get time out of tag
+        String[] s = view.getTag().toString().split("#");
+        int x = Integer.valueOf(s[0]);
+        int y = Integer.valueOf(s[1]);
+
+        //subjectManager.setLesson(subjectManager.getSubjects().get(1), "", y, x-1);
+
+        createInputDialog(x - 1, y, null);
+
+    }
+
+    public void createInputDialog(final int day, final int time, final Subject subject) {
+        //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
+        final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
+
+
+        View mView = View.inflate(this.getContext(), R.layout.fragment_lesson_input, null);
+        //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+
+        final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
+        final FloatingActionButton btnClear = (FloatingActionButton) mView.findViewById(R.id.btnClearLesson);
+        final FloatingActionButton btnDelete = (FloatingActionButton) mView.findViewById(R.id.btnDeleteSubject);
+        final EditText roomInput = (EditText) mView.findViewById(R.id.roomInput);
+        final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnHelp);
+        final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
+        final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
+        final RadioButton radioBtn1 = mView.findViewById(R.id.rating_1);
+        final RadioButton radioBtn2 = mView.findViewById(R.id.rating_2);
+        final EditText teacherEdittext = mView.findViewById(R.id.teacherInput);
+        final EditText nameEdittext = mView.findViewById(R.id.subjectNameInput);
+
+        if (subject == null) {
+            btnDelete.setVisibility(View.GONE);
+        }
+
+        btnExtra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (extraLayout.getVisibility() != View.VISIBLE) {
+                    ((Button) view).setText("Reduzieren");
+                    extraLayout.setVisibility(View.VISIBLE);
+                    Toast.makeText(getContext(), "These changes will affect all lessons of this subject!", Toast.LENGTH_LONG).show();
+                } else {
+                    ((Button) view).setText("Erweitern");
+                    extraLayout.setVisibility(View.GONE);
                 }
-                String id = j + "-" + i;
-
-                Cell cell = new Cell(id, text);
-                cellList.add(cell);
             }
-            list.add(cellList);
-        }
+        });
 
-        return list;
-    }
+        btnHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createAlertDialog("Raum", "Raum muss nur eingetragen werden falls er sich von dem für das Fach als Standard eingestellten Raum unterscheiden sollte.", 0);
+            }
+        });
 
-    /**
-     * This is a dummy model list test some cases.
-     */    /*
-    private List<List<Cell>> getCellListForSortingTest() {
-        List<List<Cell>> list = new ArrayList<>();
-        for (int i = 0; i < ROW_SIZE; i++) {
-            List<Cell> cellList = new ArrayList<>();
-            for (int j = 0; j < COLUMN_SIZE; j++) {
-                Object text = "cell " + j + " " + i;
 
-                if (j == 0) {
-                    text = i;
-                } else if (j == 1) {
-                    int random = new Random().nextInt();
-                    text = random;
+        final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection);
+        ArrayList<Subject> spinnerlist = (ArrayList<Subject>) subjectManager.getSubjects().clone();
+        spinnerlist.add(uglyAsHellWayToCreateAOtherCoiseOption);
+
+
+        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(this.getContext(), simple_spinner_dropdown_item, spinnerlist);
+        subjectSelection.setAdapter(adapter);
+        subjectSelection.setSelection(spinnerlist.indexOf(lastSubject));
+        subjectSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                if (pos == subjectSelection.getAdapter().getCount() - 1) {
+                    if (extraLayout.getVisibility() == View.GONE) {
+                        btnExtra.callOnClick();
+                    }
+                    nameEdittext.setText("");
+                    radioBtn1.setChecked(true);
+                    teacherEdittext.setText("");
+                    roomInput.setText("");
+                    btnExtra.setVisibility(View.GONE);
+
+                } else {
+                    Subject selectedSubject = (Subject) subjectSelection.getSelectedItem();
+                    nameEdittext.setText(selectedSubject.getName());
+                    if (selectedSubject.getRatingSub() == 1)
+                        radioBtn1.setChecked(true);
+                    else
+                        radioBtn2.setChecked(true);
+                    teacherEdittext.setText(selectedSubject.getTeacher());
+                    roomInput.setText(selectedSubject.getRoom());
+                    btnExtra.setVisibility(View.VISIBLE);
                 }
 
-                // Create dummy id.
-                String id = j + "-" + i;
-
-                Cell cell = new Cell(id, text);
-                cellList.add(cell);
             }
-            list.add(cellList);
-        }
 
-        return list;
-    }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        if (subject != null)
+            subjectSelection.setSelection(spinnerlist.indexOf(subject));
 
-    /**
-     * This is a dummy model list test some cases.
-     */   /*
-    private List<List<Cell>> getRandomCellList() {
-        List<List<Cell>> list = new ArrayList<>();
-        for (int i = 0; i < ROW_SIZE; i++) {
-            List<Cell> cellList = new ArrayList<>();
-            list.add(cellList);
-            for (int j = 0; j < COLUMN_SIZE; j++) {
-                String text = "cell " + j + " " + i;
-                int random = new Random().nextInt();
-                if (random % 2 == 0 || random % 5 == 0 || random == j) {
-                    text = "large cell  " + j + " " + i + getRandomString() + ".";
+        bsd.setTitle("Stunde hinzufügen");
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Subject oCSubject;
+                Subject selectedsubject = (Subject) subjectSelection.getSelectedItem();
+
+                if (subjectSelection.getSelectedItemPosition() == subjectSelection.getAdapter().getCount()-1) { //Neues Subject
+                    if (nameEdittext.getText().toString().equals("")) {
+                        createAlertDialog("Fehler im Namen", "Der Name darf nicht leer sein", 0);
+                        return;
+                    }
+                    oCSubject = new Subject(nameEdittext.getText().toString(),
+                            radioBtn1.isChecked() ? 1 : 2,
+                            teacherEdittext.getText().toString(),
+                            roomInput.getText().toString());
+                    if (subjectManager.getSubjects().contains(oCSubject)) {
+                        createAlertDialog("Fehler im Namen", "Es existiert bereits ein Fach mit dem Namen \"" + oCSubject.getName() + "\"", 0);
+                        return;
+                    }
+                    subjectManager.addSubject(oCSubject);
+                } else if (nameEdittext.getText().toString().equals(selectedsubject.getName()) &
+                        teacherEdittext.getText().toString().equals(selectedsubject.getTeacher()) &
+                        (radioBtn1.isChecked() ? 1 : 2) == selectedsubject.getRatingSub()) {
+                    oCSubject = selectedsubject;
+                } else {
+                    if (nameEdittext.getText().toString().equals("")) {
+                        createAlertDialog("Fehler im Namen", "Der Name darf nicht leer sein", 0);
+                        return;
+                    }
+                    selectedsubject.setName(nameEdittext.getText().toString());
+                    selectedsubject.setPosition(radioBtn1.isChecked() ? 1 : 2);
+                    selectedsubject.setTeacher(teacherEdittext.getText().toString());
+                    selectedsubject.setRoom(roomInput.getText().toString());
+                    oCSubject = selectedsubject;
                 }
+                System.out.println(oCSubject+"\\"+ (roomInput.getText().toString().isEmpty() ? null : roomInput.getText().toString())+"\\"+day+"\\"+ time);
+                subjectManager.setLesson(new Lesson(oCSubject, roomInput.getText().toString().isEmpty() ? null : roomInput.getText().toString(), day, time));
 
-                // Create dummy id.
-                String id = j + "-" + i;
+                initializeTableView();
 
-                Cell cell = new Cell(id, text);
-                cellList.add(cell);
+                bsd.cancel();
             }
-        }
-
-        return list;
+        });
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                subjectManager.setLesson(new Lesson(null,null, day, time));
+                initializeTableView();
+                bsd.cancel();
+            }
+        });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if((subjectSelection.getSelectedItemPosition() == subjectSelection.getAdapter().getCount()-1))
+                    return;
+                //TODO Warning dialoge
+                subjectManager.removeSubject(((Subject) subjectSelection.getSelectedItem()));
+            }
+        });
+        bsd.setContentView(mView);
+        bsd.show();
     }
+    void createAlertDialog(String title, String text, int ic) {
+        AlertDialog.Builder builder;
 
-    /**
-     * This is a dummy model list test some cases.
-     */    /*
-    public static List<List<Cell>> getRandomCellList(int startIndex) {
-        List<List<Cell>> list = new ArrayList<>();
-        for (int i = 0; i < ROW_SIZE; i++) {
-            List<Cell> cellList = new ArrayList<>();
-            list.add(cellList);
-            for (int j = 0; j < COLUMN_SIZE; j++) {
-                String text = "cell " + j + " " + (i + startIndex);
-                int random = new Random().nextInt();
-                if (random % 2 == 0 || random % 5 == 0 || random == j) {
-                    text = "large cell  " + j + " " + (i + startIndex) + getRandomString() + ".";
-                }
-
-                String id = j + "-" + (i + startIndex);
-
-                Cell cell = new Cell(id, text);
-                cellList.add(cell);
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this.getContext());
         }
-
-        return list;
-    }*/
-
-
-    private static String getRandomString() {
-        Random r = new Random();
-        String str = " a ";
-        for (int i = 0; i < r.nextInt(); i++) {
-            str = str + " a ";
-        }
-
-        return str;
+        builder.setTitle(title)
+                .setMessage(text)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(ic)
+                .show();
     }
 }
 
