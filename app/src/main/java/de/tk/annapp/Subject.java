@@ -56,30 +56,13 @@ public class Subject implements Serializable {
         this.position = position;
     }
 
-    //TODO WOOOO?
-    public int getPosition() {
-        return position;
-    }
-
-    public void sortTasks() {
-        //TODO replaxesdhfhbabuhldhfusbuhadfhsb Remove this f*** method
-    }
-
-    public void addGrade(int _grade, boolean _iswritten, float _ratingGrade, String _note) {
+    public void addGrade(Grade grade) {
         //Adding new Grade
-        grades.add(new Grade(_grade, _iswritten, _ratingGrade, _note));
+        grades.add(grade);
     }
 
-    public void removeGrade(Grade _gradePosition) {
-        grades.remove(grades.indexOf(_gradePosition));
-    }
-
-    public void editGrade(Grade _grade, int _grade_grade, boolean _iswritten, float _ratingGrade, String _note) {
-        Grade grade = grades.get(grades.indexOf(_grade));
-        grade.grade = _grade_grade;
-        grade.iswritten = _iswritten;
-        grade.rating = _ratingGrade;
-        grade.note = _note;
+    public void removeGrade(Grade grade) {
+        grades.remove(grade);
     }
 
     //Returns the gradePointAverage
@@ -93,12 +76,12 @@ public class Subject implements Serializable {
         //loops through all 'grades' in grades
         for (Grade _grade : grades) {
             //Adds the Grade to the average
-            if (_grade.iswritten) {
-                writtenGradeAverage += _grade.grade * _grade.rating;
-                writtenGrades += _grade.rating;
-            } else if (!_grade.iswritten) {
-                vocalGradeAverage += _grade.grade * _grade.rating;
-                vocalGrades += _grade.rating;
+            if (_grade.iswritten()) {
+                writtenGradeAverage += _grade.getGrade() * _grade.getRating();
+                writtenGrades += _grade.getRating();
+            } else if (!_grade.iswritten()) {
+                vocalGradeAverage += _grade.getGrade() * _grade.getRating();
+                vocalGrades += _grade.getRating();
             }
         }
 

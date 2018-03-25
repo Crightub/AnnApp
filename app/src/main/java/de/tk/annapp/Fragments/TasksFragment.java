@@ -49,13 +49,13 @@ public class TasksFragment extends Fragment  {
         root = inflater.inflate(R.layout.fragment_tasks, container, false);
 
         subjectManager = SubjectManager.getInstance();
-        subjectManager.load(getContext(), "subjects");
+        //TODO Just why? subjectManager.load(getContext(), "subjects");
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAddTask);
         fabAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 createInputDialog();
-                subjectManager.save(root.getContext(), "subjects");
+                //TODO Should be deleted? subjectManager.save();
             }
         });
 
@@ -113,6 +113,7 @@ public class TasksFragment extends Fragment  {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(((String)timeSelection.getItemAtPosition(i)).equals("Datum auswählen")){
+                    timeSelection.setSelection(0);
                     Calendar date= Calendar.getInstance();
                     if(((String)timeSelection.getItemAtPosition(i-1)).matches("\\d*\\.\\d*\\.\\d*")){
                         date = Util.getCalendarFromFullString(((String)timeSelection.getItemAtPosition(i-1)));
@@ -125,7 +126,6 @@ public class TasksFragment extends Fragment  {
                             ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(getContext(), simple_spinner_dropdown_item, pos);
                             timeSelection.setAdapter(adapterTime);
                             timeSelection.setSelection(7);
-                            //TODO If nothing was selected
                         }
                     };
                     DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -204,9 +204,9 @@ public class TasksFragment extends Fragment  {
                         }
                         Task newTask = new Task(task.getText().toString(),Calendar.getInstance(),shortKind,subject,due);
                         subject.addTask(newTask);
-
                         ((RVAdapterTaskList)recyclerView.getAdapter()).addTask(newTask);
-                        subjectManager.save(getContext(), "subjects");
+                        
+                        subjectManager.save();
                     }
                 })
                 .show();

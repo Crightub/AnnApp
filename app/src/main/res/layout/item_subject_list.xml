@@ -6,9 +6,9 @@
     android:paddingStart="10dp">
 
     <RelativeLayout
+        android:id="@+id/itme_subject_rl_woat_ever"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onClickRVItem">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/item_subject_name"

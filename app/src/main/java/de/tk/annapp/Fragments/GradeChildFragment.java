@@ -25,8 +25,8 @@ public class GradeChildFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle args = getArguments();
-        String subjectName = args.getString("subjectName");
-        getActivity().setTitle(subjectName);
+        Subject subjectName = (Subject) args.get("subjectName");
+        getActivity().setTitle(subjectName.getName());
         root = inflater.inflate(R.layout.fragment_gradeschild, container, false);
 
         recyclerView = root.findViewById(R.id.recyclerViewGradesId);

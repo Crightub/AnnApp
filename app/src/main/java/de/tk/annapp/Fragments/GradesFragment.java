@@ -29,7 +29,9 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import de.tk.annapp.Grade;
 import de.tk.annapp.R;
+import de.tk.annapp.Recycler.RVAdapterGradeList;
 import de.tk.annapp.Recycler.RVAdapterSubjectList;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
@@ -55,7 +57,7 @@ public class GradesFragment extends Fragment {
         //Get Singelton subjectManager
         subjectManager = SubjectManager.getInstance();
 
-        subjectManager.load(getContext(), "subjects");
+        //TODO Just why? subjectManager.load(getContext(), "subjects");
 
         TextView missingSubjectsWarning = (TextView) root.findViewById(R.id.missingSubjectsWarning);
         if (subjectManager.getSubjects().isEmpty())
@@ -71,7 +73,7 @@ public class GradesFragment extends Fragment {
                 } else
                     createInputDialog();
 
-                subjectManager.save(root.getContext(), "subjects");
+                //TODO Should be removed? subjectManager.save();
             }
         });
 
@@ -115,7 +117,7 @@ public class GradesFragment extends Fragment {
     public void createInputDialog() {
 
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
-        BottomSheetDialog bsd = new BottomSheetDialog(getContext());
+        final BottomSheetDialog bsd = new BottomSheetDialog(getContext());
 
 
         View mView = View.inflate(this.getContext(), R.layout.fragment_grade_input, null);
@@ -148,16 +150,10 @@ public class GradesFragment extends Fragment {
             }
         });
 
-        ArrayList<String> subjectNames = new ArrayList<>();
-
-        for (Subject s :
-                subjectManager.getSubjects()) {
-            subjectNames.add(s.name);
-        }
 
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, subjectNames);
+        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(this.getContext(), simple_spinner_dropdown_item, subjectManager.getSubjects());
 
         subjectSelection.setAdapter(adapter);
 
@@ -188,10 +184,12 @@ public class GradesFragment extends Fragment {
                     rating = Float.parseFloat(ratingInput.getText().toString());
 
 
-                Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
-                subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
-                subjectManager.save(getContext(), "subjects");
-                recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));
+                Subject subject = (Subject) subjectSelection.getSelectedItem();
+                Grade newGrade =new Grade(subject, Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
+                subject.addGrade(newGrade);
+                subjectManager.save();
+                ((RVAdapterGradeList)recyclerView.getAdapter()).addGrade(newGrade);
+                bsd.cancel();
             }
         });
 

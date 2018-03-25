@@ -7,19 +7,64 @@ import java.util.Date;
 public class Grade implements Serializable{
 
     //actual Grade
-    public int grade;
+    private int grade;
 
     //Grade iswritten = true;
-    public boolean iswritten;
+    private boolean iswritten;
 
-    public float rating;
+    private float rating;
 
-    public String note;
+    private String note;
 
-    public Grade(int grade, boolean iswritten, float rating, String note){
+    private Subject subject;
+
+    //private Calendar date;
+
+    public Grade(Subject subject, int grade, boolean iswritten, float rating, String note){
+        this.subject = subject;
         this.grade = grade;
         this.iswritten = iswritten;
         this.rating = rating;
+        this.note = note;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public boolean iswritten() {
+        return iswritten;
+    }
+
+    public void setIswritten(boolean iswritten) {
+        this.iswritten = iswritten;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
         this.note = note;
     }
 }

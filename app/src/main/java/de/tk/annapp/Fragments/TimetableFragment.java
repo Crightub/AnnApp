@@ -1,43 +1,28 @@
 package de.tk.annapp.Fragments;
 
-import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.INotificationSideChannel;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.app.Fragment;
 import android.widget.Space;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.evrencoskun.tableview.TableView;
-import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import de.tk.annapp.Day;
-import de.tk.annapp.Lesson;
 import de.tk.annapp.R;
 import de.tk.annapp.SubjectManager;
-import de.tk.annapp.TableView.MyTableViewListener;
-import de.tk.annapp.TableView.TVAdapterTimetable;
 import de.tk.annapp.TableView.model.Cell;
 import de.tk.annapp.TableView.model.ColumnHeader;
 import de.tk.annapp.TableView.model.RowHeader;
-import de.tk.annapp.TimetableManager;
 import de.tk.annapp.Util;
 
 
@@ -58,7 +43,6 @@ public class TimetableFragment extends Fragment {
 
     TableLayout tableLayout;
 
-    TimetableManager timetableManager;
     SubjectManager subjectManager;
 
     public TimetableFragment() {
@@ -81,8 +65,6 @@ public class TimetableFragment extends Fragment {
             savedInstanceState) {
         getActivity().setTitle("Stundenplan");
         View root = inflater.inflate(R.layout.fragment_timetable, container, false);
-
-        timetableManager = TimetableManager.getInstance();
         subjectManager = SubjectManager.getInstance();
 
         //RelativeLayout fragment_container = root.findViewById(R.id.fragment_container);
@@ -104,7 +86,7 @@ public class TimetableFragment extends Fragment {
 
         //default spacing
         int spacing = 10;
-        timetableManager.load(getContext(), "timetable");
+        //TODO Why??? subjectManager.load();
 
         /*timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 201", 11, 4);
         timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",1,0);
@@ -159,7 +141,7 @@ public class TimetableFragment extends Fragment {
                 //TODO Register Rowheaders
                 int f = 0;
                 for (Day d :
-                        timetableManager.getDays()) { //TODO d is not used: Really the right form?
+                        subjectManager.getDays()) { //TODO d is not used: Really the right form?
                     Button btn = getHeaderButton(accentColor);
 
                     switch (f) {
@@ -210,7 +192,7 @@ public class TimetableFragment extends Fragment {
                 tableRow.addView(btn);
 
                 for (Day d :
-                        timetableManager.getDays()) {
+                        subjectManager.getDays()) {
 
                     String cellName;
 
@@ -281,7 +263,7 @@ public class TimetableFragment extends Fragment {
 
     int getLongestDaysNumberOfLessons() {
         int x = 0;
-        for (Day d : timetableManager.getDays()) {
+        for (Day d : subjectManager.getDays()) {
             int i = d.lessons.size();
             if (i > x)
                 x = i;

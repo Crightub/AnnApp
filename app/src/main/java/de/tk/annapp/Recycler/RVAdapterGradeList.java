@@ -28,18 +28,18 @@ import de.tk.annapp.Grade;
 public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.RecyclerVH> {
 
     Context context;
-    private ArrayList<Grade> grades = new ArrayList<>();
+    private ArrayList<Grade> grades;
     private SubjectManager subjectManager;
-    private String subjectName;
+    private Subject subject;
 
     boolean isWrittenBool;
     AlertDialog adTrueDialog;
 
-    public RVAdapterGradeList(Context context, String subjectName){
+    public RVAdapterGradeList(Context context, Subject subject){
         this.context = context;
         subjectManager = SubjectManager.getInstance();
-        this.subjectName = subjectName;
-        grades = subjectManager.getSubjectByName(this.subjectName).getAllGrades();
+        this.subject = subject;
+        grades = subject.getAllGrades();
     }
 
     @Override
@@ -50,19 +50,24 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     @Override
     public void onBindViewHolder(RecyclerVH holder, final int position) {
-        grades = subjectManager.getSubjectByName(subjectName).getAllGrades();
-        holder.gradeTxt.setText(String.valueOf(grades.get(position).grade));
+        holder.gradeTxt.setText(String.valueOf(grades.get(position).getGrade()));
 
-        if(!grades.get(position).note.isEmpty())
-            holder.expandableTextView.setText(grades.get(position).note + "\n" +  context.getString(R.string.ratingList) + grades.get(position).rating);
+        if(!grades.get(position).getNote().isEmpty())
+            holder.expandableTextView.setText(grades.get(position).getNote() + "\n" +  context.getString(R.string.ratingList) + grades.get(position).getRating());
         else
-            holder.expandableTextView.setText(grades.get(position).note +  context.getString(R.string.ratingList) + grades.get(position).rating);
+            holder.expandableTextView.setText(context.getString(R.string.ratingList) + grades.get(position).getRating());
 
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                askDelete(grades.get(position));
+            }
+        });
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 System.out.println("Create InputDialog...");
-                createEditDialog(subjectManager.getSubjectByName(subjectName), grades.get(position));
+                createEditDialog(grades.get(position));
             }
         });
     }
@@ -77,10 +82,12 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         TextView gradeTxt;
         ExpandableTextView expandableTextView;
         ImageButton editButton;
+        ImageButton deleteButton;
 
         public RecyclerVH(View itemView){
             super(itemView);
-            editButton = itemView.findViewById(R.id.item_grade_deleteButton);
+            editButton = itemView.findViewById(R.id.item_grade_button_edit);
+            deleteButton = itemView.findViewById(R.id.item_grade_button_delete);
             expandableTextView = itemView.findViewById(R.id.expandable_text_view);
             gradeTxt = itemView.findViewById(R.id.item_grade_grade);
         }
@@ -89,7 +96,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
 
 
-    public void createEditDialog(final Subject subject, final Grade grade){
+    public void createEditDialog(final Grade grade){
 
         AlertDialog.Builder ad = new  AlertDialog.Builder(context);
 
@@ -99,46 +106,26 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         View mView = View.inflate(context, R.layout.fragment_grade_edit, null);
 
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
-        gradeInput.setText(String.valueOf(grade.grade));
+        gradeInput.setText(String.valueOf(grade.getGrade()));
 
         final  EditText ratingInput =(EditText) mView.findViewById(R.id.ratingInput);
-        ratingInput.setText(String.valueOf(grade.rating));
+        ratingInput.setText(String.valueOf(grade.getRating()));
 
         final EditText note = (EditText) mView.findViewById(R.id.note);
-        note.setText(grade.note);
+        note.setText(grade.getNote());
 
         final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnHelp);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
         final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
 
-        final Button btnDelete = (Button) mView.findViewById(R.id.btnDelete);
-        final Button btnDeleteIcon = (Button) mView.findViewById(R.id.btnDeleteIcon);
-
         final RadioButton isWritten = mView.findViewById(R.id.isWritten);
 
         final RadioButton isNotWritten = mView.findViewById(R.id.isNotWritten);
 
-        if(grade.iswritten)
+        if(grade.iswritten())
             isWritten.setChecked(true);
         else
             isNotWritten.setChecked(true);
-
-
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                delete(subject, grade);
-            }
-        });
-
-        btnDeleteIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                delete(subject, grade);
-            }
-        });
-
-
 
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,10 +175,13 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                         /*Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());*/
 
-                        subject.editGrade(grade, Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
+                        grade.setGrade(Integer.valueOf(gradeInput.getText().toString()));
+                        grade.setIswritten(isWrittenBool);
+                        grade.setRating(rating);
+                        grade.setNote(note.getText().toString());
                         notifyItemChanged(grades.indexOf(grade));
 
-                        subjectManager.save(context, "subjects");
+                        subjectManager.save();
                         subjectManager.setGradeTextView(true, subject);
                     }
                 })
@@ -223,7 +213,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 .show();
     }
 
-    public void delete(final Subject subject, final Grade grade){
+    public void askDelete(final Grade grade){
 
         final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -235,15 +225,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 .setMessage(context.getString(R.string.deleteQuestionMessage))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
-                        notifyItemRemoved(grades.indexOf(grade));
-                        notifyItemRangeChanged(grades.indexOf(grade), getItemCount());
-                        subject.removeGrade(grade);
-                        subjectManager.save(context,"subjects");
-                        subjectManager.setGradeTextView(true, subject);
-
-                        adTrueDialog.cancel();
-
+                        delete(grade);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -254,5 +236,18 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 .setIcon(android.R.drawable.ic_delete)
                 .show();
 
+    }
+    public void delete(Grade grade){
+        int formerIndex = grades.indexOf(grade);
+        grade.getSubject().removeGrade(grade);
+        if(grades.contains(grade))//TODO Could be redundant due to...
+            grades.remove(grade);
+        notifyItemRemoved(formerIndex);
+        subjectManager.save();
+        subjectManager.setGradeTextView(true, grade.getSubject());//TODO What does that?!
+    }
+    public void addGrade(Grade grade){
+        if(grades.contains(grade))
+            notifyItemInserted(grades.indexOf(grade));
     }
 }

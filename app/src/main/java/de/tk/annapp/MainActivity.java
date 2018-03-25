@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private SubjectManager subjectManager;
-    TimetableManager timetableManager;
 
     TextView textViewGrade;
 
@@ -39,16 +38,13 @@ public class MainActivity extends AppCompatActivity
         //Creates instance of SubjectManager
         subjectManager = SubjectManager.getInstance();
         subjectManager.setContext(this.getApplicationContext());
+        subjectManager.setFilename("17And18");
 
         subjectManager.setTextView(textViewGrade);
 
-        subjectManager.load(this.getApplicationContext(), "subjects");
+        subjectManager.load();
         subjectManager.setGradeTextView(false, null);
 
-        //Creates instance of TimetableManager
-        timetableManager = TimetableManager.getInstance();
-        timetableManager.setContext(this.getApplicationContext());
-        timetableManager.load(this.getApplicationContext(), "timetable");
 
         //Add test subjects
         subjectManager.addSubject("Mathe", 1, "fdsh", "hjsr");
@@ -184,26 +180,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    //onClickListener for the Subject Item
-    //Opens the grades
-    public void onClickRVItem(View view){
-        Fragment fragment = new GradeChildFragment();
-
-        Bundle args = new Bundle();
-        TextView subjectTextName = view.findViewById(R.id.item_subject_name);
-        System.out.print(subjectTextName.getText().toString());
-        args.putString("subjectName", subjectTextName.getText().toString());
-
-        subjectManager.setGradeTextView(true, subjectManager.getSubjectByName(subjectTextName.getText().toString()));
-
-        fragment.setArguments(args);
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment, "GradeChildFragment")
-                .commit();
-    }
 
 
 }

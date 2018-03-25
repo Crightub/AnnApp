@@ -2,6 +2,7 @@ package de.tk.annapp;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,18 +17,30 @@ public class SubjectManager {
 
     Context context;
 
+    String filename;
+
     TextView textViewGrade;
 
     //Contains all subjects
     ArrayList<Subject> subjects = new ArrayList<Subject>();
+    Day[] days;
 
     private SubjectManager(){
         System.out.println("Create SubjectManager...");
+        days = new Day[]{new Day(),new Day(),new Day(),new Day(),new Day()};
     }
 
     //Returns the singelton subjectManager
     public static SubjectManager getInstance(){
         return subjectManager;
+    }
+
+    public void setContext(Context c){
+        this.context =c;
+    }
+
+    public void setFilename(String filename){
+        this.filename = filename;
     }
 
     public ArrayList<Subject> getSubjects(){return subjects;}
@@ -45,26 +58,7 @@ public class SubjectManager {
         }
 
         subjects.add(new Subject(name, rating, teacher, room));
-        save(context, "subjects");
-    }
-
-    public void setContext(Context c){
-        this.context =c;
-    }
-
-    public Context getContext(){
-        return context;
-    }
-
-    //Goes through all subjects and gives the one with the same name back
-    public Subject getSubjectByName(String name){
-        for(Subject subject : subjects){
-            if(subject.name.equals(name)){
-                return subject;
-            }
-        }
-        //NO Subject with this name found
-        return null;
+        save();
     }
 
     //Gives back the average of all subjects
@@ -90,25 +84,25 @@ public class SubjectManager {
         return  Util.round(wholeGradeAverage, 2);
     }
 
-    public void load(Context cntxt, String filename)
+    public void load()
     {
         try {
-            ObjectInputStream ois = new ObjectInputStream(cntxt.openFileInput(filename));
+            ObjectInputStream ois = new ObjectInputStream(context.openFileInput(filename));
             subjects = (ArrayList<Subject>) ois.readObject();
-            System.out.println(subjects);
+            days = (Day[]) ois.readObject();
             ois.close();
             setGradeTextView(true, null);
-            System.out.println("loading done ---------------------------------------------------------------------------------------------------------");
         } catch (Exception e) {
             System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
             e.printStackTrace();
         }
     }
 
-    public void save(Context cntxt, String filename){
+    public void save(){
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(cntxt.openFileOutput(filename, Context.MODE_PRIVATE));
+            ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(filename, Context.MODE_PRIVATE));
             oos.writeObject(subjects);
+            oos.writeObject(days);
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,7 +117,6 @@ public class SubjectManager {
     public void setGradeTextView(boolean isVisible, Subject subject){
         if(isVisible) {
             textViewGrade.setVisibility(View.VISIBLE);
-
             if(subject == null) {
                 if(Float.toString(subjectManager.getWholeGradeAverage()).equals("NaN")){
                     setGradeTextView(false, null);
@@ -143,4 +136,16 @@ public class SubjectManager {
         else
             textViewGrade.setVisibility(View.GONE);
     }
+
+    public void setLesson(Subject subject, String room, int time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/, int day){
+        days[day].setLesson(subject, room, time);
+        if(!subjects.contains(subject))
+            Log.i("MANAGER: ","Holy shit, this should not happen!-------------------------");
+        save();
+    }
+
+    public Day[] getDays(){
+        return days;
+    }
+
 }

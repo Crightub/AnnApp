@@ -8,15 +8,12 @@ import android.widget.Toast;
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.listener.ITableViewListener;
 
-import de.tk.annapp.Lesson;
 import de.tk.annapp.TableView.holder.ColumnHeaderViewHolder;
 import de.tk.annapp.TableView.popup.ColumnHeaderLongPressPopup;
 import de.tk.annapp.TableView.popup.RowHeaderLongPressPopup;
-import de.tk.annapp.TimetableManager;
 
 public class MyTableViewListener implements ITableViewListener {
 
-    private TimetableManager timetableManager = TimetableManager.getInstance();
 
 
     private Toast mToast;

@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,7 +44,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     void constructor() {
         Calendar yesterday = Calendar.getInstance();
-        yesterday.add(Calendar.DAY_OF_YEAR,-1);
+        yesterday.add(Calendar.DAY_OF_YEAR, -1);
 
         pos = -1;
 
@@ -61,7 +60,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             s.setPosition(pos);
             for (Task t : s.getAllTasksSorted()) {
                 /*if (t.getDue().before(yesterday)) { The deletingstuff has to happen somewhere else
-                    delete(t);
+                    askDelete(t);
                     Toast.makeText(context,"Old Tasks were deleted",Toast.LENGTH_SHORT).show();
                     continue;
                 }*/
@@ -85,11 +84,14 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     public void onBindViewHolder(RecyclerVHTask holder, final int position) {
         //TODO: Change Task to "Mo", "Di", ..., if it is in less than one week
         if (tasks.get(position) == null) {
-            holder.editButton.setVisibility(View.GONE);
-            holder.deleteButton.setVisibility(View.GONE);
+            holder.content.setVisibility(View.GONE);
             holder.subjectTxt.setVisibility(View.VISIBLE);
             holder.subjectTxt.setText(tasks.get(position + 1).getSubject().getName());
             return;
+        } else {
+
+            holder.content.setVisibility(View.VISIBLE);
+            holder.subjectTxt.setVisibility(View.GONE);
         }
         holder.dateTxt.setText(Util.getDateString(tasks.get(position).getDue())); //When the Task is due
         holder.taskTxt.setText(tasks.get(position).getTask());
@@ -123,6 +125,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         TextView subjectTxt;
         ImageButton editButton;
         ImageButton deleteButton;
+        View content;
 
         public RecyclerVHTask(View itemView) {
             super(itemView);
@@ -132,6 +135,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             subjectTxt = itemView.findViewById(R.id.item_task_subject);
             editButton = itemView.findViewById(R.id.button_item_task_edit);
             deleteButton = itemView.findViewById(R.id.button_item_task_delete);
+            content = itemView.findViewById(R.id.relativeLayout_item_task_content);
         }
     }
 
@@ -174,6 +178,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (((String) timeSelection.getItemAtPosition(i)).equals("Datum auswählen")) {
+                    timeSelection.setSelection(0);
                     Calendar date = Calendar.getInstance();
                     if (((String) timeSelection.getItemAtPosition(i - 1)).matches("\\d*\\.\\d*\\.\\d*")) {
                         date = Util.getCalendarFromFullString(((String) timeSelection.getItemAtPosition(i - 1)));
@@ -186,7 +191,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                             ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, pos);
                             timeSelection.setAdapter(adapterTime);
                             timeSelection.setSelection(7);
-                            //TODO If nothing was selected
                         }
                     };
                     DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -283,9 +287,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         int altindex = tasks.indexOf(task);
                         constructor();
                         int newindex = tasks.indexOf(task);
-                        notifyItemMoved(altindex,newindex);//TODO Testing this movement
+                        notifyItemMoved(altindex, newindex);//TODO Testing this movement
 
-                        subjectManager.save(context, "tasks");
+                        subjectManager.save();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -355,11 +359,21 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         tasks.remove(task);
         notifyItemRemoved(index);
 
-        subjectManager.save(context, "subjects");
+        subjectManager.save();
     }
-    public void addTask(Task task){
+
+    public void addTask(Task task) {
         constructor();
-        if(tasks.contains(task))
-            notifyItemInserted(tasks.indexOf(task));
+        if (tasks.contains(task)) {
+            int index = tasks.indexOf(task);
+            if(task.getSubject().getAllTasks().size()==1){
+                notifyItemInserted(index-1);
+                notifyItemInserted(index);
+            } else {
+                notifyItemInserted(index);
+            }
+
+
+        }
     }
 }

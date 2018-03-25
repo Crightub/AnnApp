@@ -61,7 +61,22 @@
     </RelativeLayout>
 
     <ImageButton
-        android:id="@+id/item_grade_deleteButton"
+        android:id="@+id/item_grade_button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="24dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="btnEdit"
+        android:tint="@color/rvItemColor"
+        appNs:layout_constraintBottom_toBottomOf="parent"
+        appNs:layout_constraintEnd_toEndOf="@id/item_grade_button_edit"
+        appNs:layout_constraintTop_toTopOf="parent"
+        appNs:srcCompat="@drawable/ic_delete" />
+    <ImageButton
+        android:id="@+id/item_grade_button_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
