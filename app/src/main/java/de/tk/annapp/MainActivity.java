@@ -22,8 +22,6 @@ public class MainActivity extends AppCompatActivity
 
     private SubjectManager subjectManager;
 
-    TextView textViewGrade;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,24 +31,19 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        textViewGrade = (TextView) findViewById(R.id.grade);
-
         //Creates instance of SubjectManager
         subjectManager = SubjectManager.getInstance();
         subjectManager.setContext(this.getApplicationContext());
         subjectManager.setFilename("17And18");
 
-        subjectManager.setTextView(textViewGrade);
-
         subjectManager.load();
-        subjectManager.setGradeTextView(false, null);
-
 
         //Add test subjects
-        subjectManager.addSubject("Mathe", 1, "fdsh", "hjsr");
-        subjectManager.addSubject("Deutsch", 1, "fdsh", "hjsr");
-        subjectManager.addSubject("Latein", 1, "fdsh", "hjsr");
-        subjectManager.addSubject("Englisch", 1, "fdsh", "hjsr");
+        subjectManager.addSubject(new Subject("Mathe", 1, "fdsh", "hjsr"));
+        subjectManager.addSubject(new Subject("Deutsch", 1, "fdsh", "hjsr"));
+        subjectManager.addSubject(new Subject("Latein", 1, "fdsh", "hjsr"));
+        subjectManager.addSubject(new Subject("Englisch", 1, "fdsh", "hjsr"));
+        subjectManager.setLesson(subjectManager.getSubjects().get(0),"dsd",1,1);
 
 
 
@@ -60,7 +53,8 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        /*Default Fragment:*/ Fragment f = new MyDayFragment();
+        /*Default Fragment:*/
+        Fragment f = new MyDayFragment();
         Bundle args = new Bundle();
         f.setArguments(args);
 
@@ -156,11 +150,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(Intent.createChooser(i, getString(R.string.shareAnnApp)));
             return true;
         }
-
-        if(id == R.id.nav_grades)
-            subjectManager.setGradeTextView(true, null);
-        else
-            subjectManager.setGradeTextView(false,null);
 
         if (fragment == null) {
             System.out.println("Main Activity: Your button for the fragment has no fragment defined to put into the Layout");

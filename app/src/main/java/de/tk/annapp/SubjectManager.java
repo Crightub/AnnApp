@@ -19,8 +19,6 @@ public class SubjectManager {
 
     String filename;
 
-    TextView textViewGrade;
-
     //Contains all subjects
     ArrayList<Subject> subjects = new ArrayList<Subject>();
     Day[] days;
@@ -45,19 +43,10 @@ public class SubjectManager {
 
     public ArrayList<Subject> getSubjects(){return subjects;}
 
-    public void addSubject(String name, int rating, String teacher, String room){
-        //Add a Subject to the subjects Arraylist
-        System.out.println(subjects);
-        for(Subject s : subjects){
-            Subject newSubject = new Subject(name, rating, teacher, room);
-
-            if(newSubject.name.equals(s.name)){
-                System.out.println(getClass().getName() + ": Subject already exists. addSubject() failed.");
-                return;
-            }
-        }
-
-        subjects.add(new Subject(name, rating, teacher, room));
+    public void addSubject(Subject subject){
+        if(subjects.contains(subject))
+            return;
+        subjects.add(subject);
         save();
     }
 
@@ -91,7 +80,6 @@ public class SubjectManager {
             subjects = (ArrayList<Subject>) ois.readObject();
             days = (Day[]) ois.readObject();
             ois.close();
-            setGradeTextView(true, null);
         } catch (Exception e) {
             System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
             e.printStackTrace();
@@ -107,35 +95,8 @@ public class SubjectManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setGradeTextView(true, null);
     }
 
-    public void setTextView(TextView tw){
-        textViewGrade = tw;
-    }
-
-    public void setGradeTextView(boolean isVisible, Subject subject){
-        if(isVisible) {
-            textViewGrade.setVisibility(View.VISIBLE);
-            if(subject == null) {
-                if(Float.toString(subjectManager.getWholeGradeAverage()).equals("NaN")){
-                    setGradeTextView(false, null);
-                    return;
-                }
-                textViewGrade.setText(Float.toString(subjectManager.getWholeGradeAverage()));
-            } else {
-
-                if (Float.toString(subject.getGradePointAverage()).equals("NaN")){
-                    setGradeTextView(false, null);
-                    return;
-                } else
-                    textViewGrade.setText(Float.toString(subject.getGradePointAverage()));
-            }
-
-        }
-        else
-            textViewGrade.setVisibility(View.GONE);
-    }
 
     public void setLesson(Subject subject, String room, int time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/, int day){
         days[day].setLesson(subject, room, time);

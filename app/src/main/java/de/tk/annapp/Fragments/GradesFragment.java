@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -53,15 +54,14 @@ public class GradesFragment extends Fragment {
 
         root = inflater.inflate(R.layout.fragment_grades, container, false);
 
-
         //Get Singelton subjectManager
         subjectManager = SubjectManager.getInstance();
 
-        //TODO Just why? subjectManager.load(getContext(), "subjects");
-
-        TextView missingSubjectsWarning = (TextView) root.findViewById(R.id.missingSubjectsWarning);
-        if (subjectManager.getSubjects().isEmpty())
-            missingSubjectsWarning.setVisibility(View.VISIBLE);
+        String avg = String.valueOf(subjectManager.getWholeGradeAverage());
+        if(!avg.equals("NaN")){
+            getActivity().findViewById(R.id.grade).setVisibility(View.VISIBLE);
+            ((TextView)getActivity().findViewById(R.id.grade)).setText(String.valueOf(subjectManager.getWholeGradeAverage()));
+        }
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +76,9 @@ public class GradesFragment extends Fragment {
                 //TODO Should be removed? subjectManager.save();
             }
         });
+        TextView missingSubjectsWarning = (TextView) root.findViewById(R.id.missingSubjectsWarning);
+        if (subjectManager.getSubjects().isEmpty())
+            missingSubjectsWarning.setVisibility(View.VISIBLE);
 
         recyclerView = root.findViewById(R.id.recyclerViewSubjectsId);
 
@@ -84,9 +87,6 @@ public class GradesFragment extends Fragment {
         recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));
 
         //addTestGrades();
-
-        //subjectManager.addSubject("Mathe", 2);
-        //subjectManager.addSubject("Deutsch", 2);
 
         return root;
     }
@@ -117,12 +117,11 @@ public class GradesFragment extends Fragment {
     public void createInputDialog() {
 
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
-        final BottomSheetDialog bsd = new BottomSheetDialog(getContext());
+        final BottomSheetDialog bsd = new BottomSheetDialog(getContext(),R.style.NewDialog);
 
 
         View mView = View.inflate(this.getContext(), R.layout.fragment_grade_input, null);
         //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        mView.setBackground(getResources().getDrawable(android.R.color.transparent));
 
 
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
@@ -163,7 +162,6 @@ public class GradesFragment extends Fragment {
 
 
         bsd.setTitle(R.string.addGrade);
-
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -187,20 +185,22 @@ public class GradesFragment extends Fragment {
                 Subject subject = (Subject) subjectSelection.getSelectedItem();
                 Grade newGrade =new Grade(subject, Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
                 subject.addGrade(newGrade);
+                recyclerView.getAdapter().notifyItemChanged(subjectManager.getSubjects().indexOf(subject));
+                ((TextView)getActivity().findViewById(R.id.grade)).setText(String.valueOf(subjectManager.getWholeGradeAverage()));
                 subjectManager.save();
-                ((RVAdapterGradeList)recyclerView.getAdapter()).addGrade(newGrade);
+                //((RVAdapterSubjectList)recyclerView.getAdapter()).addGrade(newGrade);
                 bsd.cancel();
             }
         });
-
-
         bsd.setContentView(mView);
-
-
         bsd.show();
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
+    }
 
     /*float rating = 1;
 

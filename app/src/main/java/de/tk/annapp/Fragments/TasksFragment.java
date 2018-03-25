@@ -45,7 +45,6 @@ public class TasksFragment extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle(getString(R.string.tasks));
-
         root = inflater.inflate(R.layout.fragment_tasks, container, false);
 
         subjectManager = SubjectManager.getInstance();
@@ -205,7 +204,7 @@ public class TasksFragment extends Fragment  {
                         Task newTask = new Task(task.getText().toString(),Calendar.getInstance(),shortKind,subject,due);
                         subject.addTask(newTask);
                         ((RVAdapterTaskList)recyclerView.getAdapter()).addTask(newTask);
-                        
+
                         subjectManager.save();
                     }
                 })

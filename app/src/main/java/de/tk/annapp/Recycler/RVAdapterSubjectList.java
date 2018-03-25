@@ -46,7 +46,7 @@ public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectL
 
                 Bundle args = new Bundle();
                 TextView subjectTextName = view.findViewById(R.id.item_subject_name);
-                args.putSerializable("subjectName", subjects.get(position));
+                args.putSerializable("subject", subjects.get(position));
 
                 fragment.setArguments(args);
 

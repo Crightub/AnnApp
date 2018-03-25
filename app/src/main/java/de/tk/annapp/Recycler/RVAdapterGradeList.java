@@ -1,5 +1,6 @@
 package de.tk.annapp.Recycler;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -182,7 +183,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                         notifyItemChanged(grades.indexOf(grade));
 
                         subjectManager.save();
-                        subjectManager.setGradeTextView(true, subject);
+                        ((TextView)((Activity)context).findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -244,7 +245,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
             grades.remove(grade);
         notifyItemRemoved(formerIndex);
         subjectManager.save();
-        subjectManager.setGradeTextView(true, grade.getSubject());//TODO What does that?!
+        ((TextView)((Activity)context).findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
     }
     public void addGrade(Grade grade){
         if(grades.contains(grade))

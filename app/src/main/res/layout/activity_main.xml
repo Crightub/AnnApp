@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
             android:layout_marginTop="8dp"
-            android:text="15.0"
+            android:text="Platzhalter"
             android:textColor="#b2ffffff"
             android:textSize="30dp"
             android:visibility="gone"
