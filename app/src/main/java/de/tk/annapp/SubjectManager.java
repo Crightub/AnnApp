@@ -99,6 +99,7 @@ public class SubjectManager {
 
 
     public void setLesson(Subject subject, String room, int time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/, int day){
+        System.out.println("Subject: "+ subject.getName() + " Raum: " + room + " Zeit: "+ time + " Tag: "+day + "###################################################################################");
         days[day].setLesson(subject, room, time);
         if(!subjects.contains(subject))
             Log.i("MANAGER: ","Holy shit, this should not happen!-------------------------");
