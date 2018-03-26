@@ -18,4 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Change Theme" />
+
+    <Switch
+        android:id="@+id/dividersSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Teiler im Stundenplan anzeigen" />
 </LinearLayout>

@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import de.tk.annapp.R;
 
@@ -29,6 +31,26 @@ public class SettingsFragment extends Fragment {
 
         final EditText theme = (EditText) root.findViewById(R.id.theme);
         Button btnTheme = (Button) root.findViewById(R.id.btnTheme);
+        Switch timetableDividersSwitch = root.findViewById(R.id.dividersSwitch);
+
+        timetableDividersSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                SharedPreferences myPrefs = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+                SharedPreferences.Editor myPrefEditor = myPrefs.edit();
+                myPrefEditor.clear();
+                myPrefEditor.putBoolean("timetableDividers",b);
+                myPrefEditor.commit();
+
+
+                SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+
+                Boolean dividers = sp.getBoolean("timetableDividers", false);
+
+                System.out.println(dividers);
+            }
+        });
 
         btnTheme.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +67,8 @@ public class SettingsFragment extends Fragment {
                 editor.apply();
             }
         });
+
+
 
         return root;
     }

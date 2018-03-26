@@ -2,6 +2,7 @@ package de.tk.annapp.Fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,11 +17,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.app.Fragment;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -42,6 +45,7 @@ import de.tk.annapp.TableView.model.RowHeader;
 import de.tk.annapp.Util;
 
 import static android.R.layout.simple_spinner_dropdown_item;
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -58,6 +62,8 @@ public class TimetableFragment extends Fragment {
 
     //default spacing
     int spacing = 5;
+
+    boolean dividers;
 
     Subject lastSubject;
     Subject uglyAsHellWayToCreateAOtherCoiseOption = new Subject("neues Fach", 0, null, null);
@@ -99,13 +105,21 @@ public class TimetableFragment extends Fragment {
 
         tableLayout = root.findViewById(R.id.tableLayout);
 
+        //TODO ChangeBackground depending on following Variable
+        SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+
+        dividers = sp.getBoolean("timetableDividers", false);
+
+        HorizontalScrollView sv = root.findViewById(R.id.background);
+
+        if (dividers){
+            sv.setBackgroundColor(getResources().getColor(android.R.color.black));
+        }else{
+            sv.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        }
+
+
         initializeTableView();
-
-        // Create Table view
-        //mTableView = createTableView();
-        //fragment_container.addView(mTableView);
-
-        //loadData();
         return root;
     }
 
@@ -238,6 +252,11 @@ public class TimetableFragment extends Fragment {
 
             tableLayout.addView(tableRow);
         }
+        TableRow tr = new TableRow(this.getContext());
+        Space bottomSpace = new Space(this.getContext());
+        bottomSpace.setMinimumHeight(spacing*2);
+        tr.addView(bottomSpace);
+        tableLayout.addView(tr);
 
 
     }
@@ -253,7 +272,7 @@ public class TimetableFragment extends Fragment {
         Button btn = new Button(this.getContext());
 
         //general Settings for headers
-        btn.setTextColor(getResources().getColor(R.color.bg_line));
+        btn.setTextColor(getResources().getColor(R.color.default_background_color));
         btn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         btn.setTypeface(null, Typeface.BOLD);
 
@@ -271,7 +290,7 @@ public class TimetableFragment extends Fragment {
         Button btn = new Button(this.getContext());
 
         //general Settings for Cells
-        btn.setTextColor(getResources().getColor(R.color.bg_line));
+        btn.setTextColor(getResources().getColor(R.color.default_background_color));
 
         btn.setBackgroundColor(accentColor);
 
@@ -289,9 +308,14 @@ public class TimetableFragment extends Fragment {
         Button btn = new Button(this.getContext());
 
         //general Settings for empty cells
-        btn.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+        if(dividers)
+            btn.setBackgroundColor(getResources().getColor(R.color.default_background_color));
+        else
+            btn.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
         btn.setTag(position);
+
 
         btn.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -462,8 +486,8 @@ public class TimetableFragment extends Fragment {
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                subjectManager.setLesson(new Lesson(null,null, day, time));
-                initializeTableView();
+                //subjectManager.setLesson(new Lesson(null,null, day, time));
+                //initializeTableView();
                 bsd.cancel();
             }
         });
