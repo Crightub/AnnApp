@@ -25,7 +25,7 @@ public class SubjectManager {
 
     private SubjectManager(){
         System.out.println("Create SubjectManager...");
-        days = new Day[]{new Day(),new Day(),new Day(),new Day(),new Day()};
+        days = new Day[]{new Day(0),new Day(1),new Day(2),new Day(3),new Day(4)};
     }
 
     //Returns the singelton subjectManager
@@ -48,6 +48,11 @@ public class SubjectManager {
             return;
         subjects.add(subject);
         save();
+    }
+
+    public void removeSubject(Subject subject){
+        for(Lesson lesson: subject.getLessons())
+            subjectManager.setLesson(new Lesson(null,null, lesson.getDay(), lesson.getTime()));
     }
 
     //Gives back the average of all subjects
@@ -98,11 +103,19 @@ public class SubjectManager {
     }
 
 
-    public void setLesson(Subject subject, String room, int time /*Number of the lesson (1st lesson, 2nd lesson, ...)*/, int day){
-        System.out.println("Subject: "+ subject.getName() + " Raum: " + room + " Zeit: "+ time + " Tag: "+day + "###################################################################################");
-        days[day].setLesson(subject, room, time);
-        if(!subjects.contains(subject))
-            Log.i("MANAGER: ","Holy shit, this should not happen!-------------------------");
+    public void setLesson(Lesson lesson){
+        int day =lesson.getDay();
+        int time = lesson.getTime();
+        if(lesson.getSubject()==null){
+            days[day].getLesseon(time).getSubject().removeLesson(days[day].getLesseon(time));
+        }else if(days[day].getLesseon(time).getSubject()==null){
+            lesson.getSubject().addLesson(lesson);
+        }else if(!days[day].getLesseon(time).getSubject().equals(lesson.getSubject())){
+            days[day].getLesseon(time).getSubject().removeLesson(days[day].getLesseon(time));
+            lesson.getSubject().addLesson(lesson);
+        }
+        System.out.println("InSubMan");
+        days[day].setLesson(lesson);
         save();
     }
 

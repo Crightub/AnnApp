@@ -15,21 +15,23 @@ public class Subject implements Serializable {
     //Contains all tasks of one Subject
     ArrayList<Task> tasks = new ArrayList<>();
 
+    private ArrayList<Lesson> lessons = new ArrayList<>();
+
     int position;
 
     //name of the Subject
-    public String name;
+    private String name;
 
     //determines how much a written Grade is worth
     //int the Subject class
     //(1 or 2)
-    int ratingSub;
+    private int ratingSub;
 
     //name of the Teacher
-    public String teacher;
+    private String teacher;
 
     //Name of the room the subject normally takes place
-    public String room;
+    private String room;
 
     //Junge, junge, wer hat hier geschlampt?
     public Subject(String name, int rating, String teacher, String room) {
@@ -43,6 +45,34 @@ public class Subject implements Serializable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getRatingSub() {
+        return ratingSub;
+    }
+
+    public void setRatingSub(int ratingSub) {
+        this.ratingSub = ratingSub;
+    }
+
+    public String getTeacher() {
+        return teacher;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
+    }
+
     public void addTask(Task task) {
         tasks.add(task);
     }
@@ -51,6 +81,17 @@ public class Subject implements Serializable {
         tasks.remove(task);
     }
 
+    public void addLesson(Lesson lesson){
+        lessons.add(lesson);
+    }
+
+    public void removeLesson(Lesson lesson){
+        lessons.remove(lesson);
+    }
+
+    public ArrayList<Lesson> getLessons() {
+        return lessons;
+    }
 
     public void setPosition(int position) {
         this.position = position;

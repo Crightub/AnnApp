@@ -48,7 +48,6 @@ public class TasksFragment extends Fragment  {
         root = inflater.inflate(R.layout.fragment_tasks, container, false);
 
         subjectManager = SubjectManager.getInstance();
-        //TODO Just why? subjectManager.load(getContext(), "subjects");
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAddTask);
         fabAdd.setOnClickListener(new View.OnClickListener() {
