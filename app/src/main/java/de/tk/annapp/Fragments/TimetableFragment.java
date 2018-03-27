@@ -507,10 +507,11 @@ public class TimetableFragment extends Fragment {
         AlertDialog.Builder builder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Light_Dialog);
         } else {
             builder = new AlertDialog.Builder(this.getContext());
         }
+
         builder.setTitle(title)
                 .setMessage(text)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -519,6 +520,7 @@ public class TimetableFragment extends Fragment {
                 })
                 .setIcon(ic)
                 .show();
+
     }
 }
 
