@@ -1,5 +1,8 @@
 package de.tk.annapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 public class SettingsManager {
 
     private static final SettingsManager settingsManager = new SettingsManager();
@@ -12,4 +15,5 @@ public class SettingsManager {
     public static SettingsManager getInstance(){
         return settingsManager;
     }
+
 }

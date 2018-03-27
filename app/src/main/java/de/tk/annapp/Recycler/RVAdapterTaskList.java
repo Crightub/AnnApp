@@ -20,6 +20,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import de.tk.annapp.Lesson;
+import de.tk.annapp.SchoolLessonSystem;
 import de.tk.annapp.Task;
 import de.tk.annapp.R;
 import de.tk.annapp.Subject;
@@ -146,10 +148,12 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         Calendar now = Calendar.getInstance();
         String[] duedates;
-        if (task.getDue().get(Calendar.YEAR) == now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR))
-            duedates = new String[]{"Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag", "Datum auswählen"};
+        /*if (task.getDue().get(Calendar.YEAR) == now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR))
+            duedates = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", "Datum auswählen"};
         else
-            duedates = new String[]{"Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag", Util.getFullDate(task.getDue()), "Datum auswählen"};
+            duedates = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", Util.getFullDate(task.getDue()), "Datum auswählen"};*/
+
+        duedates = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", Util.getFullDate(task.getDue()), "Datum auswählen"};
 
         String[] kinds = new String[]{"Hausaufgabe", "Schulaufgabe", "Notiz"};
 
@@ -187,7 +191,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                            String[] pos = new String[]{"Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag", dayOfMonth + "." + monthOfYear + "." + year, "Datum auswählen"};
+                            String[] pos = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", dayOfMonth + "." + monthOfYear + "." + year, "Datum auswählen"};
                             ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, pos);
                             timeSelection.setAdapter(adapterTime);
                             timeSelection.setSelection(7);
@@ -206,7 +210,8 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
             }
         });
-        if (task.getDue().get(Calendar.YEAR) == now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR))
+        timeSelection.setSelection(4);
+        /*if (task.getDue().get(Calendar.YEAR) == now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR))
             switch (Util.getWeekDayShort(task.getDue())) {
                 case "Mo":
                     timeSelection.setSelection(0);
@@ -231,7 +236,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     break;
             }
         else
-            timeSelection.setSelection(7);
+            timeSelection.setSelection(7);*/
 
         ad.setTitle(context.getString(R.string.editTask) + task.getSubject().getName())
                 .setView(mView)
@@ -245,20 +250,16 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         }
 
                         Calendar due = Calendar.getInstance();
-                        if (timeSelection.getSelectedItem().toString().equals("Montag")) {
-                            due.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                        } else if (timeSelection.getSelectedItem().toString().equals("Dienstag")) {
-                            due.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-                        } else if (timeSelection.getSelectedItem().toString().equals("Mittwoch")) {
-                            due.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-                        } else if (timeSelection.getSelectedItem().toString().equals("Donnerstag")) {
-                            due.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-                        } else if (timeSelection.getSelectedItem().toString().equals("Freitag")) {
-                            due.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-                        } else if (timeSelection.getSelectedItem().toString().equals("Samstag")) {
-                            due.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-                        } else if (timeSelection.getSelectedItem().toString().equals("Sonntag")) {
-                            due.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                        Calendar now = Calendar.getInstance();
+                        SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
+                        if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
+                            due = task.getSubject().getNextLessonAfter(due,sls);
+                        } else if (timeSelection.getSelectedItem().toString().equals("Übernächste Stunde")) {
+                            due = task.getSubject().getNextLessonAfter(task.getSubject().getNextLessonAfter(due,sls),sls);
+                        } else if (timeSelection.getSelectedItem().toString().equals("Morgen")) {
+                            due.add(Calendar.DAY_OF_YEAR, 1);
+                        } else if (timeSelection.getSelectedItem().toString().equals("Nächste Woche")) {
+                            due.add(Calendar.WEEK_OF_YEAR, 1);
                         } else if (timeSelection.getSelectedItem().toString().matches("\\d*\\.\\d*\\.\\d*")) {
                             due = Util.getCalendarFromFullString(timeSelection.getSelectedItem().toString());
                         } else {

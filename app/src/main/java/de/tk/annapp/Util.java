@@ -58,6 +58,27 @@ public class Util {
         }
     }
 
+    public static int calendarWeekdayByDayIndex(int day) {
+        switch (day) {
+            case 0:
+                return Calendar.MONDAY;
+            case 1:
+                return Calendar.TUESDAY;
+            case 2:
+                return Calendar.WEDNESDAY;
+            case 3:
+                return Calendar.THURSDAY;
+            case 4:
+                return Calendar.FRIDAY;
+            case 5:
+                return Calendar.SATURDAY;
+            case 6:
+                return Calendar.SUNDAY;
+            default:
+                return -1;
+        }
+    }
+
     public static String getFullDate(Calendar calendar) {
         return new SimpleDateFormat("dd.MM.yyyy").format(calendar.getTime());
     }

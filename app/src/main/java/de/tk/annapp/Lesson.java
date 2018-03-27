@@ -1,12 +1,19 @@
 package de.tk.annapp;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+
+import static java.lang.Math.floor;
 
 /**
  * Created by Tobias Kiehnlein on 03.01.2018.
  */
 
-public class Lesson implements Serializable {
+public class Lesson implements Serializable, Comparable<Lesson> {
 
     //the subject of this lesson
     private Subject subject;
@@ -16,7 +23,7 @@ public class Lesson implements Serializable {
     //the room in which this very lesson takes place
     private String room;
 
-    public Lesson (Subject subject, String room, int day, int time){
+    public Lesson(Subject subject, String room, int day, int time) {
         this.subject = subject;
         this.room = room;
 
@@ -33,7 +40,7 @@ public class Lesson implements Serializable {
     }
 
     public String getRoom() {
-        if(room==null)
+        if (room == null)
             return subject.getRoom();
         return room;
     }
@@ -56,5 +63,43 @@ public class Lesson implements Serializable {
 
     public void setTime(int time) {
         this.time = time;
+    }
+
+    public Calendar getNextLessonAfter(Calendar base, SchoolLessonSystem sls) {
+        Calendar ret = (Calendar) base.clone();
+        ret.set(Calendar.DAY_OF_WEEK, Util.calendarWeekdayByDayIndex(day));
+        ret.set(Calendar.HOUR_OF_DAY, (int) Math.floor((double) sls.getSchoolstart() / 60.0));
+        ret.set(Calendar.MINUTE, sls.getSchoolstart() % 60);
+        ret.add(Calendar.MINUTE, time * sls.getLessonLenght());
+        for(Integer b:sls.getBreaksAfterLesson())
+            if(b<time)
+                ret.add(Calendar.MINUTE,sls.getBreakLenght());
+        if(ret.before(base))
+            ret.add(Calendar.WEEK_OF_YEAR,1);
+        return ret;
+    }
+
+    @Override
+    public int compareTo(@NonNull Lesson lesson) {
+        if (day == lesson.day)
+            if (time > lesson.time)
+                return 1;
+            else if (time < lesson.time)
+                return -1;
+            else
+                return 0;
+        else if (day > lesson.day)
+            return 1;
+        return -1;
+    }
+
+    @Override
+    public String toString() {
+        return "Lesson{" +
+                "subject=" + subject +
+                ", day=" + day +
+                ", time=" + time +
+                ", room='" + room + '\'' +
+                '}';
     }
 }

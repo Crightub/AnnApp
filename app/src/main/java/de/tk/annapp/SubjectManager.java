@@ -2,9 +2,6 @@ package de.tk.annapp;
 
 
 import android.content.Context;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,6 +15,8 @@ public class SubjectManager {
     Context context;
 
     String filename;
+
+    private SchoolLessonSystem schoolLessonSystem;
 
     //Contains all subjects
     ArrayList<Subject> subjects = new ArrayList<Subject>();
@@ -123,4 +122,18 @@ public class SubjectManager {
         return days;
     }
 
+    public SchoolLessonSystem getSchoolLessonSystem() {
+        return schoolLessonSystem;
+    }
+
+    public void setSchoolLessonSystem(SchoolLessonSystem schoolLessonSystem) {
+        this.schoolLessonSystem = schoolLessonSystem;
+    }
+
+    public News getNews(int position){
+        return new News("Titel "+position, "Beschreibung",context.getDrawable(R.drawable.ic_fehler_bild));
+    }
+    public int getNewsCount(){
+        return 5;
+    }
 }

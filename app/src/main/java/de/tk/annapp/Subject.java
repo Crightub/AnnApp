@@ -2,6 +2,7 @@ package de.tk.annapp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -174,5 +175,18 @@ public class Subject implements Serializable {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+
+    public Calendar getNextLessonAfter(Calendar after,SchoolLessonSystem sls){
+        if(lessons.isEmpty())
+            return after;
+        Calendar ret = (Calendar) after.clone();
+        ret.add(Calendar.YEAR,100);
+        for (Lesson lesson : lessons) {
+            Calendar tmp = lesson.getNextLessonAfter(after, sls);
+            if (ret.after(tmp))
+                ret = tmp;
+        }
+        return ret;
     }
 }
