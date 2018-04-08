@@ -77,8 +77,7 @@ public class SubjectManager {
         return  Util.round(wholeGradeAverage, 2);
     }
 
-    public void load()
-    {
+    public void load() {
         try {
             ObjectInputStream ois = new ObjectInputStream(context.openFileInput(filename));
             subjects = (ArrayList<Subject>) ois.readObject();

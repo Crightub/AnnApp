@@ -55,7 +55,6 @@ public class TasksFragment extends Fragment {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 createInputDialog();
-                //TODO Should be deleted? subjectManager.save();
             }
         });
 
