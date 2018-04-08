@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.Switch;
 
 import de.tk.annapp.R;
@@ -32,6 +33,12 @@ public class SettingsFragment extends Fragment {
         final EditText theme = (EditText) root.findViewById(R.id.theme);
         Button btnTheme = (Button) root.findViewById(R.id.btnTheme);
         Switch timetableDividersSwitch = root.findViewById(R.id.dividersSwitch);
+
+        //Setting Switch to actual setting
+        SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+        Boolean dividers = sp.getBoolean("timetableDividers", false);
+        timetableDividersSwitch.setChecked(dividers);
+
 
         timetableDividersSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

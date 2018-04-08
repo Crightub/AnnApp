@@ -3,6 +3,7 @@ package de.tk.annapp.Fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -113,7 +114,7 @@ public class TimetableFragment extends Fragment {
         HorizontalScrollView sv = root.findViewById(R.id.background);
 
         if (dividers){
-            sv.setBackgroundColor(getResources().getColor(android.R.color.black));
+            sv.setBackgroundColor(Color.parseColor("#DADADA"));
         }else{
             sv.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
