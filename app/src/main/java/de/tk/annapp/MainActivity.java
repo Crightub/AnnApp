@@ -38,15 +38,6 @@ public class MainActivity extends AppCompatActivity
 
         subjectManager.load();
 
-        //Add test subjects
-        subjectManager.addSubject(new Subject("Mathe", 1, "fdsh", "hjsr"));
-        subjectManager.addSubject(new Subject("Deutsch", 1, "fdsh", "hjsr"));
-        subjectManager.addSubject(new Subject("Latein", 1, "fdsh", "hjsr"));
-        subjectManager.addSubject(new Subject("Englisch", 1, "fdsh", "hjsr"));
-        subjectManager.setLesson(new Lesson(subjectManager.getSubjects().get(0),"dsd",1,1));
-
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

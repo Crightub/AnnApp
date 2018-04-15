@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,11 +59,20 @@ public class TasksFragment extends Fragment {
             }
         });
 
+        TextView taskMessage = (TextView) root.findViewById(R.id.noTask);
+
+        for (Subject s :
+                subjectManager.getSubjects()) {
+            if(!s.getAllTasks().isEmpty()){
+                taskMessage.setVisibility(View.INVISIBLE);
+            }
+        }
+
         recyclerView = root.findViewById(R.id.recyclerViewTasksId);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        recyclerView.setAdapter(new RVAdapterTaskList(getActivity()));
+        recyclerView.setAdapter(new RVAdapterTaskList(getActivity(), taskMessage));
 
         return root;
     }
@@ -120,10 +130,10 @@ public class TasksFragment extends Fragment {
 
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                            String[] pos = new String[]{"Nächste Stunde", "Übernächste Stunde", "Morgen", "Nächste Woche", dayOfMonth + "." + monthOfYear + "." + year, "Datum auswählen"};
+                            String[] pos = new String[]{"Nächste Stunde", "Übernächste Stunde", "Morgen", "Nächste Woche", dayOfMonth + "." + (monthOfYear+1) + "." + year, "Datum auswählen"};
                             ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(getContext(), simple_spinner_dropdown_item, pos);
                             timeSelection.setAdapter(adapterTime);
-                            timeSelection.setSelection(7);
+                            timeSelection.setSelection(4);
                         }
                     };
                     DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -190,7 +200,7 @@ public class TasksFragment extends Fragment {
                         Task newTask = new Task(task.getText().toString(), Calendar.getInstance(), shortKind, subject, due);
                         subject.addTask(newTask);
                         ((RVAdapterTaskList) recyclerView.getAdapter()).addTask(newTask);
-
+                        root.findViewById(R.id.noTask).setVisibility(View.GONE);
                         subjectManager.save();
                     }
                 })

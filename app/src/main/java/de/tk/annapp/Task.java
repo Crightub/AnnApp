@@ -155,7 +155,9 @@ public class Task implements Serializable, Comparable<Task>{
     @Override
     public int compareTo(@NonNull Task task) { //TODO Check order
         return getDue().after(task.getDue())?1:
-                getDate().after(task.getDate())?1:0;
+                getDue().before(task.getDue())?-1:
+                getDate().after(task.getDate())?1:
+                        getDate().after(task.getDate())?-1:0;
     }
 
     @Override

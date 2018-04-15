@@ -1,5 +1,6 @@
 package de.tk.annapp.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -22,13 +23,11 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -106,7 +105,6 @@ public class TimetableFragment extends Fragment {
 
         tableLayout = root.findViewById(R.id.tableLayout);
 
-        //TODO ChangeBackground depending on following Variable
         SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
 
         dividers = sp.getBoolean("timetableDividers", false);
@@ -126,41 +124,6 @@ public class TimetableFragment extends Fragment {
 
 
     void initializeTableView() {
-        /*timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 201", 11, 4);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",1,0);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 203",2,0);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",3,0);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",4,0);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",5,0);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 203",6,0);
-
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 213",1,1);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 213",2,1);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 213",3,1);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 213",4,1);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 213",5,1);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 213",6,1);
-
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 223",1,2);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 223",2,2);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 223",3,2);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 223",4,2);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 223",5,2);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 223",6,2);
-
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 233",1,3);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 233",2,3);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 233",3,3);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 233",4,3);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 233",5,3);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 233",6,3);
-
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",1,4);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Mathe"), "E 243",2,4);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",3,4);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",4,4);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",5,4);
-        timetableManager.setLesson(subjectManager.getSubjectByName("Deutsch"), "E 243",6,4);*/
 
         tableLayout.removeAllViews();
 
@@ -295,10 +258,14 @@ public class TimetableFragment extends Fragment {
 
         btn.setBackgroundColor(accentColor);
 
+        btn.setTag(position);
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Clicked ", Toast.LENGTH_SHORT).show();
+
+                lessonInfo(view);
             }
         });
 
@@ -326,16 +293,6 @@ public class TimetableFragment extends Fragment {
                 return false;
             }
         });
-
-        /*btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO create new lesson
-                Toast.makeText(getContext(), "Empty Cell pressed on Position" + view.getTag(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-
         return btn;
     }
 
@@ -347,11 +304,19 @@ public class TimetableFragment extends Fragment {
 
         //subjectManager.setLesson(subjectManager.getSubjects().get(1), "", y, x-1);
 
-        createInputDialog(x - 1, y, null);
+        createNewLessonDialog(x - 1, y, null);
 
     }
 
-    public void createInputDialog(final int day, final int time, final Subject subject) {
+    void lessonInfo(View view){
+        String[] s = view.getTag().toString().split("#");
+        int x = Integer.valueOf(s[0]) - 1;
+        int y = Integer.valueOf(s[1]);
+
+        createLessonInfoDialog(x, y, subjectManager.getDays()[x].getLesseon(y).getSubject());
+    }
+
+    public void createNewLessonDialog(final int day, final int time, final Subject subject) {
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
 
@@ -504,6 +469,55 @@ public class TimetableFragment extends Fragment {
         bsd.setContentView(mView);
         bsd.show();
     }
+
+    @SuppressLint("ResourceAsColor")
+    public void createLessonInfoDialog(final int day, final int time, final Subject subject) {
+        //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
+        final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
+
+
+        View mView = View.inflate(this.getContext(), R.layout.fragment_lesson_info, null);
+        //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+
+        final FloatingActionButton btnClear = (FloatingActionButton) mView.findViewById(R.id.btnClearLesson);
+        final FloatingActionButton btnDelete = (FloatingActionButton) mView.findViewById(R.id.btnDeleteSubject);
+        final FloatingActionButton btnEdit = (FloatingActionButton) mView.findViewById(R.id.btnEditSubject);
+
+        TextView subjectView = (TextView) mView.findViewById(R.id.subjectView);
+        TextView teacherCard = (TextView) mView.findViewById(R.id.teacherView);
+        TextView roomCard = (TextView) mView.findViewById(R.id.roomView);
+
+        subjectView.setText(subject.getName());
+
+        teacherCard.setText(subject.getTeacher());
+
+        roomCard.setText(subjectManager.getDays()[day].getLesseon(time).getRoom());
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bsd.cancel();
+            }
+        });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO ask what to delete then delete
+                bsd.cancel();
+            }
+        });
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO ask what to edit then edit
+                bsd.cancel();
+            }
+        });
+        bsd.setContentView(mView);
+        bsd.show();
+    }
+
     void createAlertDialog(String title, String text, int ic) {
         AlertDialog.Builder builder;
 

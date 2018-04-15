@@ -1,11 +1,13 @@
 package de.tk.annapp;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
 public class Subject implements Serializable {
@@ -181,9 +183,10 @@ public class Subject implements Serializable {
         if(lessons.isEmpty())
             return after;
         Calendar ret = (Calendar) after.clone();
-        ret.add(Calendar.YEAR,100);
+        ret.add(Calendar.YEAR,5);
         for (Lesson lesson : lessons) {
             Calendar tmp = lesson.getNextLessonAfter(after, sls);
+
             if (ret.after(tmp))
                 ret = tmp;
         }

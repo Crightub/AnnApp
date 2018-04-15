@@ -87,7 +87,7 @@ public class Util {
         if (fullCalendar.matches("\\d*\\.\\d*\\.\\d*")) {
             String[] datest = fullCalendar.split("\\.");
             Calendar ret = Calendar.getInstance();
-            ret.set(Integer.valueOf(datest[2]), Integer.valueOf(datest[1]), Integer.valueOf(datest[0]));
+            ret.set(Integer.valueOf(datest[2]), Integer.valueOf(datest[1])-1, Integer.valueOf(datest[0]));
             return ret;
         }
         return null;

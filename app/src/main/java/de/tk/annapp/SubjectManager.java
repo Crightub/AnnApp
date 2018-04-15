@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.SortedSet;
 
 public class SubjectManager {
 
@@ -24,6 +27,10 @@ public class SubjectManager {
 
     private SubjectManager(){
         System.out.println("Create SubjectManager...");
+        Set s = new HashSet<Integer>();
+        s.add(1);
+        s.add(3);
+        schoolLessonSystem = new SchoolLessonSystem(480, 45, 20, s);//TODO From Preferences
         days = new Day[]{new Day(0),new Day(1),new Day(2),new Day(3),new Day(4)};
     }
 

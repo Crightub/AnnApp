@@ -20,7 +20,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import de.tk.annapp.Lesson;
 import de.tk.annapp.SchoolLessonSystem;
 import de.tk.annapp.Task;
 import de.tk.annapp.R;
@@ -34,11 +33,13 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private Context context;
     private ArrayList<Task> tasks = new ArrayList<>();
     private SubjectManager subjectManager;
+    private TextView taskMessage;
     int pos;
 
-    public RVAdapterTaskList(Context context) {
+    public RVAdapterTaskList(Context context, TextView taskMessage) {
 
         this.context = context;
+        this.taskMessage = taskMessage;
         subjectManager = SubjectManager.getInstance();
         constructor();
 
@@ -55,7 +56,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
 
         for (Subject s : subjects) {
-            if (s.getAllTasksSorted().isEmpty())
+            if (s.getAllTasks().isEmpty())
                 continue;
             tasks.add(null);
             pos++;
@@ -83,7 +84,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     }
 
     @Override
-    public void onBindViewHolder(RecyclerVHTask holder, final int position) {
+    public void onBindViewHolder(RecyclerVHTask holder, int position) {
         //TODO: Change Task to "Mo", "Di", ..., if it is in less than one week
         if (tasks.get(position) == null) {
             holder.content.setVisibility(View.GONE);
@@ -99,24 +100,41 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         holder.taskTxt.setText(tasks.get(position).getTask());
         holder.kindTxt.setText(tasks.get(position).getKind());
 
-        holder.editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("Create InputDialog...");
-                createEditDialog(tasks.get(position));
-            }
-        });
-        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                askDelete(tasks.get(position));
-            }
-        });
+        holder.editButton.setOnClickListener(new OnEditListener(tasks.get(position)));
+        holder.deleteButton.setOnClickListener(new OnDeleteListener(tasks.get(position)));
     }
 
     @Override
     public int getItemCount() {
         return tasks.size();
+    }
+
+    private class OnEditListener implements View.OnClickListener{
+
+        private Task t;
+
+        public OnEditListener(Task t){
+            this.t = t;
+        }
+
+        @Override
+        public void onClick(View v) {
+            createEditDialog(t);
+        }
+    }
+
+    private class OnDeleteListener implements View.OnClickListener{
+
+        private Task t;
+
+        public OnDeleteListener(Task t){
+            this.t = t;
+        }
+
+        @Override
+        public void onClick(View v) {
+            askDelete(t);
+        }
     }
 
     //Viewholder Class
@@ -191,10 +209,10 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                            String[] pos = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", dayOfMonth + "." + monthOfYear + "." + year, "Datum auswählen"};
+                            String[] pos = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", dayOfMonth + "." + (monthOfYear+1) + "." + year, "Datum auswählen"};
                             ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, pos);
                             timeSelection.setAdapter(adapterTime);
-                            timeSelection.setSelection(7);
+                            timeSelection.setSelection(4);
                         }
                     };
                     DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -250,11 +268,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         }
 
                         Calendar due = Calendar.getInstance();
-                        Calendar now = Calendar.getInstance();
                         SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
                         if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
                             due = task.getSubject().getNextLessonAfter(due,sls);
                         } else if (timeSelection.getSelectedItem().toString().equals("Übernächste Stunde")) {
+                            System.out.println(due);
                             due = task.getSubject().getNextLessonAfter(task.getSubject().getNextLessonAfter(due,sls),sls);
                         } else if (timeSelection.getSelectedItem().toString().equals("Morgen")) {
                             due.add(Calendar.DAY_OF_YEAR, 1);
@@ -362,6 +380,10 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         notifyItemRemoved(index);
 
         subjectManager.save();
+
+        if(tasks.isEmpty()){
+            taskMessage.setVisibility(View.VISIBLE);
+        }
     }
 
     public void addTask(Task task) {

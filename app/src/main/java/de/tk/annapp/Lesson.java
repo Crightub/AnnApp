@@ -74,7 +74,7 @@ public class Lesson implements Serializable, Comparable<Lesson> {
         for(Integer b:sls.getBreaksAfterLesson())
             if(b<time)
                 ret.add(Calendar.MINUTE,sls.getBreakLenght());
-        if(ret.before(base))
+        if(!ret.after(base))
             ret.add(Calendar.WEEK_OF_YEAR,1);
         return ret;
     }
