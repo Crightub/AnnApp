@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
 
 public class SubjectManager {
 
@@ -109,19 +108,54 @@ public class SubjectManager {
 
 
     public void setLesson(Lesson lesson){
-        int day =lesson.getDay();
-        int time = lesson.getTime();
-        if(lesson.getSubject()==null){
-            days[day].getLesseon(time).getSubject().removeLesson(days[day].getLesseon(time));
-        }else if(days[day].getLesseon(time).getSubject()==null){
+        int day = lesson.getDay();
+        System.out.println(lesson.getDay());
+        int time = lesson.getTime()-1;
+        System.out.println(lesson.getTime());
+        System.out.println("Lesson: " + lesson.toString());
+        if(lesson.getSubject() == null){
+            days[day].getLesson(time).getSubject().removeLesson(days[day].getLesson(time));
+        }else if(days[day].getLesson(time) == null) {
+
+        }else if(days[day].getLesson(time).getSubject() == null){
             lesson.getSubject().addLesson(lesson);
-        }else if(!days[day].getLesseon(time).getSubject().equals(lesson.getSubject())){
-            days[day].getLesseon(time).getSubject().removeLesson(days[day].getLesseon(time));
+        }else if(!days[day].getLesson(time).getSubject().equals(lesson.getSubject())){
+            days[day].getLesson(time).getSubject().removeLesson(days[day].getLesson(time));
             lesson.getSubject().addLesson(lesson);
         }
         System.out.println("InSubMan");
         days[day].setLesson(lesson);
         save();
+    }
+
+    public void deleteLesson(Lesson lesson){
+        for (Day d :
+                days) {
+            for (Lesson l :
+                    d.getLessons()) {
+                if(l==lesson) {
+                    d.getLessons().set(lesson.getTime(), null);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void deleteAllLessons(Lesson lesson){
+        for (Day d :
+                days) {
+            for (Lesson l :
+                    d.getLessons()) {
+                if(l == null)
+                    continue;
+                if(l.getSubject()==lesson.getSubject())
+                    d.getLessons().set(l.getTime(), null);
+            }
+        }
+    }
+
+    public void deleteSubject(Subject subject){
+        subjects.remove(subject);
     }
 
     public Day[] getDays(){

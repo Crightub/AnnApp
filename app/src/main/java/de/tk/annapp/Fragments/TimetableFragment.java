@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -84,10 +87,6 @@ public class TimetableFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //setRowSize();
         //initData();
-    }
-
-    void setRowSize() {
-
     }
 
     @Override
@@ -197,7 +196,7 @@ public class TimetableFragment extends Fragment {
 
 
                     try {
-                        cellName = d.getLesseon(i).getSubject().getName();
+                        cellName = d.getLesson(i).getSubject().getName();
                         //add cell
                         cell = getCellButton(accentColor, String.valueOf(x) + "#" + String.valueOf(i));
                         ((Button) cell).setText(cellName);
@@ -304,7 +303,7 @@ public class TimetableFragment extends Fragment {
 
         //subjectManager.setLesson(subjectManager.getSubjects().get(1), "", y, x-1);
 
-        createNewLessonDialog(x - 1, y, null);
+        createNewLessonDialog(x - 1, y, null, false);
 
     }
 
@@ -313,10 +312,10 @@ public class TimetableFragment extends Fragment {
         int x = Integer.valueOf(s[0]) - 1;
         int y = Integer.valueOf(s[1]);
 
-        createLessonInfoDialog(x, y, subjectManager.getDays()[x].getLesseon(y).getSubject());
+        createLessonInfoDialog(x, y, subjectManager.getDays()[x].getLesson(y).getSubject());
     }
 
-    public void createNewLessonDialog(final int day, final int time, final Subject subject) {
+    public void createNewLessonDialog(final int day, final int time, final Subject subject, final Boolean subjectEdit) {
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
 
@@ -326,8 +325,7 @@ public class TimetableFragment extends Fragment {
 
 
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
-        final FloatingActionButton btnClear = (FloatingActionButton) mView.findViewById(R.id.btnClearLesson);
-        final FloatingActionButton btnDelete = (FloatingActionButton) mView.findViewById(R.id.btnDeleteSubject);
+        final FloatingActionButton btnClear = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
         final EditText roomInput = (EditText) mView.findViewById(R.id.roomInput);
         final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnHelp);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
@@ -337,16 +335,16 @@ public class TimetableFragment extends Fragment {
         final EditText teacherEdittext = mView.findViewById(R.id.teacherInput);
         final EditText nameEdittext = mView.findViewById(R.id.subjectNameInput);
 
-        if (subject == null) {
-            btnDelete.setVisibility(View.GONE);
-        }
+
+
+
 
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (extraLayout.getVisibility() != View.VISIBLE) {
+                Toast.makeText(getContext(), subjectEdit.toString(), Toast.LENGTH_SHORT);
+                if (extraLayout.getVisibility() != View.VISIBLE || subjectEdit) {
                     ((Button) view).setText("Reduzieren");
-                    extraLayout.setVisibility(View.VISIBLE);
                     Toast.makeText(getContext(), "These changes will affect all lessons of this subject!", Toast.LENGTH_LONG).show();
                 } else {
                     ((Button) view).setText("Erweitern");
@@ -364,6 +362,21 @@ public class TimetableFragment extends Fragment {
 
 
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection);
+
+        //All the stuff for editing subject
+        if(subjectEdit) {
+            Space topSpace = mView.findViewById(R.id.topSpace);
+            topSpace.setMinimumHeight(20);
+            subjectSelection.setVisibility(View.GONE);
+            extraLayout.setVisibility(View.VISIBLE);
+            nameEdittext.setText(subject.getName());
+            if(subject.getRatingSub()==1)
+                radioBtn1.setChecked(true);
+            else
+                radioBtn2.setChecked(true);
+            teacherEdittext.setText(subject.getTeacher());
+            roomInput.setText(subject.getRoom());
+        }
         ArrayList<Subject> spinnerlist = (ArrayList<Subject>) subjectManager.getSubjects().clone();
         spinnerlist.add(uglyAsHellWayToCreateAOtherCoiseOption);
 
@@ -374,26 +387,30 @@ public class TimetableFragment extends Fragment {
         subjectSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (pos == subjectSelection.getAdapter().getCount() - 1) {
+                if (pos == subjectSelection.getAdapter().getCount() - 1 || subjectEdit) {
                     if (extraLayout.getVisibility() == View.GONE) {
                         btnExtra.callOnClick();
+                        extraLayout.setVisibility(View.VISIBLE);
                     }
-                    nameEdittext.setText("");
-                    radioBtn1.setChecked(true);
-                    teacherEdittext.setText("");
-                    roomInput.setText("");
+                    if(!subjectEdit){
+                        nameEdittext.setText("");
+                        radioBtn1.setChecked(true);
+                        teacherEdittext.setText("");
+                        roomInput.setText("");
+                    }
+
                     btnExtra.setVisibility(View.GONE);
 
                 } else {
+                    extraLayout.setVisibility(View.GONE);
                     Subject selectedSubject = (Subject) subjectSelection.getSelectedItem();
                     nameEdittext.setText(selectedSubject.getName());
-                    if (selectedSubject.getRatingSub() == 1)
+                    if (subject.getRatingSub() == 1)
                         radioBtn1.setChecked(true);
                     else
                         radioBtn2.setChecked(true);
                     teacherEdittext.setText(selectedSubject.getTeacher());
                     roomInput.setText(selectedSubject.getRoom());
-                    btnExtra.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -436,7 +453,7 @@ public class TimetableFragment extends Fragment {
                         return;
                     }
                     selectedsubject.setName(nameEdittext.getText().toString());
-                    selectedsubject.setPosition(radioBtn1.isChecked() ? 1 : 2);
+                    selectedsubject.setRatingSub(radioBtn1.isChecked() ? 1 : 2);
                     selectedsubject.setTeacher(teacherEdittext.getText().toString());
                     selectedsubject.setRoom(roomInput.getText().toString());
                     oCSubject = selectedsubject;
@@ -457,18 +474,11 @@ public class TimetableFragment extends Fragment {
                 bsd.cancel();
             }
         });
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if((subjectSelection.getSelectedItemPosition() == subjectSelection.getAdapter().getCount()-1))
-                    return;
-                //TODO Warning dialoge
-                subjectManager.removeSubject(((Subject) subjectSelection.getSelectedItem()));
-            }
-        });
         bsd.setContentView(mView);
         bsd.show();
     }
+
+
 
     @SuppressLint("ResourceAsColor")
     public void createLessonInfoDialog(final int day, final int time, final Subject subject) {
@@ -480,19 +490,31 @@ public class TimetableFragment extends Fragment {
         //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
 
-        final FloatingActionButton btnClear = (FloatingActionButton) mView.findViewById(R.id.btnClearLesson);
+        final FloatingActionButton btnClear = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
         final FloatingActionButton btnDelete = (FloatingActionButton) mView.findViewById(R.id.btnDeleteSubject);
         final FloatingActionButton btnEdit = (FloatingActionButton) mView.findViewById(R.id.btnEditSubject);
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
+        TextView roomTxt = (TextView) mView.findViewById(R.id.roomTxt);
+        TextView teacherTxt = (TextView) mView.findViewById(R.id.teacherTxt);
+
+
+
+        roomTxt.setWidth(180);
+        teacherTxt.setWidth(180);
+
         TextView subjectView = (TextView) mView.findViewById(R.id.subjectView);
-        TextView teacherCard = (TextView) mView.findViewById(R.id.teacherView);
-        TextView roomCard = (TextView) mView.findViewById(R.id.roomView);
+        TextView teacherView = (TextView) mView.findViewById(R.id.teacherView);
+        TextView roomView = (TextView) mView.findViewById(R.id.roomView);
 
         subjectView.setText(subject.getName());
 
-        teacherCard.setText(subject.getTeacher());
+        subjectView.setMinWidth(900);
 
-        roomCard.setText(subjectManager.getDays()[day].getLesseon(time).getRoom());
+        teacherView.setText(subject.getTeacher());
+
+        roomView.setText(subjectManager.getDays()[day].getLesson(time).getRoom());
 
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -503,17 +525,108 @@ public class TimetableFragment extends Fragment {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO ask what to delete then delete
                 bsd.cancel();
+                createDeleteQuestionDialog(subjectManager.getDays()[day].getLesson(time));
+
             }
         });
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO ask what to edit then edit
+                bsd.cancel();
+                createEditQuestionDialog(subjectManager.getDays()[day].getLesson(time));
+            }
+        });
+        bsd.setContentView(mView);
+        bsd.show();
+    }
+
+    void createDeleteQuestionDialog(final Lesson lesson){
+            //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
+            final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
+
+
+            View mView = View.inflate(this.getContext(), R.layout.fragment_lesson_delete, null);
+            //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+
+            final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
+            final Button selectionThisLesson = (Button) mView.findViewById(R.id.selectionThisLesson);
+            final Button selectionAllLessons = (Button) mView.findViewById(R.id.selectionAllLessons);
+            final Button selectionSubject = (Button) mView.findViewById(R.id.selectionSubject);
+
+            selectionAllLessons.setText("Alle " + lesson.getSubject().getName()+"stunden");
+
+            selectionThisLesson.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reallyDeleteQuestionForDAUs(0, lesson, bsd);
+                }
+            });
+
+            selectionAllLessons.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reallyDeleteQuestionForDAUs(1, lesson, bsd);
+                }
+            });
+
+            selectionSubject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reallyDeleteQuestionForDAUs(2, lesson, bsd);
+                }
+            });
+
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    bsd.cancel();
+                }
+            });
+
+            bsd.setContentView(mView);
+            bsd.show();
+    }
+
+    void createEditQuestionDialog(final Lesson lesson){
+        //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
+        final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
+
+
+        View mView = View.inflate(this.getContext(), R.layout.fragment_lesson_edit_question, null);
+        //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+
+        final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
+        final Button selectionThisLesson = (Button) mView.findViewById(R.id.selectionThisLesson);
+        final Button selectionSubject = (Button) mView.findViewById(R.id.selectionSubject);
+
+        selectionThisLesson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO start lesson Edit dialog
+                createNewLessonDialog(lesson.getDay(),lesson.getTime(), lesson.getSubject(), false);
                 bsd.cancel();
             }
         });
+
+        selectionSubject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO start subject Edit dialog
+                createNewLessonDialog(lesson.getDay(), lesson.getTime(), lesson.getSubject(), true);
+                bsd.cancel();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bsd.cancel();
+            }
+        });
+
         bsd.setContentView(mView);
         bsd.show();
     }
@@ -537,5 +650,59 @@ public class TimetableFragment extends Fragment {
                 .show();
 
     }
+
+    void reallyDeleteQuestionForDAUs(final int i, final Lesson lesson, final BottomSheetDialog bsd){
+        String message = "";
+        switch (i){
+            case 0:
+                message = "Wollen Sie diese Stunde wirklich löschen?";
+                break;
+            case 1:
+                message = "Wollen Sie wirklich alle " + lesson.getSubject().getName() + "stunden löschen?";
+                break;
+            case 2:
+                message = "Wollen Sie wirklich das gesamte Fach löschen?\nDies inkludiert sowohl alle Stunden, als auch sämtliche Noten und Aufgaben!";
+                break;
+        }
+        AlertDialog.Builder builder;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Light_Dialog);
+        } else {
+            builder = new AlertDialog.Builder(this.getContext());
+        }
+
+        builder.setTitle("Wirklich löschen?")
+                .setMessage(message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (i){
+                            case 0:
+                                subjectManager.deleteLesson(lesson);
+                                subjectManager.save();
+                                initializeTableView();
+                                break;
+                            case 1:
+                                subjectManager.deleteAllLessons(lesson);
+                                subjectManager.save();
+                                initializeTableView();
+                                break;
+                            case 2:
+                                subjectManager.deleteAllLessons(lesson);
+                                subjectManager.deleteSubject(lesson.getSubject());
+                                subjectManager.save();
+                                initializeTableView();
+                                break;
+                        }
+                        bsd.cancel();
+                    }
+                })
+                .setIcon(R.drawable.ic_delete)
+                .show();
+
+    }
+
+
+
 }
 

@@ -21,10 +21,10 @@ public class Day implements Serializable {
         lessons.set(lesson.getTime(), lesson);
     }
 
-    public Lesson getLesseon(int time) {
+    public Lesson getLesson(int time) {
         if (time < lessons.size())
             return lessons.get(time);
-        return new Lesson(null, null,number, time);
+        return new Lesson(null, null, number, time);
     }
 
     public ArrayList<Lesson> getLessons() {

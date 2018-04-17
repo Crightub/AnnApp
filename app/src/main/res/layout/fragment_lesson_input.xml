@@ -12,12 +12,20 @@
         android:layout_marginTop="24dp"
         android:background="#ffffff"
         android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <Space
+            android:id="@+id/topSpace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Spinner
             android:id="@+id/subjectSelection"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteY="24dp" />
 
         <Button
             android:id="@+id/btnExtra"
@@ -26,7 +34,8 @@
             android:layout_gravity="left"
             android:background="#00000000"
             android:text="erweitert"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/colorAccent"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/extraLayout"
@@ -44,7 +53,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Name" />
+                    android:hint="Name"
+                    android:inputType="textShortMessage" />
 
                 <ImageView
                     android:id="@+id/btnHelpSubjectName"
@@ -116,7 +126,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Raum" />
+                android:hint="Raum"
+                android:inputType="textShortMessage" />
 
             <ImageView
                 android:id="@+id/btnHelp"
@@ -140,15 +151,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btnDeleteSubject"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:src="@drawable/ic_delete"
-            android:tint="@android:color/white" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btnClearLesson"
+            android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
