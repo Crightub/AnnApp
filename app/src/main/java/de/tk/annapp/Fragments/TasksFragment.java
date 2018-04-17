@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -94,7 +95,7 @@ public class TasksFragment extends Fragment {
     public void createInputDialog() {
 
 
-        AlertDialog.Builder ad = new AlertDialog.Builder(this.getContext());
+        final BottomSheetDialog bsd = new BottomSheetDialog(this.getContext());
 
         View mView = View.inflate(this.getContext(), R.layout.fragment_task_input, null); //TODO EInes der Layouts elemenieren
 
@@ -154,9 +155,71 @@ public class TasksFragment extends Fragment {
         ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(this.getContext(), simple_spinner_dropdown_item, kinds);
         kindSelection.setAdapter(adapterKind);
 
-        ad.setTitle(R.string.addTask)
-                .setView(mView)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+        FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bsd.cancel();
+            }
+        });
+
+
+        FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (task.getText().toString().isEmpty()) {
+                    createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                    return;
+                }
+
+                Subject subject = (Subject) subjectSelection.getSelectedItem();
+
+                Calendar due = Calendar.getInstance();//"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche",
+                Calendar now = Calendar.getInstance();
+
+                SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
+                if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
+                    due = subject.getNextLessonAfter(due,sls);
+                } else if (timeSelection.getSelectedItem().toString().equals("Übernächste Stunde")) {
+                    due = subject.getNextLessonAfter(subject.getNextLessonAfter(due,sls),sls);
+                } else if (timeSelection.getSelectedItem().toString().equals("Morgen")) {
+                    due.add(Calendar.DAY_OF_YEAR, 1);
+                } else if (timeSelection.getSelectedItem().toString().equals("Nächste Woche")) {
+                    due.add(Calendar.WEEK_OF_YEAR, 1);
+                } else if (timeSelection.getSelectedItem().toString().matches("\\d*\\.\\d*\\.\\d*")) {
+                    due = Util.getCalendarFromFullString(timeSelection.getSelectedItem().toString());
+                } else {
+                    createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                    return;
+                }
+
+                String shortKind;
+                if (kindSelection.getSelectedItem().toString().equals("Hausaufgabe")) {
+                    shortKind = "HA";
+                } else if (kindSelection.getSelectedItem().toString().equals("Schulaufgabe")) {
+                    shortKind = "SA";
+                } else if (kindSelection.getSelectedItem().toString().equals("Notiz")) {
+                    shortKind = "No";
+                } else {
+                    shortKind = "";
+                    createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                }
+                Task newTask = new Task(task.getText().toString(), Calendar.getInstance(), shortKind, subject, due);
+                subject.addTask(newTask);
+                ((RVAdapterTaskList) recyclerView.getAdapter()).addTask(newTask);
+                root.findViewById(R.id.noTask).setVisibility(View.GONE);
+                subjectManager.save();
+                bsd.cancel();
+            }
+        });
+
+
+        bsd.setTitle(R.string.addTask);
+                /*.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -182,7 +245,7 @@ public class TasksFragment extends Fragment {
                         } else if (timeSelection.getSelectedItem().toString().matches("\\d*\\.\\d*\\.\\d*")) {
                             due = Util.getCalendarFromFullString(timeSelection.getSelectedItem().toString());
                         } else {
-                            createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                            createAlertDialog(/*getString(R.string.warning)*//*"Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
                             return;
                         }
 
@@ -203,8 +266,9 @@ public class TasksFragment extends Fragment {
                         root.findViewById(R.id.noTask).setVisibility(View.GONE);
                         subjectManager.save();
                     }
-                })
-                .show();
+                })*/
+                bsd.setContentView(mView);
+                bsd.show();
     }
 
     public void createInputDialogCalendar() {
