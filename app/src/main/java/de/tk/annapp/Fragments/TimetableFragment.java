@@ -405,10 +405,17 @@ public class TimetableFragment extends Fragment {
                     extraLayout.setVisibility(View.GONE);
                     Subject selectedSubject = (Subject) subjectSelection.getSelectedItem();
                     nameEdittext.setText(selectedSubject.getName());
-                    if (subject.getRatingSub() == 1)
-                        radioBtn1.setChecked(true);
-                    else
-                        radioBtn2.setChecked(true);
+                    if(subject != null){
+                        if (subject.getRatingSub() == 1)
+                            radioBtn1.setChecked(true);
+                        else
+                            radioBtn2.setChecked(true);
+                    }else{
+                        if (selectedSubject.getRatingSub() == 1)
+                            radioBtn1.setChecked(true);
+                        else
+                            radioBtn2.setChecked(true);
+                    }
                     teacherEdittext.setText(selectedSubject.getTeacher());
                     roomInput.setText(selectedSubject.getRoom());
                 }

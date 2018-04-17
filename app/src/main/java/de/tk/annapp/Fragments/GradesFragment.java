@@ -72,8 +72,6 @@ public class GradesFragment extends Fragment {
                     createAlertDialog(getContext().getString(R.string.warning), "Bitte fügen Sie ein Fach hinzu!", android.R.drawable.ic_dialog_alert);
                 } else
                     createInputDialog();
-
-                //TODO Should be removed? subjectManager.save();
             }
         });
         TextView missingSubjectsWarning = (TextView) root.findViewById(R.id.missingSubjectsWarning);
@@ -120,6 +118,8 @@ public class GradesFragment extends Fragment {
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(),R.style.NewDialog);
 
 
+
+
         View mView = View.inflate(this.getContext(), R.layout.fragment_grade_input, null);
         //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
@@ -131,6 +131,7 @@ public class GradesFragment extends Fragment {
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
         final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
+        final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
 
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +140,13 @@ public class GradesFragment extends Fragment {
                     extraLayout.setVisibility(View.VISIBLE);
                 else
                     extraLayout.setVisibility(View.GONE);
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bsd.cancel();
             }
         });
 
@@ -162,6 +170,7 @@ public class GradesFragment extends Fragment {
 
 
         bsd.setTitle(R.string.addGrade);
+
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

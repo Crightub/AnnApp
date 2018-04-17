@@ -21,11 +21,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <Spinner
-            android:id="@+id/subjectSelection"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:layout_editor_absoluteY="24dp" />
+            android:orientation="vertical"
+            android:background="@color/colorPrimary">
+
+            <Spinner
+                android:id="@+id/subjectSelection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:popupBackground="@color/colorPrimary"
+                />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnExtra"
@@ -56,15 +68,6 @@
                     android:hint="Name"
                     android:inputType="textShortMessage" />
 
-                <ImageView
-                    android:id="@+id/btnHelpSubjectName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/ic_help"
-                    android:text="Button" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -103,17 +106,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Lehrer" />
+                    android:hint="Lehrer"
+                    android:inputType="textShortMessage" />
 
-                <ImageView
-                    android:id="@+id/btnHelpteacher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/ic_help"
-                    android:text="Button" />
             </RelativeLayout>
         </LinearLayout>
 
