@@ -8,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -104,8 +103,6 @@ public class SubjectManager {
             ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(filename, Context.MODE_PRIVATE));
             oos.writeObject(subjects);
             oos.writeObject(days);
-            //TODO Experimental
-            sortSubjects();
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -189,10 +186,4 @@ public class SubjectManager {
     }
 
 
-}
-class CustomComparator implements Comparator<Subject> {
-    @Override
-    public int compare(Subject o1, Subject o2) {
-        return o1.getName().compareTo(o2.getName());
-    }
 }

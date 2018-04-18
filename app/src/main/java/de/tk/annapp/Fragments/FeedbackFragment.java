@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.net.URI;
-
 import de.tk.annapp.R;
 
 /**

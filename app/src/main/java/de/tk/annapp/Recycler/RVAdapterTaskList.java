@@ -162,7 +162,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     public void createEditDialog(final Task task) {
         AlertDialog.Builder ad = new AlertDialog.Builder(context);
 
-        View mView = View.inflate(context, R.layout.fragment_task_edit, null);
+        View mView = View.inflate(context, R.layout.dialog_edit_task, null);
 
         Calendar now = Calendar.getInstance();
         String[] duedates;
@@ -229,32 +229,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             }
         });
         timeSelection.setSelection(4);
-        /*if (task.getDue().get(Calendar.YEAR) == now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR))
-            switch (Util.getWeekDayShort(task.getDue())) {
-                case "Mo":
-                    timeSelection.setSelection(0);
-                    break;
-                case "Di":
-                    timeSelection.setSelection(1);
-                    break;
-                case "Mi":
-                    timeSelection.setSelection(2);
-                    break;
-                case "Do":
-                    timeSelection.setSelection(3);
-                    break;
-                case "Fr":
-                    timeSelection.setSelection(4);
-                    break;
-                case "Sa":
-                    timeSelection.setSelection(5);
-                    break;
-                case "So":
-                    timeSelection.setSelection(6);
-                    break;
-            }
-        else
-            timeSelection.setSelection(7);*/
 
         ad.setTitle(context.getString(R.string.editTask) + task.getSubject().getName())
                 .setView(mView)

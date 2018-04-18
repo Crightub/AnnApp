@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 
 import de.tk.annapp.News;
 import de.tk.annapp.R;
-import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
 
 /**

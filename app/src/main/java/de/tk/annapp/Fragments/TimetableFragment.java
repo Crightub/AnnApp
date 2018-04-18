@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +24,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -35,16 +33,12 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.tk.annapp.Day;
 import de.tk.annapp.Lesson;
 import de.tk.annapp.R;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
-import de.tk.annapp.TableView.model.Cell;
-import de.tk.annapp.TableView.model.ColumnHeader;
-import de.tk.annapp.TableView.model.RowHeader;
 import de.tk.annapp.Util;
 
 import static android.R.layout.simple_spinner_dropdown_item;
@@ -58,10 +52,6 @@ public class TimetableFragment extends Fragment {
 
     //public static final int COLUMN_SIZE = 5;
     //public static final int ROW_SIZE = 11;
-
-    private List<RowHeader> mRowHeaderList;
-    private List<ColumnHeader> mColumnHeaderList;
-    private List<List<Cell>> mCellList;
 
     //default spacing
     int spacing = 5;
@@ -320,7 +310,7 @@ public class TimetableFragment extends Fragment {
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
 
 
-        View mView = View.inflate(this.getContext(), R.layout.fragment_lesson_input, null);
+        View mView = View.inflate(this.getContext(), R.layout.dialog_lesson, null);
         //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
 
@@ -493,7 +483,7 @@ public class TimetableFragment extends Fragment {
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
 
 
-        View mView = View.inflate(this.getContext(), R.layout.fragment_lesson_info, null);
+        View mView = View.inflate(this.getContext(), R.layout.dialog_lesson_info, null);
         //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
 
@@ -553,7 +543,7 @@ public class TimetableFragment extends Fragment {
             final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
 
 
-            View mView = View.inflate(this.getContext(), R.layout.fragment_lesson_delete, null);
+            View mView = View.inflate(this.getContext(), R.layout.dialog_lesson_delete, null);
             //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
 
@@ -601,7 +591,7 @@ public class TimetableFragment extends Fragment {
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
 
 
-        View mView = View.inflate(this.getContext(), R.layout.fragment_lesson_edit_question, null);
+        View mView = View.inflate(this.getContext(), R.layout.dialog_lesson_edit, null);
         //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
 

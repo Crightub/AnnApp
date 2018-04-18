@@ -3,14 +3,10 @@ package de.tk.annapp.Fragments;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,13 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
 import de.tk.annapp.Grade;
 import de.tk.annapp.R;
-import de.tk.annapp.Recycler.RVAdapterGradeList;
 import de.tk.annapp.Recycler.RVAdapterSubjectList;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
@@ -120,7 +111,7 @@ public class GradesFragment extends Fragment {
 
 
 
-        View mView = View.inflate(this.getContext(), R.layout.fragment_grade_input, null);
+        View mView = View.inflate(this.getContext(), R.layout.dialog_new_grade, null);
         //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
 

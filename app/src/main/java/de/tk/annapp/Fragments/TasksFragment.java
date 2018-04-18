@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import de.tk.annapp.Lesson;
 import de.tk.annapp.R;
 import de.tk.annapp.Recycler.RVAdapterTaskList;
 import de.tk.annapp.SchoolLessonSystem;
@@ -95,9 +94,9 @@ public class TasksFragment extends Fragment {
     public void createInputDialog() {
 
 
-        final BottomSheetDialog bsd = new BottomSheetDialog(this.getContext());
+        final BottomSheetDialog bsd = new BottomSheetDialog(this.getContext(),R.style.NewDialog);
 
-        View mView = View.inflate(this.getContext(), R.layout.fragment_task_input, null); //TODO EInes der Layouts elemenieren
+        View mView = View.inflate(this.getContext(), R.layout.dialog_new_task, null); //TODO EInes der Layouts elemenieren
 
         String[] duedates = new String[]{"Nächste Stunde", "Übernächste Stunde", "Morgen", "Nächste Woche", "Datum auswählen"};
 
@@ -229,7 +228,6 @@ public class TasksFragment extends Fragment {
                         }
 
                         Subject subject = (Subject) subjectSelection.getSelectedItem();
-
                         Calendar due = Calendar.getInstance();//"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche",
                         Calendar now = Calendar.getInstance();
 

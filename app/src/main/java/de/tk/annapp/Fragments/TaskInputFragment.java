@@ -17,7 +17,7 @@ public class TaskInputFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().setTitle(getString(R.string.addTask));
-        root = inflater.inflate(R.layout.fragment_task_input, container, false);
+        root = inflater.inflate(R.layout.dialog_new_task, container, false);
         return root;
     }
 }

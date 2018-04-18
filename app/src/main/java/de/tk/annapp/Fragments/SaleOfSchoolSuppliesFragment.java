@@ -1,13 +1,12 @@
-
 package de.tk.annapp.Fragments;
 
-        import android.app.Fragment;
-        import android.os.Bundle;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
+import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-        import de.tk.annapp.R;
+import de.tk.annapp.R;
 
 /**
  * Created by Tobi on 20.09.2017.

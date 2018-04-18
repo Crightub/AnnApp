@@ -1,4 +1,3 @@
-
 package de.tk.annapp.Fragments;
 
 import android.app.Fragment;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import de.tk.annapp.R;
+import de.tk.annapp.Recycler.RVAdapterNews;
 
 /**
  * Created by Tobi on 20.09.2017.
@@ -25,6 +25,7 @@ public class AnnanewsFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_annanews, container, false);
         RecyclerView rv = root.findViewById(R.id.rv_news);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv.setAdapter(new RVAdapterNews(getContext()));
         return root;
     }
 }

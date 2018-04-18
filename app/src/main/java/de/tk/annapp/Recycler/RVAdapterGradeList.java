@@ -104,7 +104,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
 
         //View mView = getLayoutInflater().inflate(R.layout.fragment_grade_input, null);
-        View mView = View.inflate(context, R.layout.fragment_grade_edit, null);
+        View mView = View.inflate(context, R.layout.dialog_edit_grade, null);
 
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
         gradeInput.setText(String.valueOf(grade.getGrade()));
