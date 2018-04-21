@@ -32,15 +32,17 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     private ArrayList<Grade> grades;
     private SubjectManager subjectManager;
     private Subject subject;
+    private TextView gradeMessage;
 
     boolean isWrittenBool;
     AlertDialog adTrueDialog;
 
-    public RVAdapterGradeList(Context context, Subject subject){
+    public RVAdapterGradeList(Context context, Subject subject, TextView gradeMessage){
         this.context = context;
         subjectManager = SubjectManager.getInstance();
         this.subject = subject;
         grades = subject.getAllGrades();
+        this.gradeMessage = gradeMessage;
     }
 
     @Override
@@ -246,6 +248,9 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         notifyItemRemoved(formerIndex);
         subjectManager.save();
         ((TextView)((Activity)context).findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
+        if(grades.isEmpty()){
+            gradeMessage.setVisibility(View.VISIBLE);
+        }
     }
     public void addGrade(Grade grade){
         if(grades.contains(grade))
