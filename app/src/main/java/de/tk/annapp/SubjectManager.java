@@ -1,6 +1,7 @@
 package de.tk.annapp;
 
 
+import android.app.Activity;
 import android.content.Context;
 
 import java.io.IOException;
@@ -19,7 +20,9 @@ public class SubjectManager {
 
     String filename;
 
-    private SchoolLessonSystem schoolLessonSystem;
+    Activity activity;
+
+    private SchoolLessonSystem schoolLessonSystem = null;
 
     //Contains all subjects
     ArrayList<Subject> subjects = new ArrayList<Subject>();
@@ -27,11 +30,14 @@ public class SubjectManager {
 
     private SubjectManager(){
         System.out.println("Create SubjectManager...");
-        Set s = new HashSet<Integer>();
-        s.add(1);
-        s.add(3);
-        schoolLessonSystem = new SchoolLessonSystem(480, 45, 20, s);//TODO From Preferences
         days = new Day[]{new Day(0),new Day(1),new Day(2),new Day(3),new Day(4)};
+        if(getSchoolLessonSystem() == null){
+            Set s = new HashSet<Integer>();
+            s.add(2);
+            s.add(4);
+            //TODO Load Data
+            setSchoolLessonSystem(new SchoolLessonSystem(480,45, 15, s));
+        }
     }
 
     //Returns the singelton subjectManager
@@ -41,6 +47,18 @@ public class SubjectManager {
 
     public void setContext(Context c){
         this.context =c;
+    }
+
+    public void setSchoolLessonSystem(SchoolLessonSystem schoolLessonSystem){
+        this.schoolLessonSystem =schoolLessonSystem;
+    }
+
+    public void setActivity(Activity activity){
+        this.activity = activity;
+    }
+
+    public Activity getActivity(){
+        return activity;
     }
 
     public void setFilename(String filename){
@@ -84,12 +102,36 @@ public class SubjectManager {
         return  Util.round(wholeGradeAverage, 2);
     }
 
+    public int getLongestDaysLessons(){
+        int i = 0;
+        System.out.println(i);
+        for (Day d :
+                days) {
+            int x = 0;
+            for (Lesson l :
+                    d.getLessons()) {
+                x++;
+            }
+
+            Boolean subjectExists = false;
+            for(int start = d.getLessons().size(); start>0; start--){
+                if(d.getLesson(start) == null && subjectExists){
+                    x--;
+                } else{
+                    subjectExists = true;
+                }
+            }
+            if(x>i)
+                i=x;
+        }
+        return i;
+    }
+
     public void load() {
         try {
             ObjectInputStream ois = new ObjectInputStream(context.openFileInput(filename));
             subjects = (ArrayList<Subject>) ois.readObject();
             days = (Day[]) ois.readObject();
-            //TODO Experimental
             sortSubjects();
             ois.close();
         } catch (Exception e) {
@@ -167,10 +209,6 @@ public class SubjectManager {
 
     public SchoolLessonSystem getSchoolLessonSystem() {
         return schoolLessonSystem;
-    }
-
-    public void setSchoolLessonSystem(SchoolLessonSystem schoolLessonSystem) {
-        this.schoolLessonSystem = schoolLessonSystem;
     }
 
     public News getNews(int position){

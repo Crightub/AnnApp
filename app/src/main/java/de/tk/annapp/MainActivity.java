@@ -2,6 +2,7 @@ package de.tk.annapp;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import de.tk.annapp.Fragments.*;
 
@@ -46,6 +51,22 @@ public class MainActivity extends AppCompatActivity
         Fragment f = new MyDayFragment();
         Bundle args = new Bundle();
         f.setArguments(args);
+
+        //Set Default ColorScheme for Timetable
+        try {
+            Object obj;
+            ObjectInputStream ois = new ObjectInputStream(this.openFileInput("colorSchemePosition"));
+            obj = ois.readObject();
+            ois.close();
+        } catch (Exception e) {
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(this.openFileOutput("colorSchemePosition", Context.MODE_PRIVATE));
+                oos.writeObject(0);
+                oos.close();
+            } catch (IOException o) {
+                o.printStackTrace();
+            }
+        }
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();

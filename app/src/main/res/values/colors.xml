@@ -20,4 +20,64 @@
     <color name="header_line_color">@android:color/holo_red_light</color>
 
     <color name="default_background_color">@color/cell_background_color</color>
+    
+    
+    <!--Color Schemes for Timetable-->
+
+    <!-- Color Scheme 0 -->
+    <!-- AccentColor -->
+
+    <!-- Color Scheme 1 -->
+    <color name="cs1.header">#303030</color>
+    <color name="cs1.0">#ffab00</color>
+    <color name="cs1.1">#ffaa00</color>
+    <color name="cs1.2">#ff8400</color>
+    <color name="cs1.3">#ffec7e</color>
+    <color name="cs1.4">#d7ac00</color>
+    <color name="cs1.5">#fbc02d</color>
+    <color name="cs1.6">#ffa32b</color>
+    <color name="cs1.7">#c6a500</color>
+    <color name="cs1.8">#fbff00</color>
+    <color name="cs1.9">#ffd500</color>
+    <color name="cs1.10">#ffdd00</color>
+    <color name="cs1.11">#ff7300</color>
+    <color name="cs1.12">#766538</color>
+    <color name="cs1.13">#ab7247</color>
+    <color name="cs1.14">#ffdb4a</color>
+
+    <!-- Color Scheme 2 -->
+    <color name="cs2.header">#303030</color>
+    <color name="cs2.0">#0040ff</color>
+    <color name="cs2.1">#2e2efe</color>
+    <color name="cs2.2">#0000ff</color>
+    <color name="cs2.3">#013adf</color>
+    <color name="cs2.4">#0101df</color>
+    <color name="cs2.5">#3a01df</color>
+    <color name="cs2.6">#0431bf</color>
+    <color name="cs2.7">#0404b4</color>
+    <color name="cs2.8">#08298a</color>
+    <color name="cs2.9">#08088a</color>
+    <color name="cs2.10">#0b2161</color>
+    <color name="cs2.11">#4000ff</color>
+    <color name="cs2.12">#2e64fe</color>
+    <color name="cs2.13">#0b0b3b</color>
+    <color name="cs2.14">#29088a</color>
+
+    <!-- Color Scheme 3 -->
+    <color name="cs3.header">#303030</color>
+    <color name="cs3.0">#1e90ff</color>
+    <color name="cs3.1">#F70303</color>
+    <color name="cs3.2">#00c853</color>
+    <color name="cs3.3">#ffc400</color>
+    <color name="cs3.4">#848484</color>
+    <color name="cs3.5">#E128CF</color>
+    <color name="cs3.6">#ff9100</color>
+    <color name="cs3.7">#006400</color>
+    <color name="cs3.8">#ff4500</color>
+    <color name="cs3.9">#0097a7</color>
+    <color name="cs3.10">#76ff03</color>
+    <color name="cs3.11">#880e4f</color>
+    <color name="cs3.12">#1a237e</color>
+    <color name="cs3.13">#795548</color>
+    <color name="cs3.14">#000000</color>
 </resources>

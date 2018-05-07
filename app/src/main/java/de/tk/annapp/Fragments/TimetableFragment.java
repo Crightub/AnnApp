@@ -2,6 +2,7 @@ package de.tk.annapp.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -32,6 +33,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import de.tk.annapp.Day;
@@ -54,7 +58,7 @@ public class TimetableFragment extends Fragment {
     //public static final int ROW_SIZE = 11;
 
     //default spacing
-    int spacing = 5;
+    int spacing = 4;
 
     boolean dividers;
 
@@ -100,9 +104,9 @@ public class TimetableFragment extends Fragment {
 
         HorizontalScrollView sv = root.findViewById(R.id.background);
 
-        if (dividers){
+        if (dividers) {
             sv.setBackgroundColor(Color.parseColor("#DADADA"));
-        }else{
+        } else {
             sv.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
 
@@ -116,21 +120,28 @@ public class TimetableFragment extends Fragment {
 
         tableLayout.removeAllViews();
 
-        int accentColor = (new Util()).getAccentColor(getContext());
+        int u;
+        System.out.println(subjectManager.getLongestDaysLessons());
+        if((int) getActivity().getPreferences(MODE_PRIVATE).getInt("maxlessons", 11) > subjectManager.getLongestDaysLessons())
+            u = (int) getActivity().getPreferences(MODE_PRIVATE).getInt("maxlessons", 11);
+        else
+            u = subjectManager.getLongestDaysLessons();
 
-        for (int i = 0; i < 12/*TODO Later you should be able to change this in the settings*/; i++) {
+        for (int i = 0; i < u; i++) {
             TableRow tableRow = new TableRow(this.getContext());
+            tableRow.setPadding(0,0,0,spacing);
 
 
             if (i == 0) {
-                Button b = getHeaderButton(accentColor);
-                tableRow.addView(b);
-                tableRow.addView(getDefaultSpace());
 
-                //TODO Register Rowheaders
+                Button b = getHeaderButton((int) getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0));
+                tableRow.addView(b);
+                tableRow.addView(getSpaceButton());
+
+
                 int f = 0;
                 for (int d = 0; d < 5; d++) {
-                    Button btn = getHeaderButton(accentColor);
+                    Button btn = getHeaderButton((int) getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0));
 
                     switch (f) {
                         case (0):
@@ -148,6 +159,12 @@ public class TimetableFragment extends Fragment {
                         case (4):
                             btn.setText("Freitag");
                             break;
+                        case (5):
+                            btn.setText("Samstag");
+                            break;
+                        case (6):
+                            btn.setText("Sonntag");
+                            break;
                         default:
                             btn.setText("Unnamed Day");
                             break;
@@ -155,24 +172,17 @@ public class TimetableFragment extends Fragment {
                     f++;
 
 
-                    tableRow.addView(btn);
 
-                    //horizontal space between buttons
-                    tableRow.addView(getDefaultSpace());
+                    tableRow.addView(btn);
+                    tableRow.addView(getSpaceButton());
 
                 }
             } else {
-                //TODO Register Columnheaders and Cells
-
-                //vertical space between buttons
-                TableRow t = new TableRow(this.getContext());
-                t.addView(getDefaultSpace());
-                tableLayout.addView(t);
-
                 //add row header
-                Button btn = getHeaderButton(accentColor);
+                Button btn = getHeaderButton((int) getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0));
                 btn.setText(i + ". Stunde");
                 tableRow.addView(btn);
+                tableRow.addView(getSpaceButton());
 
                 int x = 0;
 
@@ -188,16 +198,14 @@ public class TimetableFragment extends Fragment {
                     try {
                         cellName = d.getLesson(i).getSubject().getName();
                         //add cell
-                        cell = getCellButton(accentColor, String.valueOf(x) + "#" + String.valueOf(i));
+                        cell = getCellButton(d.getLesson(i).getSubject(), String.valueOf(x) + "#" + String.valueOf(i));
                         ((Button) cell).setText(cellName);
                     } catch (Exception e) {
                         cell = getEmptyCellButton(String.valueOf(x) + "#" + String.valueOf(i));
                     }
 
-                    //add spacing
-                    tableRow.addView(getDefaultSpace());
-
                     tableRow.addView(cell);
+                    tableRow.addView(getSpaceButton());
                 }
 
             }
@@ -207,26 +215,42 @@ public class TimetableFragment extends Fragment {
         }
         TableRow tr = new TableRow(this.getContext());
         Space bottomSpace = new Space(this.getContext());
-        bottomSpace.setMinimumHeight(spacing*2);
+        bottomSpace.setMinimumHeight(spacing * 2);
         tr.addView(bottomSpace);
         tableLayout.addView(tr);
 
 
     }
 
-    Space getDefaultSpace() {
-        Space s = new Space(this.getContext());
-        s.setMinimumWidth(spacing);
-        s.setMinimumHeight(spacing);
-        return s;
+    TextView getSpaceButton(){
+        TextView btn = new TextView(this.getContext());
+        btn.setWidth(spacing);
+        btn.setMinWidth(spacing);
+        btn.setMaxWidth(spacing);
+        return btn;
     }
 
-    Button getHeaderButton(int accentColor) {
+    Button getHeaderButton(int colorScheme) {
         Button btn = new Button(this.getContext());
 
         //general Settings for headers
         btn.setTextColor(getResources().getColor(R.color.default_background_color));
-        btn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        switch(colorScheme){
+            case 0:
+                btn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                break;
+            case 1:
+                btn.setBackgroundColor(getResources().getColor(R.color.cs1_header));
+                break;
+            case 2:
+                btn.setBackgroundColor(getResources().getColor(R.color.cs2_header));
+                break;
+            case 3:
+                btn.setBackgroundColor(getResources().getColor(R.color.cs3_header));
+                break;
+        }
+
+
         btn.setTypeface(null, Typeface.BOLD);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -239,21 +263,180 @@ public class TimetableFragment extends Fragment {
         return btn;
     }
 
-    Button getCellButton(int accentColor, String position) {
+    Button getCellButton(Subject subject, String position) {
         Button btn = new Button(this.getContext());
 
         //general Settings for Cells
         btn.setTextColor(getResources().getColor(R.color.default_background_color));
 
-        btn.setBackgroundColor(accentColor);
+        int color = 0;
+
+        int index = subjectManager.getSubjects().indexOf(subject);
+        for (int i; index > 14; index = index - 14){}
+
+        int colorSchemePosition;
+
+        try {
+            colorSchemePosition = (int) getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition",0);
+        } catch (Exception e){
+            colorSchemePosition = 0; //Default value
+        }
+
+        if (colorSchemePosition == 0) {
+            color = new Util().getAccentColor(this.getContext());
+        } else if (colorSchemePosition == 1) {
+            switch (index) {
+                case 0:
+                    color = getResources().getColor(R.color.cs1_0);
+                    break;
+                case 1:
+                    color = getResources().getColor(R.color.cs1_1);
+                    break;
+                case 2:
+                    color = getResources().getColor(R.color.cs1_2);
+                    break;
+                case 3:
+                    color = getResources().getColor(R.color.cs1_3);
+                    break;
+                case 4:
+                    color = getResources().getColor(R.color.cs1_4);
+                    break;
+                case 5:
+                    color = getResources().getColor(R.color.cs1_5);
+                    break;
+                case 6:
+                    color = getResources().getColor(R.color.cs1_6);
+                    break;
+                case 7:
+                    color = getResources().getColor(R.color.cs1_7);
+                    break;
+                case 8:
+                    color = getResources().getColor(R.color.cs1_8);
+                    break;
+                case 9:
+                    color = getResources().getColor(R.color.cs1_9);
+                    break;
+                case 10:
+                    color = getResources().getColor(R.color.cs1_10);
+                    break;
+                case 11:
+                    color = getResources().getColor(R.color.cs1_11);
+                    break;
+                case 12:
+                    color = getResources().getColor(R.color.cs1_12);
+                    break;
+                case 13:
+                    color = getResources().getColor(R.color.cs1_13);
+                    break;
+                case 14:
+                    color = getResources().getColor(R.color.cs1_14);
+                    break;
+            }
+        } else if (colorSchemePosition == 2) {
+            switch (index) {
+                case 0:
+                    color = getResources().getColor(R.color.cs2_0);
+                    break;
+                case 1:
+                    color = getResources().getColor(R.color.cs2_1);
+                    break;
+                case 2:
+                    color = getResources().getColor(R.color.cs2_2);
+                    break;
+                case 3:
+                    color = getResources().getColor(R.color.cs2_3);
+                    break;
+                case 4:
+                    color = getResources().getColor(R.color.cs2_4);
+                    break;
+                case 5:
+                    color = getResources().getColor(R.color.cs2_5);
+                    break;
+                case 6:
+                    color = getResources().getColor(R.color.cs2_6);
+                    break;
+                case 7:
+                    color = getResources().getColor(R.color.cs2_7);
+                    break;
+                case 8:
+                    color = getResources().getColor(R.color.cs2_8);
+                    break;
+                case 9:
+                    color = getResources().getColor(R.color.cs2_9);
+                    break;
+                case 10:
+                    color = getResources().getColor(R.color.cs2_10);
+                    break;
+                case 11:
+                    color = getResources().getColor(R.color.cs2_11);
+                    break;
+                case 12:
+                    color = getResources().getColor(R.color.cs2_12);
+                    break;
+                case 13:
+                    color = getResources().getColor(R.color.cs2_13);
+                    break;
+                case 14:
+                    color = getResources().getColor(R.color.cs2_14);
+                    break;
+            }
+        }else if (colorSchemePosition == 3) {
+            switch (index) {
+                case 0:
+                    color = getResources().getColor(R.color.cs3_0);
+                    break;
+                case 1:
+                    color = getResources().getColor(R.color.cs3_1);
+                    break;
+                case 2:
+                    color = getResources().getColor(R.color.cs3_2);
+                    break;
+                case 3:
+                    color = getResources().getColor(R.color.cs3_3);
+                    break;
+                case 4:
+                    color = getResources().getColor(R.color.cs3_4);
+                    break;
+                case 5:
+                    color = getResources().getColor(R.color.cs3_5);
+                    break;
+                case 6:
+                    color = getResources().getColor(R.color.cs3_6);
+                    break;
+                case 7:
+                    color = getResources().getColor(R.color.cs3_7);
+                    break;
+                case 8:
+                    color = getResources().getColor(R.color.cs3_8);
+                    break;
+                case 9:
+                    color = getResources().getColor(R.color.cs3_9);
+                    break;
+                case 10:
+                    color = getResources().getColor(R.color.cs3_10);
+                    break;
+                case 11:
+                    color = getResources().getColor(R.color.cs3_11);
+                    break;
+                case 12:
+                    color = getResources().getColor(R.color.cs3_12);
+                    break;
+                case 13:
+                    color = getResources().getColor(R.color.cs3_13);
+                    break;
+                case 14:
+                    color = getResources().getColor(R.color.cs3_14);
+                    break;
+            }
+        }
+
+        btn.setBackgroundColor(color);
 
         btn.setTag(position);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Clicked ", Toast.LENGTH_SHORT).show();
-
                 lessonInfo(view);
             }
         });
@@ -266,7 +449,7 @@ public class TimetableFragment extends Fragment {
 
         //general Settings for empty cells
 
-        if(dividers)
+        if (dividers)
             btn.setBackgroundColor(getResources().getColor(R.color.default_background_color));
         else
             btn.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -297,7 +480,7 @@ public class TimetableFragment extends Fragment {
 
     }
 
-    void lessonInfo(View view){
+    void lessonInfo(View view) {
         String[] s = view.getTag().toString().split("#");
         int x = Integer.valueOf(s[0]) - 1;
         int y = Integer.valueOf(s[1]);
@@ -317,7 +500,7 @@ public class TimetableFragment extends Fragment {
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
         final FloatingActionButton btnClear = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
         final EditText roomInput = (EditText) mView.findViewById(R.id.roomInput);
-        final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnHelp);
+        final ImageView btnRoomHelp = (ImageView) mView.findViewById(R.id.btnRoomHelp);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
         final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
         final RadioButton radioBtn1 = mView.findViewById(R.id.rating_1);
@@ -328,22 +511,7 @@ public class TimetableFragment extends Fragment {
 
 
 
-
-        btnExtra.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), subjectEdit.toString(), Toast.LENGTH_SHORT);
-                if (extraLayout.getVisibility() != View.VISIBLE || subjectEdit) {
-                    ((Button) view).setText("Reduzieren");
-                    Toast.makeText(getContext(), "These changes will affect all lessons of this subject!", Toast.LENGTH_LONG).show();
-                } else {
-                    ((Button) view).setText("Erweitern");
-                    extraLayout.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        btnHelp.setOnClickListener(new View.OnClickListener() {
+        btnRoomHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createAlertDialog("Raum", "Raum muss nur eingetragen werden falls er sich von dem für das Fach als Standard eingestellten Raum unterscheiden sollte.", 0);
@@ -354,13 +522,13 @@ public class TimetableFragment extends Fragment {
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection);
 
         //All the stuff for editing subject
-        if(subjectEdit) {
+        if (subjectEdit) {
             Space topSpace = mView.findViewById(R.id.topSpace);
             topSpace.setMinimumHeight(20);
             subjectSelection.setVisibility(View.GONE);
             extraLayout.setVisibility(View.VISIBLE);
             nameEdittext.setText(subject.getName());
-            if(subject.getRatingSub()==1)
+            if (subject.getRatingSub() == 1)
                 radioBtn1.setChecked(true);
             else
                 radioBtn2.setChecked(true);
@@ -379,10 +547,10 @@ public class TimetableFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (pos == subjectSelection.getAdapter().getCount() - 1 || subjectEdit) {
                     if (extraLayout.getVisibility() == View.GONE) {
-                        btnExtra.callOnClick();
                         extraLayout.setVisibility(View.VISIBLE);
+                        btnRoomHelp.setVisibility(View.GONE);
                     }
-                    if(!subjectEdit){
+                    if (!subjectEdit) {
                         nameEdittext.setText("");
                         radioBtn1.setChecked(true);
                         teacherEdittext.setText("");
@@ -395,12 +563,12 @@ public class TimetableFragment extends Fragment {
                     extraLayout.setVisibility(View.GONE);
                     Subject selectedSubject = (Subject) subjectSelection.getSelectedItem();
                     nameEdittext.setText(selectedSubject.getName());
-                    if(subject != null){
+                    if (subject != null) {
                         if (subject.getRatingSub() == 1)
                             radioBtn1.setChecked(true);
                         else
                             radioBtn2.setChecked(true);
-                    }else{
+                    } else {
                         if (selectedSubject.getRatingSub() == 1)
                             radioBtn1.setChecked(true);
                         else
@@ -426,7 +594,7 @@ public class TimetableFragment extends Fragment {
                 Subject oCSubject;
                 Subject selectedsubject = (Subject) subjectSelection.getSelectedItem();
 
-                if (subjectSelection.getSelectedItemPosition() == subjectSelection.getAdapter().getCount()-1) { //Neues Subject
+                if (subjectSelection.getSelectedItemPosition() == subjectSelection.getAdapter().getCount() - 1) { //Neues Subject
                     if (nameEdittext.getText().toString().equals("")) {
                         createAlertDialog("Fehler im Namen", "Der Name darf nicht leer sein", 0);
                         return;
@@ -455,7 +623,7 @@ public class TimetableFragment extends Fragment {
                     selectedsubject.setRoom(roomInput.getText().toString());
                     oCSubject = selectedsubject;
                 }
-                System.out.println(oCSubject+"\\"+ (roomInput.getText().toString().isEmpty() ? null : roomInput.getText().toString())+"\\"+day+"\\"+ time);
+                System.out.println(oCSubject + "\\" + (roomInput.getText().toString().isEmpty() ? null : roomInput.getText().toString()) + "\\" + day + "\\" + time);
                 subjectManager.setLesson(new Lesson(oCSubject, roomInput.getText().toString().isEmpty() ? null : roomInput.getText().toString(), day, time));
 
                 initializeTableView();
@@ -476,7 +644,6 @@ public class TimetableFragment extends Fragment {
     }
 
 
-
     @SuppressLint("ResourceAsColor")
     public void createLessonInfoDialog(final int day, final int time, final Subject subject) {
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
@@ -495,11 +662,6 @@ public class TimetableFragment extends Fragment {
 
         TextView roomTxt = (TextView) mView.findViewById(R.id.roomTxt);
         TextView teacherTxt = (TextView) mView.findViewById(R.id.teacherTxt);
-
-
-
-        roomTxt.setWidth(180);
-        teacherTxt.setWidth(180);
 
         TextView subjectView = (TextView) mView.findViewById(R.id.subjectView);
         TextView teacherView = (TextView) mView.findViewById(R.id.teacherView);
@@ -538,55 +700,55 @@ public class TimetableFragment extends Fragment {
         bsd.show();
     }
 
-    void createDeleteQuestionDialog(final Lesson lesson){
-            //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
-            final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
+    void createDeleteQuestionDialog(final Lesson lesson) {
+        //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
+        final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
 
 
-            View mView = View.inflate(this.getContext(), R.layout.dialog_lesson_delete, null);
-            //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        View mView = View.inflate(this.getContext(), R.layout.dialog_lesson_delete, null);
+        //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
 
-            final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
-            final Button selectionThisLesson = (Button) mView.findViewById(R.id.selectionThisLesson);
-            final Button selectionAllLessons = (Button) mView.findViewById(R.id.selectionAllLessons);
-            final Button selectionSubject = (Button) mView.findViewById(R.id.selectionSubject);
+        final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
+        final Button selectionThisLesson = (Button) mView.findViewById(R.id.selectionThisLesson);
+        final Button selectionAllLessons = (Button) mView.findViewById(R.id.selectionAllLessons);
+        final Button selectionSubject = (Button) mView.findViewById(R.id.selectionSubject);
 
-            selectionAllLessons.setText("Alle " + lesson.getSubject().getName()+"stunden");
+        selectionAllLessons.setText("Alle " + lesson.getSubject().getName() + "stunden");
 
-            selectionThisLesson.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    reallyDeleteQuestionForDAUs(0, lesson, bsd);
-                }
-            });
+        selectionThisLesson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reallyDeleteQuestionForDAUs(0, lesson, bsd);
+            }
+        });
 
-            selectionAllLessons.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    reallyDeleteQuestionForDAUs(1, lesson, bsd);
-                }
-            });
+        selectionAllLessons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reallyDeleteQuestionForDAUs(1, lesson, bsd);
+            }
+        });
 
-            selectionSubject.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    reallyDeleteQuestionForDAUs(2, lesson, bsd);
-                }
-            });
+        selectionSubject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reallyDeleteQuestionForDAUs(2, lesson, bsd);
+            }
+        });
 
-            btnCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    bsd.cancel();
-                }
-            });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bsd.cancel();
+            }
+        });
 
-            bsd.setContentView(mView);
-            bsd.show();
+        bsd.setContentView(mView);
+        bsd.show();
     }
 
-    void createEditQuestionDialog(final Lesson lesson){
+    void createEditQuestionDialog(final Lesson lesson) {
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
 
@@ -602,8 +764,7 @@ public class TimetableFragment extends Fragment {
         selectionThisLesson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO start lesson Edit dialog
-                createNewLessonDialog(lesson.getDay(),lesson.getTime(), lesson.getSubject(), false);
+                createNewLessonDialog(lesson.getDay(), lesson.getTime(), lesson.getSubject(), false);
                 bsd.cancel();
             }
         });
@@ -611,7 +772,6 @@ public class TimetableFragment extends Fragment {
         selectionSubject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO start subject Edit dialog
                 createNewLessonDialog(lesson.getDay(), lesson.getTime(), lesson.getSubject(), true);
                 bsd.cancel();
             }
@@ -648,9 +808,9 @@ public class TimetableFragment extends Fragment {
 
     }
 
-    void reallyDeleteQuestionForDAUs(final int i, final Lesson lesson, final BottomSheetDialog bsd){
+    void reallyDeleteQuestionForDAUs(final int i, final Lesson lesson, final BottomSheetDialog bsd) {
         String message = "";
-        switch (i){
+        switch (i) {
             case 0:
                 message = "Wollen Sie diese Stunde wirklich löschen?";
                 break;
@@ -673,7 +833,7 @@ public class TimetableFragment extends Fragment {
                 .setMessage(message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (i){
+                        switch (i) {
                             case 0:
                                 subjectManager.deleteLesson(lesson);
                                 subjectManager.save();
@@ -699,7 +859,14 @@ public class TimetableFragment extends Fragment {
 
     }
 
-
+    private void setMargins (View view, int left, int top, int right, int bottom) {
+        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            p.setMargins(left, top, right, bottom);
+            view.requestLayout();
+            System.out.println("-----------------------------------------set Margins");
+        }
+    }
 
 }
 

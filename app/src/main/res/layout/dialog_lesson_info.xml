@@ -1,89 +1,98 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#00000000">
 
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="80dp"
-            android:background="#fff"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            android:layout_marginTop="30dp"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="30dp">
+            android:paddingTop="30dp"
+            android:background="@android:color/white">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/teacherTxt"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="50dp"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp"
+                android:text="Lehrer:"
+                android:textColor="@color/colorPrimary"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/teacherTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    android:text="Lehrer:"
-                    android:textColor="@color/colorPrimary" />
-
-                <TextView
-                    android:id="@+id/teacherView"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
-                    android:paddingTop="3dp"
-                    android:text="Teacher"
-                    android:textColor="#ffff"
-                    android:textSize="15dp" />
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="5dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/teacherView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="50dp"
+                android:background="@color/colorPrimary"
+                android:paddingBottom="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingTop="3dp"
+                android:text="Teacher"
+                android:textColor="#ffff"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/teacherTxt"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/roomTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    android:text="Raum:"
-                    android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/roomTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="13dp"
+                android:layout_marginTop="8dp"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp"
+                android:text="Raum:"
+                android:textColor="@color/colorPrimary"
+                android:visibility="visible"
+                app:layout_constraintEnd_toStartOf="@+id/roomView"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teacherTxt" />
 
-                <TextView
-                    android:id="@+id/roomView"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
-                    android:paddingTop="3dp"
-                    android:text="Room"
-                    android:textColor="#ffff"
-                    android:textSize="15dp" />
-            </LinearLayout>
-
-        </LinearLayout>
+            <TextView
+                android:id="@+id/roomView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorPrimary"
+                android:paddingBottom="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingTop="3dp"
+                android:text="Room"
+                android:textColor="#ffff"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/teacherView"
+                app:layout_constraintTop_toBottomOf="@+id/teacherView" />
+        </android.support.constraint.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,8 +112,7 @@
                 android:paddingLeft="10dp"
                 android:text="Fach:"
                 android:textColor="#ffff"
-                android:textSize="25dp"
-                />
+                android:textSize="25dp" />
 
         </LinearLayout>
 

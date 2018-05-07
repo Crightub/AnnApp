@@ -118,7 +118,7 @@ public class GradesFragment extends Fragment {
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
         final EditText ratingInput = (EditText) mView.findViewById(R.id.ratingInput);
         final EditText note = (EditText) mView.findViewById(R.id.note);
-        final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnHelp);
+        final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnRoomHelp);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
         final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);

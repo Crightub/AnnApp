@@ -115,7 +115,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         final EditText note = (EditText) mView.findViewById(R.id.note);
         note.setText(grade.getNote());
 
-        final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnHelp);
+        final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnRoomHelp);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
         final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
 
