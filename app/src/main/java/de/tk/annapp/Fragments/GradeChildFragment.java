@@ -27,18 +27,20 @@ public class GradeChildFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle args = getArguments();
         Subject subject = (Subject) args.get("subject");
-        getActivity().setTitle(subject.getName());
-        if(!subject.getAllGrades().isEmpty()){
-            getActivity().findViewById(R.id.grade).setVisibility(View.VISIBLE);
-            ((TextView)getActivity().findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
-        }
         root = inflater.inflate(R.layout.fragment_gradeschild, container, false);
+        TextView gradeMessage = (TextView) root.findViewById(R.id.noGrade);
+        getActivity().setTitle(subject.getName());
+        if(!subject.getAllGrades().isEmpty()) {
+            gradeMessage.setVisibility(View.INVISIBLE);
+            getActivity().findViewById(R.id.grade).setVisibility(View.VISIBLE);
+            ((TextView) getActivity().findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
+        }
 
         recyclerView = root.findViewById(R.id.recyclerViewGradesId);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        recyclerView.setAdapter(new RVAdapterGradeList(getActivity(), subject));
+        recyclerView.setAdapter(new RVAdapterGradeList(getActivity(), subject, gradeMessage));
 
         return root;
     }

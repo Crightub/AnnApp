@@ -30,7 +30,7 @@
     <string name="ratingOfSubject">Wertung des Fachs</string>
     <string name="addSubject">Fach Hinzufügen</string>
     <string name="addTask">Aufgabe Hinzufügen</string>
-    <string name="insertTask">Keine Aufgaben vorhanden</string>
+    <string name="addGradeMessage">Bitte fügen sie eine neue Note hinzu!</string>
 
     <string-array name="day_names">
         <item>Montag</item>
