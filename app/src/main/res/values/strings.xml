@@ -14,10 +14,11 @@
     <string name="warningMessage">Bitte füllen Sie alle notwendigen Felder aus!</string>
     <string name="grades">Noten</string>
     <string name="lostStuff">Verlorene Sachen</string>
-    <string name="myDay">Mein Tag</string>
+    <string name="Home">Home</string>
     <string name="privateTuition">Nachhilfe</string>
     <string name="saleOfSchoolSupplies">Schulsachenverkauf</string>
     <string name="tasks">Aufgaben</string>
+    <string name="timeTable">Stundenplan</string>
     <string name="ratingList">"Wertung: "</string>
     <string name="editGrade">Note bearbeiten -</string>
     <string name="editTask">Aufgabe bearbeiten -</string>
@@ -60,5 +61,7 @@
         <item>Blautöne</item>
         <item>Bunt</item>
     </string-array>
-    <string name="key_schoolstart" translatable="false">pref_schoolstart</string>
+    <string name="key_schoolstart" translatable="false">schoolstart</string>
+    <string name="schoolCalendar">Schulkalender</string>
+    <string name="AnnaNews">AnnaNews</string>
 </resources>

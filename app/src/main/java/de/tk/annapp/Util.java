@@ -1,5 +1,6 @@
 package de.tk.annapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.TypedValue;
@@ -92,4 +93,5 @@ public class Util {
         }
         return null;
     }
+
 }

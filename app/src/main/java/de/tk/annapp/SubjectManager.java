@@ -26,18 +26,12 @@ public class SubjectManager {
 
     //Contains all subjects
     ArrayList<Subject> subjects = new ArrayList<Subject>();
+    ArrayList<News> news = new ArrayList<>();
     Day[] days;
 
     private SubjectManager(){
         System.out.println("Create SubjectManager...");
         days = new Day[]{new Day(0),new Day(1),new Day(2),new Day(3),new Day(4)};
-        if(getSchoolLessonSystem() == null){
-            Set s = new HashSet<Integer>();
-            s.add(2);
-            s.add(4);
-            //TODO Load Data
-            setSchoolLessonSystem(new SchoolLessonSystem(480,45, 15, s));
-        }
     }
 
     //Returns the singelton subjectManager
@@ -50,6 +44,15 @@ public class SubjectManager {
     }
 
     public void setSchoolLessonSystem(SchoolLessonSystem schoolLessonSystem){
+        if(schoolLessonSystem == null){
+            Set s = new HashSet<Integer>();
+            s.add(2);
+            s.add(4);
+            int schoolstart = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("schoolstart", 480);
+            int lessonTime = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("lessonTime", 45);
+            int breakTime = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("breaktTime", 15);
+            setSchoolLessonSystem(new SchoolLessonSystem(schoolstart, lessonTime, breakTime, s));
+        }
         this.schoolLessonSystem =schoolLessonSystem;
     }
 
@@ -72,6 +75,14 @@ public class SubjectManager {
             return;
         subjects.add(subject);
         save();
+    }
+
+    public ArrayList<News> getNews() {
+        return news;
+    }
+
+    public void addTask(News news){
+        this.news.add(news);
     }
 
     public void removeSubject(Subject subject){
@@ -129,10 +140,11 @@ public class SubjectManager {
 
     public void load() {
         try {
-            ObjectInputStream ois = new ObjectInputStream(context.openFileInput(filename));
+            ObjectInputStream ois = new ObjectInputStream(context.openFileInput("AnnApp"));
             subjects = (ArrayList<Subject>) ois.readObject();
             days = (Day[]) ois.readObject();
             sortSubjects();
+            news = (ArrayList<News>) ois.readObject();
             ois.close();
         } catch (Exception e) {
             System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
@@ -142,9 +154,10 @@ public class SubjectManager {
 
     public void save(){
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(filename, Context.MODE_PRIVATE));
+            ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput("AnnApp", Context.MODE_PRIVATE));
             oos.writeObject(subjects);
             oos.writeObject(days);
+            oos.writeObject(news);
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -211,11 +224,15 @@ public class SubjectManager {
         return schoolLessonSystem;
     }
 
-    public News getNews(int position){
-        return new News("Titel "+position, "Beschreibung",context.getDrawable(R.drawable.ic_fehler_bild));
+    public News getOneNews(int position){
+        return news.get(position);
     }
     public int getNewsCount(){
-        return 5;
+        return news.size();
+    }
+
+    public void addNews(News news){
+        this.news.add(news);
     }
 
     public void sortSubjects(){

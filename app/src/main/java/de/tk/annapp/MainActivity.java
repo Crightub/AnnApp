@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity
         //Creates instance of SubjectManager
         subjectManager = SubjectManager.getInstance();
         subjectManager.setContext(this.getApplicationContext());
-        subjectManager.setFilename("17And18");
+        subjectManager.setActivity(MainActivity.this);
+        subjectManager.setSchoolLessonSystem(null);
 
         subjectManager.load();
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         /*Default Fragment:*/
-        Fragment f = new MyDayFragment();
+        Fragment f = new HomeFragment();
         Bundle args = new Bundle();
         f.setArguments(args);
 
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity
 
         //detects which item was selected -> initiating inserting of the fragment
         if (id == R.id.nav_myday) {
-            fragment = new MyDayFragment();
+            fragment = new HomeFragment();
         } else if (id == R.id.nav_timetable) {
             fragment = new TimetableFragment();
         } else if (id == R.id.nav_grades) {

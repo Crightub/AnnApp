@@ -1,6 +1,11 @@
 package de.tk.annapp.Recycler;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,17 +15,15 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import de.tk.annapp.Fragments.NewsDetailActivity;
+import de.tk.annapp.Fragments.NewsDetailFragment;
 import de.tk.annapp.News;
 import de.tk.annapp.R;
 import de.tk.annapp.SubjectManager;
 
-/**
- * Created by Petrus on 28.03.2018.
- */
 
-public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHolder>{
+public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHolder> {
 
     Context context;
     SubjectManager subjectManager;
@@ -39,14 +42,30 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-        News news = subjectManager.getNews(position);
+        News news = subjectManager.getOneNews(position);
         holder.titel.setText(news.getTitle());
         holder.discription.setText(news.getDiscription());
         holder.image.setImageDrawable(news.getImage());
+        if (news.getImage() == null)
+            holder.image.setVisibility(View.GONE);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(context, NewsDetailActivity.class);
+                intent.putExtra("title", holder.titel.getText().toString());
+                intent.putExtra("text", holder.discription.getText().toString());
+
+                context.startActivity(intent);
+
+            }
+        });
+
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,"Clicked ",Toast.LENGTH_LONG).show();
+                //TODO do menu stuff
             }
         });
     }

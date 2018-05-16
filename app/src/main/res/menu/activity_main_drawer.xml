@@ -6,38 +6,38 @@
         <item
             android:id="@+id/nav_myday"
             android:icon="@drawable/ic_myday"
-            android:title="Mein Tag" />
+            android:title="@string/Home" />
         <item
             android:id="@+id/nav_timetable"
             android:icon="@drawable/ic_timetable"
-            android:title="Stundenplan" />
+            android:title="@string/timeTable" />
         <item
             android:id="@+id/nav_grades"
             android:icon="@drawable/ic_grade"
-            android:title="Noten" />
+            android:title="@string/grades" />
         <item
             android:id="@+id/nav_tasks"
             android:icon="@drawable/ic_task"
-            android:title="Aufgaben"/>
+            android:title="@string/tasks"/>
         <item
             android:id="@+id/nav_calendar"
             android:icon="@drawable/ic_calendar"
-            android:title="Schulkalender"/>
+            android:title="@string/schoolCalendar"/>
         <item
             android:id="@+id/nav_privattuition"
             android:icon="@drawable/ic_privattuition"
-            android:title="Nachhilfe"/>
+            android:title="@string/privateTuition"/>
         <item
             android:id="@+id/nav_saleofschoolsupplies"
             android:icon="@drawable/ic_saleofschoolsupplies"
-            android:title="Schulsachenverkauf"/>
+            android:title="@string/saleOfSchoolSupplies"/>
         <item
             android:id="@+id/nav_loststuff"
             android:icon="@drawable/ic_loststuff"
-            android:title="Fundsachen"/>
+            android:title="@string/lostStuff"/>
         <item
             android:id="@+id/nav_annanews"
-            android:title="AnnaNews"/>
+            android:title="@string/AnnaNews"/>
     </group>
 
 

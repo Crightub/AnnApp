@@ -111,7 +111,7 @@ public class SettingsFragment extends Fragment {
 
         EditText breakTime = root.findViewById(R.id.breakTime);
 
-        breakTime.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt("breakTime", 15)));
+        breakTime.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt("breakTime", 30)));
 
         breakTime.addTextChangedListener(new TextWatcher() {
             @Override
@@ -126,7 +126,9 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                getActivity().getPreferences(MODE_PRIVATE).edit().putInt("breakTime", Integer.valueOf(s.toString()));
+                if(s.toString().isEmpty())
+                    return;
+                getActivity().getPreferences(MODE_PRIVATE).edit().putInt("breakTime", Integer.valueOf(s.toString())).commit();
                 setSchoolLessonSystem();
             }
         });
@@ -147,6 +149,8 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if(s.toString().isEmpty())
+                    return;
                 getActivity().getPreferences(MODE_PRIVATE).edit().putInt("lessonTime", Integer.valueOf(s.toString())).commit();
                 setSchoolLessonSystem();
             }
@@ -172,7 +176,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if(!s.toString().isEmpty())
-                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt("maxlessons", Integer.valueOf(s.toString()));
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt("maxlessons", Integer.valueOf(s.toString())).commit();
             }
         });
 
@@ -221,6 +225,7 @@ public class SettingsFragment extends Fragment {
         System.out.println(schoolLessonSystem.getSchoolstart());
 
         SubjectManager subjectManager = SubjectManager.getInstance();
+        subjectManager.setActivity(getActivity());
         subjectManager.setSchoolLessonSystem(schoolLessonSystem);
     }
 }
