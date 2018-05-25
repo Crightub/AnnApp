@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -34,6 +37,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        //Change the color on top of the toolbar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = MainActivity.this.getWindow();
+            window.setStatusBarColor(Util.getColorPrimaryDark(this.getApplicationContext(), MainActivity.this));
+        }
+
         //Creates instance of SubjectManager
         subjectManager = SubjectManager.getInstance();
         subjectManager.setContext(this.getApplicationContext());
@@ -42,32 +52,23 @@ public class MainActivity extends AppCompatActivity
 
         subjectManager.load();
 
+
+        toolbar.setBackgroundColor(Util.getColorPrimary(this.getApplicationContext(), MainActivity.this));
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        NavigationView navView = findViewById(R.id.nav_view);
+        navView.getHeaderView(0).setBackgroundColor(Util.getColorPrimary(this.getApplicationContext(), MainActivity.this));
+
         /*Default Fragment:*/
         Fragment f = new HomeFragment();
         Bundle args = new Bundle();
         f.setArguments(args);
 
-        //Set Default ColorScheme for Timetable
-        try {
-            Object obj;
-            ObjectInputStream ois = new ObjectInputStream(this.openFileInput("colorSchemePosition"));
-            obj = ois.readObject();
-            ois.close();
-        } catch (Exception e) {
-            try {
-                ObjectOutputStream oos = new ObjectOutputStream(this.openFileOutput("colorSchemePosition", Context.MODE_PRIVATE));
-                oos.writeObject(0);
-                oos.close();
-            } catch (IOException o) {
-                o.printStackTrace();
-            }
-        }
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();

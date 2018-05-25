@@ -2,9 +2,9 @@ package de.tk.annapp.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -33,9 +33,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import de.tk.annapp.Day;
@@ -233,23 +230,7 @@ public class TimetableFragment extends Fragment {
     Button getHeaderButton(int colorScheme) {
         Button btn = new Button(this.getContext());
 
-        //general Settings for headers
-        btn.setTextColor(getResources().getColor(R.color.default_background_color));
-        switch(colorScheme){
-            case 0:
-                btn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                break;
-            case 1:
-                btn.setBackgroundColor(getResources().getColor(R.color.cs1_header));
-                break;
-            case 2:
-                btn.setBackgroundColor(getResources().getColor(R.color.cs2_header));
-                break;
-            case 3:
-                btn.setBackgroundColor(getResources().getColor(R.color.cs3_header));
-                break;
-        }
-
+        btn.setBackgroundColor(Util.getColorPrimary(getContext(), getActivity()));
 
         btn.setTypeface(null, Typeface.BOLD);
 
@@ -269,166 +250,7 @@ public class TimetableFragment extends Fragment {
         //general Settings for Cells
         btn.setTextColor(getResources().getColor(R.color.default_background_color));
 
-        int color = 0;
-
-        int index = subjectManager.getSubjects().indexOf(subject);
-        for (int i; index > 14; index = index - 14){}
-
-        int colorSchemePosition;
-
-        try {
-            colorSchemePosition = (int) getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition",0);
-        } catch (Exception e){
-            colorSchemePosition = 0; //Default value
-        }
-
-        if (colorSchemePosition == 0) {
-            color = new Util().getAccentColor(this.getContext());
-        } else if (colorSchemePosition == 1) {
-            switch (index) {
-                case 0:
-                    color = getResources().getColor(R.color.cs1_0);
-                    break;
-                case 1:
-                    color = getResources().getColor(R.color.cs1_1);
-                    break;
-                case 2:
-                    color = getResources().getColor(R.color.cs1_2);
-                    break;
-                case 3:
-                    color = getResources().getColor(R.color.cs1_3);
-                    break;
-                case 4:
-                    color = getResources().getColor(R.color.cs1_4);
-                    break;
-                case 5:
-                    color = getResources().getColor(R.color.cs1_5);
-                    break;
-                case 6:
-                    color = getResources().getColor(R.color.cs1_6);
-                    break;
-                case 7:
-                    color = getResources().getColor(R.color.cs1_7);
-                    break;
-                case 8:
-                    color = getResources().getColor(R.color.cs1_8);
-                    break;
-                case 9:
-                    color = getResources().getColor(R.color.cs1_9);
-                    break;
-                case 10:
-                    color = getResources().getColor(R.color.cs1_10);
-                    break;
-                case 11:
-                    color = getResources().getColor(R.color.cs1_11);
-                    break;
-                case 12:
-                    color = getResources().getColor(R.color.cs1_12);
-                    break;
-                case 13:
-                    color = getResources().getColor(R.color.cs1_13);
-                    break;
-                case 14:
-                    color = getResources().getColor(R.color.cs1_14);
-                    break;
-            }
-        } else if (colorSchemePosition == 2) {
-            switch (index) {
-                case 0:
-                    color = getResources().getColor(R.color.cs2_0);
-                    break;
-                case 1:
-                    color = getResources().getColor(R.color.cs2_1);
-                    break;
-                case 2:
-                    color = getResources().getColor(R.color.cs2_2);
-                    break;
-                case 3:
-                    color = getResources().getColor(R.color.cs2_3);
-                    break;
-                case 4:
-                    color = getResources().getColor(R.color.cs2_4);
-                    break;
-                case 5:
-                    color = getResources().getColor(R.color.cs2_5);
-                    break;
-                case 6:
-                    color = getResources().getColor(R.color.cs2_6);
-                    break;
-                case 7:
-                    color = getResources().getColor(R.color.cs2_7);
-                    break;
-                case 8:
-                    color = getResources().getColor(R.color.cs2_8);
-                    break;
-                case 9:
-                    color = getResources().getColor(R.color.cs2_9);
-                    break;
-                case 10:
-                    color = getResources().getColor(R.color.cs2_10);
-                    break;
-                case 11:
-                    color = getResources().getColor(R.color.cs2_11);
-                    break;
-                case 12:
-                    color = getResources().getColor(R.color.cs2_12);
-                    break;
-                case 13:
-                    color = getResources().getColor(R.color.cs2_13);
-                    break;
-                case 14:
-                    color = getResources().getColor(R.color.cs2_14);
-                    break;
-            }
-        }else if (colorSchemePosition == 3) {
-            switch (index) {
-                case 0:
-                    color = getResources().getColor(R.color.cs3_0);
-                    break;
-                case 1:
-                    color = getResources().getColor(R.color.cs3_1);
-                    break;
-                case 2:
-                    color = getResources().getColor(R.color.cs3_2);
-                    break;
-                case 3:
-                    color = getResources().getColor(R.color.cs3_3);
-                    break;
-                case 4:
-                    color = getResources().getColor(R.color.cs3_4);
-                    break;
-                case 5:
-                    color = getResources().getColor(R.color.cs3_5);
-                    break;
-                case 6:
-                    color = getResources().getColor(R.color.cs3_6);
-                    break;
-                case 7:
-                    color = getResources().getColor(R.color.cs3_7);
-                    break;
-                case 8:
-                    color = getResources().getColor(R.color.cs3_8);
-                    break;
-                case 9:
-                    color = getResources().getColor(R.color.cs3_9);
-                    break;
-                case 10:
-                    color = getResources().getColor(R.color.cs3_10);
-                    break;
-                case 11:
-                    color = getResources().getColor(R.color.cs3_11);
-                    break;
-                case 12:
-                    color = getResources().getColor(R.color.cs3_12);
-                    break;
-                case 13:
-                    color = getResources().getColor(R.color.cs3_13);
-                    break;
-                case 14:
-                    color = getResources().getColor(R.color.cs3_14);
-                    break;
-            }
-        }
+        int color = Util.getSubjectColor(this.getContext(), getActivity(), subject);
 
         btn.setBackgroundColor(color);
 
@@ -498,15 +320,32 @@ public class TimetableFragment extends Fragment {
 
 
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
+        /*Color*/ btnOK.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
+
         final FloatingActionButton btnClear = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
+        /*Color*/ btnClear.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
+
         final EditText roomInput = (EditText) mView.findViewById(R.id.roomInput);
+        /*Color*/ roomInput.setBackgroundTintList(ColorStateList.valueOf(Util.getColorAccent()));
+
         final ImageView btnRoomHelp = (ImageView) mView.findViewById(R.id.btnRoomHelp);
+
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
+        /*Color*/ btnExtra.setTextColor(Util.getColorPrimary(getContext(),getActivity()));
+
         final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
+
         final RadioButton radioBtn1 = mView.findViewById(R.id.rating_1);
+        /*Color*/ radioBtn1.setButtonTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
+
         final RadioButton radioBtn2 = mView.findViewById(R.id.rating_2);
+        /*Color*/ radioBtn2.setButtonTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
+
         final EditText teacherEdittext = mView.findViewById(R.id.teacherInput);
+        /*Color*/ teacherEdittext.setBackgroundTintList(ColorStateList.valueOf(Util.getColorAccent()));
+
         final EditText nameEdittext = mView.findViewById(R.id.subjectNameInput);
+        /*Color*/ nameEdittext.setBackgroundTintList(ColorStateList.valueOf(Util.getColorAccent()));
 
 
 

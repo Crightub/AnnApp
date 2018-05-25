@@ -8,22 +8,26 @@
         android:id="@+id/timeTable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="8dp">
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="1"
-        android:background="?android:attr/listDivider" />
-
     <LinearLayout
-        android:id="@+id/tasks"
+        android:id="@+id/divider"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:background="@android:color/darker_gray">
+
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="de.tk.annapp.Fragments.TasksPreviewFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_weight="1" />
+
 </LinearLayout>

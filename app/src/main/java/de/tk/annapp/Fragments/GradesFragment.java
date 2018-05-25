@@ -2,7 +2,9 @@ package de.tk.annapp.Fragments;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
@@ -27,6 +29,7 @@ import de.tk.annapp.R;
 import de.tk.annapp.Recycler.RVAdapterSubjectList;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
+import de.tk.annapp.Util;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 
@@ -55,6 +58,7 @@ public class GradesFragment extends Fragment {
         }
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd);
+        fabAdd.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,6 +128,7 @@ public class GradesFragment extends Fragment {
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
         final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
 
+        btnExtra.setTextColor(Util.getColorAccent());
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,12 +139,15 @@ public class GradesFragment extends Fragment {
             }
         });
 
+
+        btnCancel.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bsd.cancel();
             }
         });
+
 
         btnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +169,9 @@ public class GradesFragment extends Fragment {
 
 
         bsd.setTitle(R.string.addGrade);
+
+
+        btnOK.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
 
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override

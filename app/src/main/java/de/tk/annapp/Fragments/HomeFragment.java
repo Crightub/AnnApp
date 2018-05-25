@@ -1,9 +1,15 @@
 package de.tk.annapp.Fragments;
 
 import android.app.Fragment;
+import android.app.FragmentContainer;
 import android.app.TimePickerDialog;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.Icon;
 import android.icu.text.TimeZoneFormat;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +17,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Space;
+import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import de.tk.annapp.Lesson;
 import de.tk.annapp.R;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
+import de.tk.annapp.Task;
 import de.tk.annapp.Util;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -31,8 +40,8 @@ public class HomeFragment extends Fragment {
 
     View root;
     LinearLayout timeTable;
-    LinearLayout tasks;
     SubjectManager subjectManager;
+    View divider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,14 +53,18 @@ public class HomeFragment extends Fragment {
 
         timeTable = root.findViewById(R.id.timeTable);
 
-        tasks = root.findViewById(R.id.tasks);
+        divider = root.findViewById(R.id.divider);
 
         setTimeTable();
+        System.out.println("HomeCreated");
+        Util.createPushNotification(this.getContext(), 1, "AnnApp", "Du hast die AnnApp\ngestartet!", R.drawable.ic_add, BitmapFactory.decodeResource(getResources(), R.drawable.ic_add));
+
 
         return root;
 
 
     }
+
 
     void setTimeTable() {
         GregorianCalendar gc = new GregorianCalendar();
@@ -81,26 +94,58 @@ public class HomeFragment extends Fragment {
                 break;
         }
 
+
         if (dayOfWeek != -1) {
+
             for (Lesson l :
                     subjectManager.getDays()[dayOfWeek].getLessons()) {
 
-                Button btn;
+                /*Button btn;
 
                 System.out.println(subjectManager.getDays()[dayOfWeek].getLessons());
 
+                timeTable.setShowDividers(View.VISIBLE);
+
                 if (l == null || l.getSubject() == null)
+
                     btn = getEmptyCellButton("");
                 else {
                     btn = getCellButton(l.getSubject(), "");
                     btn.setText(l.getSubject().getName());
+                }*/
+
+                View btn;
+
+                System.out.println(subjectManager.getDays()[dayOfWeek].getLessons());
+
+                timeTable.setShowDividers(View.VISIBLE);
+
+                if (l == null || l.getSubject() == null)
+
+                    btn = getEmptyCellButton("");
+                else {
+                    btn = getCellCardView(l.getSubject(), "");
                 }
 
                 timeTable.addView(btn);
                 Space space = new Space(getContext());
-                space.setMinimumHeight(1);
+                space.setMinimumHeight(8);
                 timeTable.addView(space);
             }
+
+            try {
+                timeTable.removeViewAt(0);
+            } catch (NullPointerException npe) {
+                divider.setVisibility(View.GONE);
+            }
+        } else {
+
+            TextView tv = new TextView(this.getContext());
+            tv.setText("Heute hast Du keine Schule!");
+            tv.setPadding(0, 50, 0, 0);
+            tv.setGravity(View.TEXT_ALIGNMENT_CENTER);
+            tv.setTextColor(getResources().getColor(R.color.colorAccent));
+            timeTable.addView(tv);
         }
     }
 
@@ -117,174 +162,72 @@ public class HomeFragment extends Fragment {
         for (int i; index > 14; index = index - 14) {
         }
 
-        int colorSchemePosition;
 
-        try {
-            colorSchemePosition = (int) getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
-        } catch (Exception e) {
-            colorSchemePosition = 0; //Default value
-        }
+        color = new Util().getSubjectColor(getContext(), getActivity(), subject);
 
-        if (colorSchemePosition == 0) {
-            color = new Util().getAccentColor(this.getContext());
-        } else if (colorSchemePosition == 1) {
-            switch (index) {
-                case 0:
-                    color = getResources().getColor(R.color.cs1_0);
-                    break;
-                case 1:
-                    color = getResources().getColor(R.color.cs1_1);
-                    break;
-                case 2:
-                    color = getResources().getColor(R.color.cs1_2);
-                    break;
-                case 3:
-                    color = getResources().getColor(R.color.cs1_3);
-                    break;
-                case 4:
-                    color = getResources().getColor(R.color.cs1_4);
-                    break;
-                case 5:
-                    color = getResources().getColor(R.color.cs1_5);
-                    break;
-                case 6:
-                    color = getResources().getColor(R.color.cs1_6);
-                    break;
-                case 7:
-                    color = getResources().getColor(R.color.cs1_7);
-                    break;
-                case 8:
-                    color = getResources().getColor(R.color.cs1_8);
-                    break;
-                case 9:
-                    color = getResources().getColor(R.color.cs1_9);
-                    break;
-                case 10:
-                    color = getResources().getColor(R.color.cs1_10);
-                    break;
-                case 11:
-                    color = getResources().getColor(R.color.cs1_11);
-                    break;
-                case 12:
-                    color = getResources().getColor(R.color.cs1_12);
-                    break;
-                case 13:
-                    color = getResources().getColor(R.color.cs1_13);
-                    break;
-                case 14:
-                    color = getResources().getColor(R.color.cs1_14);
-                    break;
-            }
-        } else if (colorSchemePosition == 2) {
-            switch (index) {
-                case 0:
-                    color = getResources().getColor(R.color.cs2_0);
-                    break;
-                case 1:
-                    color = getResources().getColor(R.color.cs2_1);
-                    break;
-                case 2:
-                    color = getResources().getColor(R.color.cs2_2);
-                    break;
-                case 3:
-                    color = getResources().getColor(R.color.cs2_3);
-                    break;
-                case 4:
-                    color = getResources().getColor(R.color.cs2_4);
-                    break;
-                case 5:
-                    color = getResources().getColor(R.color.cs2_5);
-                    break;
-                case 6:
-                    color = getResources().getColor(R.color.cs2_6);
-                    break;
-                case 7:
-                    color = getResources().getColor(R.color.cs2_7);
-                    break;
-                case 8:
-                    color = getResources().getColor(R.color.cs2_8);
-                    break;
-                case 9:
-                    color = getResources().getColor(R.color.cs2_9);
-                    break;
-                case 10:
-                    color = getResources().getColor(R.color.cs2_10);
-                    break;
-                case 11:
-                    color = getResources().getColor(R.color.cs2_11);
-                    break;
-                case 12:
-                    color = getResources().getColor(R.color.cs2_12);
-                    break;
-                case 13:
-                    color = getResources().getColor(R.color.cs2_13);
-                    break;
-                case 14:
-                    color = getResources().getColor(R.color.cs2_14);
-                    break;
-            }
-        } else if (colorSchemePosition == 3) {
-            switch (index) {
-                case 0:
-                    color = getResources().getColor(R.color.cs3_0);
-                    break;
-                case 1:
-                    color = getResources().getColor(R.color.cs3_1);
-                    break;
-                case 2:
-                    color = getResources().getColor(R.color.cs3_2);
-                    break;
-                case 3:
-                    color = getResources().getColor(R.color.cs3_3);
-                    break;
-                case 4:
-                    color = getResources().getColor(R.color.cs3_4);
-                    break;
-                case 5:
-                    color = getResources().getColor(R.color.cs3_5);
-                    break;
-                case 6:
-                    color = getResources().getColor(R.color.cs3_6);
-                    break;
-                case 7:
-                    color = getResources().getColor(R.color.cs3_7);
-                    break;
-                case 8:
-                    color = getResources().getColor(R.color.cs3_8);
-                    break;
-                case 9:
-                    color = getResources().getColor(R.color.cs3_9);
-                    break;
-                case 10:
-                    color = getResources().getColor(R.color.cs3_10);
-                    break;
-                case 11:
-                    color = getResources().getColor(R.color.cs3_11);
-                    break;
-                case 12:
-                    color = getResources().getColor(R.color.cs3_12);
-                    break;
-                case 13:
-                    color = getResources().getColor(R.color.cs3_13);
-                    break;
-                case 14:
-                    color = getResources().getColor(R.color.cs3_14);
-                    break;
-            }
-        }
+        GradientDrawable shape = new GradientDrawable();
+        shape.setCornerRadius(24);
+        shape.setColor(color);
 
-        btn.setBackgroundColor(color);
+        btn.setBackground(shape);
 
         btn.setTag(position);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO go to TimeTable
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, new TimetableFragment()).commit();
             }
         });
 
         return btn;
+    }
+
+    CardView getCellCardView(Subject subject, String position) {
+        CardView cardView = new CardView(this.getContext());
+
+        //general Settings for Cells
+        //cardView.setTextColor(getResources().getColor(R.color.default_background_color));
+
+        int color = 0;
+
+        int index = subjectManager.getSubjects().indexOf(subject);
+        for (int i; index > 14; index = index - 14) {
+        }
+
+        int colorSchemePosition = getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
+
+        color = new Util().getSubjectColor(getContext(), getActivity(), subject);
+
+        /*GradientDrawable shape =  new GradientDrawable();
+        shape.setCornerRadius( 24 );
+        shape.setColor(color);
+
+        cardView.setBackground(shape);*/
+
+        cardView.setCardBackgroundColor(color);
+        cardView.setCardElevation(3f);
+
+        cardView.setTag(position);
+
+        TextView txt = new TextView(getContext());
+        txt.setText(subject.getName());
+        txt.setTextColor(getContext().getColor(android.R.color.white));
+        txt.setTextSize(20);
+        txt.setPadding(8, 8, 16, 8);
+
+
+        cardView.addView(txt);
+
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, new TimetableFragment()).commit();
+            }
+        });
+
+        return cardView;
     }
 
     Button getEmptyCellButton(String position) {

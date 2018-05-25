@@ -1,16 +1,20 @@
 package de.tk.annapp.Recycler;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
+import android.preference.PreferenceManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -35,12 +39,16 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private SubjectManager subjectManager;
     private TextView taskMessage;
     int pos;
+    int colorSchemePosition;
+    boolean isPreview;
 
-    public RVAdapterTaskList(Context context, TextView taskMessage) {
+    public RVAdapterTaskList(Context context, TextView taskMessage, int colorSchemePosition, boolean isPreview) {
 
         this.context = context;
         this.taskMessage = taskMessage;
         subjectManager = SubjectManager.getInstance();
+        this.colorSchemePosition = colorSchemePosition;
+        this.isPreview = isPreview;
         constructor();
 
     }
@@ -79,7 +87,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     @Override
     public RecyclerVHTask onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_task_list, parent, false);
+        View v;
+        if (!isPreview)
+            v = LayoutInflater.from(context).inflate(R.layout.item_task_list, parent, false);
+        else
+            v = LayoutInflater.from(context).inflate(R.layout.item_task_preview_list, parent, false);
         return new RecyclerVHTask(v);
     }
 
@@ -90,18 +102,24 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             holder.content.setVisibility(View.GONE);
             holder.subjectTxt.setVisibility(View.VISIBLE);
             holder.subjectTxt.setText(tasks.get(position + 1).getSubject().getName());
+            holder.space.setVisibility(View.GONE);
+            holder.cardViewTask.setCardBackgroundColor(new Util().getSubjectColor(context, subjectManager.getActivity(), tasks.get(position + 1).getSubject()));
+            holder.subjectTxt.setTextColor(context.getColor(android.R.color.white));
             return;
         } else {
 
             holder.content.setVisibility(View.VISIBLE);
             holder.subjectTxt.setVisibility(View.GONE);
+            holder.space.setVisibility(View.VISIBLE);
         }
         holder.dateTxt.setText(Util.getDateString(tasks.get(position).getDue())); //When the Task is due
         holder.taskTxt.setText(tasks.get(position).getTask());
         holder.kindTxt.setText(tasks.get(position).getKind());
 
-        holder.editButton.setOnClickListener(new OnEditListener(tasks.get(position)));
-        holder.deleteButton.setOnClickListener(new OnDeleteListener(tasks.get(position)));
+        if (!isPreview) {
+            holder.editButton.setOnClickListener(new OnEditListener(tasks.get(position)));
+            holder.deleteButton.setOnClickListener(new OnDeleteListener(tasks.get(position)));
+        }
     }
 
     @Override
@@ -109,11 +127,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         return tasks.size();
     }
 
-    private class OnEditListener implements View.OnClickListener{
+    private class OnEditListener implements View.OnClickListener {
 
         private Task t;
 
-        public OnEditListener(Task t){
+        public OnEditListener(Task t) {
             this.t = t;
         }
 
@@ -123,11 +141,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
     }
 
-    private class OnDeleteListener implements View.OnClickListener{
+    private class OnDeleteListener implements View.OnClickListener {
 
         private Task t;
 
-        public OnDeleteListener(Task t){
+        public OnDeleteListener(Task t) {
             this.t = t;
         }
 
@@ -146,6 +164,8 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         ImageButton editButton;
         ImageButton deleteButton;
         View content;
+        Button space;
+        CardView cardViewTask;
 
         public RecyclerVHTask(View itemView) {
             super(itemView);
@@ -156,6 +176,8 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             editButton = itemView.findViewById(R.id.button_item_task_edit);
             deleteButton = itemView.findViewById(R.id.button_item_task_delete);
             content = itemView.findViewById(R.id.relativeLayout_item_task_content);
+            space = itemView.findViewById(R.id.space);
+            cardViewTask = itemView.findViewById(R.id.cardViewTask);
         }
     }
 
@@ -171,7 +193,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         else
             duedates = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", Util.getFullDate(task.getDue()), "Datum auswählen"};*/
 
-        duedates = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", Util.getFullDate(task.getDue()), "Datum auswählen"};
+        duedates = new String[]{"Nächste Stunde", "Übernächste Stunde", "Morgen", "Nächste Woche", Util.getFullDate(task.getDue()), "Datum auswählen"};
 
         String[] kinds = new String[]{"Hausaufgabe", "Schulaufgabe", "Notiz"};
 
@@ -209,7 +231,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                            String[] pos = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", dayOfMonth + "." + (monthOfYear+1) + "." + year, "Datum auswählen"};
+                            String[] pos = new String[]{"Nächste Stunde", "Übernächste Stunde", "Morgen", "Nächste Woche", dayOfMonth + "." + (monthOfYear + 1) + "." + year, "Datum auswählen"};
                             ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, pos);
                             timeSelection.setAdapter(adapterTime);
                             timeSelection.setSelection(4);
@@ -244,10 +266,10 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         Calendar due = Calendar.getInstance();
                         SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
                         if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
-                            due = task.getSubject().getNextLessonAfter(due,sls);
+                            due = task.getSubject().getNextLessonAfter(due, sls);
                         } else if (timeSelection.getSelectedItem().toString().equals("Übernächste Stunde")) {
                             System.out.println(due);
-                            due = task.getSubject().getNextLessonAfter(task.getSubject().getNextLessonAfter(due,sls),sls);
+                            due = task.getSubject().getNextLessonAfter(task.getSubject().getNextLessonAfter(due, sls), sls);
                         } else if (timeSelection.getSelectedItem().toString().equals("Morgen")) {
                             due.add(Calendar.DAY_OF_YEAR, 1);
                         } else if (timeSelection.getSelectedItem().toString().equals("Nächste Woche")) {
@@ -355,7 +377,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         subjectManager.save();
 
-        if(tasks.isEmpty()){
+        if (tasks.isEmpty()) {
             taskMessage.setVisibility(View.VISIBLE);
         }
     }
@@ -364,8 +386,8 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         constructor();
         if (tasks.contains(task)) {
             int index = tasks.indexOf(task);
-            if(task.getSubject().getAllTasks().size()==1){
-                notifyItemInserted(index-1);
+            if (task.getSubject().getAllTasks().size() == 1) {
+                notifyItemInserted(index - 1);
                 notifyItemInserted(index);
             } else {
                 notifyItemInserted(index);

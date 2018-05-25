@@ -1,11 +1,7 @@
 package de.tk.annapp.Recycler;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -17,10 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import de.tk.annapp.Fragments.NewsDetailActivity;
-import de.tk.annapp.Fragments.NewsDetailFragment;
 import de.tk.annapp.News;
 import de.tk.annapp.R;
 import de.tk.annapp.SubjectManager;
+import de.tk.annapp.Util;
 
 
 public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHolder> {
@@ -43,9 +39,12 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         News news = subjectManager.getOneNews(position);
-        holder.titel.setText(news.getTitle());
-        holder.discription.setText(news.getDiscription());
+        holder.title.setText(news.getTitle());
+        holder.description.setText(news.getDiscription());
         holder.image.setImageDrawable(news.getImage());
+
+
+
         if (news.getImage() == null)
             holder.image.setVisibility(View.GONE);
 
@@ -54,8 +53,11 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, NewsDetailActivity.class);
-                intent.putExtra("title", holder.titel.getText().toString());
-                intent.putExtra("text", holder.discription.getText().toString());
+                intent.putExtra("title", holder.title.getText().toString());
+                intent.putExtra("text", holder.description.getText().toString());
+
+                intent.putExtra("colorPrimary", Util.getColorPrimary(context, subjectManager.getActivity()));
+                intent.putExtra("colorPrimaryDark", Util.getColorPrimaryDark(context, subjectManager.getActivity()));
 
                 context.startActivity(intent);
 
@@ -77,16 +79,16 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
-        TextView titel;
-        TextView discription;
+        TextView title;
+        TextView description;
         ImageView image;
         ImageButton btn;
 
         NewsViewHolder(View itemView) {
             super(itemView);
             cv = itemView.findViewById(R.id.card_news_card);
-            titel = itemView.findViewById(R.id.card_news_titel);
-            discription = itemView.findViewById(R.id.card_news_discription);
+            title = itemView.findViewById(R.id.card_news_titel);
+            description = itemView.findViewById(R.id.card_news_discription);
             image = itemView.findViewById(R.id.card_news_image);
             btn = itemView.findViewById(R.id.card_news_btn);
         }

@@ -6,10 +6,6 @@
     <color name="colorPrimaryDark">#6a00ff</color-->
     <color name="colorAccent">#2196f3</color>
 
-    <color name="colorPrimaryGreen">#63FF00</color>
-    <color name="colorPrimaryDarkGreen">#14E80C</color>
-    <color name="colorAccentGreen">#ff0d96</color>
-
     <color name="rvItemColor">#616161</color>
 
     <color name="bg_line">#E7E7E7</color>
@@ -22,13 +18,14 @@
     <color name="default_background_color">@color/cell_background_color</color>
     
     
-    <!--Color Schemes for Timetable-->
+    <!--Color Schemes for App-->
 
     <!-- Color Scheme 0 -->
     <!-- AccentColor -->
 
     <!-- Color Scheme 1 -->
-    <color name="cs1.header">#303030</color>
+    <color name="cs1.primary">#303030</color>
+    <color name="cs1.primaryDark">#101010</color>
     <color name="cs1.0">#ffab00</color>
     <color name="cs1.1">#ffaa00</color>
     <color name="cs1.2">#ff8400</color>
@@ -46,7 +43,8 @@
     <color name="cs1.14">#ffdb4a</color>
 
     <!-- Color Scheme 2 -->
-    <color name="cs2.header">#303030</color>
+    <color name="cs2.primary">#303030</color>
+    <color name="cs2.primaryDark">#101010</color>
     <color name="cs2.0">#0040ff</color>
     <color name="cs2.1">#2e2efe</color>
     <color name="cs2.2">#0000ff</color>
@@ -64,7 +62,8 @@
     <color name="cs2.14">#29088a</color>
 
     <!-- Color Scheme 3 -->
-    <color name="cs3.header">#303030</color>
+    <color name="cs3.primary">#303030</color>
+    <color name="cs3.primaryDark">#101010</color>
     <color name="cs3.0">#1e90ff</color>
     <color name="cs3.1">#F70303</color>
     <color name="cs3.2">#00c853</color>

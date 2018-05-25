@@ -68,14 +68,14 @@ public class Lesson implements Serializable, Comparable<Lesson> {
     public Calendar getNextLessonAfter(Calendar base, SchoolLessonSystem sls) {
         Calendar ret = (Calendar) base.clone();
         ret.set(Calendar.DAY_OF_WEEK, Util.calendarWeekdayByDayIndex(day));
-        ret.set(Calendar.HOUR_OF_DAY, (int) Math.floor((double) sls.getSchoolstart() / 60.0));
-        ret.set(Calendar.MINUTE, sls.getSchoolstart() % 60);
-        ret.add(Calendar.MINUTE, time * sls.getLessonLenght());
-        for(Integer b:sls.getBreaksAfterLesson())
+        ret.set(Calendar.HOUR_OF_DAY, (int) Math.floor((double) /**sls.getSchoolstart()*/ /*TODO Change back to schoolstart time from sls*/ 240 / 60.0));
+        ret.set(Calendar.MINUTE, /*sls.getSchoolstart()*/ 240 % 60);
+        ret.add(Calendar.MINUTE, time * /*sls.getLessonLenght()*/45);
+        /*for(Integer b:sls.getBreaksAfterLesson())
             if(b<time)
                 ret.add(Calendar.MINUTE,sls.getBreakLenght());
         if(!ret.after(base))
-            ret.add(Calendar.WEEK_OF_YEAR,1);
+            ret.add(Calendar.WEEK_OF_YEAR,1);*/
         return ret;
     }
 

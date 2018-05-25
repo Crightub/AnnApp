@@ -79,7 +79,7 @@ public class SettingsFragment extends Fragment {
         Button btnSchoolStart = root.findViewById(R.id.btnSchoolStart);
         try {
             int ss = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480);
-            btnSchoolStart.setText(String.valueOf((int)Math.floor(ss/60)) + ":" + String.format("%02d",ss%60));
+            btnSchoolStart.setText(String.valueOf((int) Math.floor(ss / 60)) + ":" + String.format("%02d", ss % 60));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,10 +87,10 @@ public class SettingsFragment extends Fragment {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_schoolstart),hourOfDay*60+minute).commit();
+                getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_schoolstart), hourOfDay * 60 + minute).commit();
                 //save("schoolStartHour", hourOfDay);
                 //save("schoolStartMinute", minute);
-                btnSchoolStart.setText(String.valueOf(hourOfDay) + ":" + String.format("%02d",minute));
+                btnSchoolStart.setText(String.valueOf(hourOfDay) + ":" + String.format("%02d", minute));
                 setSchoolLessonSystem();
             }
         };
@@ -99,10 +99,10 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                int minute = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480)%60;
+                int minute = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480) % 60;
 
                 System.out.println(minute);
-                int hourOfDay = (int) Math.floor(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480)/60);
+                int hourOfDay = (int) Math.floor(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480) / 60);
 
                 TimePickerDialog tpd = new TimePickerDialog(getContext(), onTimeSetListener, hourOfDay, minute, true);
                 tpd.show();
@@ -126,7 +126,7 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty())
+                if (s.toString().isEmpty())
                     return;
                 getActivity().getPreferences(MODE_PRIVATE).edit().putInt("breakTime", Integer.valueOf(s.toString())).commit();
                 setSchoolLessonSystem();
@@ -149,7 +149,7 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty())
+                if (s.toString().isEmpty())
                     return;
                 getActivity().getPreferences(MODE_PRIVATE).edit().putInt("lessonTime", Integer.valueOf(s.toString())).commit();
                 setSchoolLessonSystem();
@@ -175,7 +175,7 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!s.toString().isEmpty())
+                if (!s.toString().isEmpty())
                     getActivity().getPreferences(MODE_PRIVATE).edit().putInt("maxlessons", Integer.valueOf(s.toString())).commit();
             }
         });
@@ -194,7 +194,10 @@ public class SettingsFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getActivity().getPreferences(MODE_PRIVATE).edit().putInt("colorSchemePosition", position).commit();
+                if (getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0) != position) {
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt("colorSchemePosition", position).commit();
+                    getActivity().recreate();
+                }
             }
 
             @Override
@@ -210,7 +213,7 @@ public class SettingsFragment extends Fragment {
     }
 
 
-    void setSchoolLessonSystem(){
+    void setSchoolLessonSystem() {
 
         Set s = new HashSet<Integer>();
         s.add(1);

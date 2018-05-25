@@ -8,7 +8,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
@@ -40,7 +39,7 @@ import de.tk.annapp.Util;
 import static android.R.layout.simple_spinner_dropdown_item;
 
 
-public class TasksFragment extends Fragment {
+public class TasksPreviewFragment extends Fragment {
     View root;
     private SubjectManager subjectManager;
     RecyclerView recyclerView;
@@ -49,18 +48,12 @@ public class TasksFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle(getString(R.string.tasks));
         root = inflater.inflate(R.layout.fragment_tasks, container, false);
 
         subjectManager = SubjectManager.getInstance();
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAddTask);
-        fabAdd.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                createInputDialog();
-            }
-        });
+        fabAdd.setVisibility(View.GONE);
 
         TextView taskMessage = (TextView) root.findViewById(R.id.noTask);
 
@@ -75,7 +68,7 @@ public class TasksFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        recyclerView.setAdapter(new RVAdapterTaskList(getActivity(), taskMessage, getActivity().getPreferences(Context.MODE_PRIVATE).getInt("colorSchemePosition", 0), false));
+        recyclerView.setAdapter(new RVAdapterTaskList(getActivity(), taskMessage, getActivity().getPreferences(Context.MODE_PRIVATE).getInt("colorSchemePosition", 0), true));
 
         return root;
     }
@@ -160,8 +153,6 @@ public class TasksFragment extends Fragment {
 
         FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
 
-        btnCancel.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
-
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,9 +162,6 @@ public class TasksFragment extends Fragment {
 
 
         FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
-
-        btnOK.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
-
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
