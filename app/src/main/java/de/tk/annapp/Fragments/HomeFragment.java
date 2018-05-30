@@ -2,6 +2,7 @@ package de.tk.annapp.Fragments;
 
 import android.app.Fragment;
 import android.app.FragmentContainer;
+import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -42,6 +43,7 @@ public class HomeFragment extends Fragment {
     LinearLayout timeTable;
     SubjectManager subjectManager;
     View divider;
+    View fragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,9 +57,18 @@ public class HomeFragment extends Fragment {
 
         divider = root.findViewById(R.id.divider);
 
+        fragment = root.findViewById(R.id.fragment);
+
+        fragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, new TasksFragment()).commit();
+            }
+        });
+
         setTimeTable();
         System.out.println("HomeCreated");
-        Util.createPushNotification(this.getContext(), 1, "AnnApp", "Du hast die AnnApp\ngestartet!", R.drawable.ic_add, BitmapFactory.decodeResource(getResources(), R.drawable.ic_add));
+        Util.createPushNotification(this.getContext(), "AnnApp", "AnnApp", "Du hast die AnnApp\ngestartet!", R.drawable.ic_add, BitmapFactory.decodeResource(getResources(), R.drawable.ic_add));
 
 
         return root;
@@ -230,12 +241,13 @@ public class HomeFragment extends Fragment {
         return cardView;
     }
 
-    Button getEmptyCellButton(String position) {
-        Button btn = new Button(this.getContext());
+    CardView getEmptyCellButton(String position) {
+        CardView btn = new CardView(this.getContext());
 
         //general Settings for empty cells
 
         btn.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        btn.addView(new TextView(this.getContext()));
 
         btn.setTag(position);
 
@@ -243,7 +255,8 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO go to TimeTable
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new TimetableFragment()).commit();
             }
         });
         return btn;

@@ -1,10 +1,13 @@
 package de.tk.annapp;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.TypedValue;
 
@@ -99,7 +102,33 @@ public class Util {
         return null;
     }
 
+
     public static void createPushNotification(Context context, int ID, String title, String subject, int smallIcon, Bitmap largeIcon) {
+
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "AnnApp";
+            String description = "AnnApp";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(String.valueOf(ID), name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+
+
+        }
+
+        /*NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, ID)
+                .setSmallIcon(smallIcon)
+                .setContentTitle(title)
+                .setContentText(subject)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(subject))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);*/
+
         System.out.println("Start Notification");
         /*Notification noti = new Notification.Builder(context)
                 .setContentTitle(title)
@@ -107,6 +136,7 @@ public class Util {
                 .setSmallIcon(smallIcon)
                 .setLargeIcon(largeIcon)
                 .build();*/
+
 
         NotificationCompat.Builder notif = new NotificationCompat.Builder(context)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -143,11 +173,29 @@ public class Util {
 
     }
 
-    public static  int getColorAccent(){
-        return R.color.colorAccent;
+    public static int getColorAccent(Context context, Activity activity) {
+        int colorAccent;
+        int colorSchemePosition = activity.getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
+
+        switch (colorSchemePosition) {
+            case 1:
+                colorAccent = context.getColor(R.color.cs1_accent);
+                break;
+            case 2:
+                colorAccent = context.getColor(R.color.cs2_accent);
+                break;
+            case 3:
+                colorAccent = context.getColor(R.color.cs3_accent);
+                break;
+            default:
+                colorAccent = context.getColor(R.color.colorAccent);
+                break;
+        }
+
+        return colorAccent;
     }
 
-    public static int getColorPrimaryDark(Context context, Activity activity){
+    public static int getColorPrimaryDark(Context context, Activity activity) {
         int colorSchemePosition = activity.getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
         int color;
         switch (colorSchemePosition) {

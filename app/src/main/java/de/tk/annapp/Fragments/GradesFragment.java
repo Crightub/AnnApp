@@ -128,7 +128,7 @@ public class GradesFragment extends Fragment {
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
         final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
 
-        btnExtra.setTextColor(Util.getColorAccent());
+        btnExtra.setTextColor(Util.getColorAccent(getContext(), getActivity()));
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -26,6 +26,7 @@
     <!-- Color Scheme 1 -->
     <color name="cs1.primary">#303030</color>
     <color name="cs1.primaryDark">#101010</color>
+    <color name="cs1.accent">#1976d2</color>
     <color name="cs1.0">#ffab00</color>
     <color name="cs1.1">#ffaa00</color>
     <color name="cs1.2">#ff8400</color>
@@ -45,6 +46,7 @@
     <!-- Color Scheme 2 -->
     <color name="cs2.primary">#303030</color>
     <color name="cs2.primaryDark">#101010</color>
+    <color name="cs2.accent">#80d8ff</color>
     <color name="cs2.0">#0040ff</color>
     <color name="cs2.1">#2e2efe</color>
     <color name="cs2.2">#0000ff</color>
@@ -64,6 +66,7 @@
     <!-- Color Scheme 3 -->
     <color name="cs3.primary">#303030</color>
     <color name="cs3.primaryDark">#101010</color>
+    <color name="cs3.accent">#64dd17</color>
     <color name="cs3.0">#1e90ff</color>
     <color name="cs3.1">#F70303</color>
     <color name="cs3.2">#00c853</color>
