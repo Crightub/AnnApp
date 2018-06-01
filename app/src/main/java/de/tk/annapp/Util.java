@@ -1,6 +1,7 @@
 package de.tk.annapp;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -151,8 +152,8 @@ public class Util {
 
     }
 
-    public static int getColorPrimary(Context context, Activity activity) {
-        int colorSchemePosition = activity.getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
+    public static int getColorPrimary(Context context) {
+        int colorSchemePosition = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
         int color;
         switch (colorSchemePosition) {
             case 1:
@@ -173,9 +174,9 @@ public class Util {
 
     }
 
-    public static int getColorAccent(Context context, Activity activity) {
+    public static int getColorAccent(Context context) {
         int colorAccent;
-        int colorSchemePosition = activity.getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
+        int colorSchemePosition = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
 
         switch (colorSchemePosition) {
             case 1:
@@ -195,8 +196,8 @@ public class Util {
         return colorAccent;
     }
 
-    public static int getColorPrimaryDark(Context context, Activity activity) {
-        int colorSchemePosition = activity.getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
+    public static int getColorPrimaryDark(Context context) {
+        int colorSchemePosition = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
         int color;
         switch (colorSchemePosition) {
             case 1:
@@ -216,8 +217,8 @@ public class Util {
         return color;
     }
 
-    public static int getSubjectColor(Context context, Activity activity, Subject subject) {
-        int colorSchemePosition = activity.getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
+    public static int getSubjectColor(Context context, Subject subject) {
+        int colorSchemePosition = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
         SubjectManager subjectManager = SubjectManager.getInstance();
         int index = subjectManager.getSubjects().indexOf(subject);
 

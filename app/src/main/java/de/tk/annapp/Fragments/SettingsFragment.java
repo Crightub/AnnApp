@@ -228,7 +228,6 @@ public class SettingsFragment extends Fragment {
         System.out.println(schoolLessonSystem.getSchoolstart());
 
         SubjectManager subjectManager = SubjectManager.getInstance();
-        subjectManager.setActivity(getActivity());
         subjectManager.setSchoolLessonSystem(schoolLessonSystem);
     }
 }

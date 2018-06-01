@@ -58,7 +58,7 @@ public class GradesFragment extends Fragment {
         }
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd);
-        fabAdd.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
+        fabAdd.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext())));
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +128,7 @@ public class GradesFragment extends Fragment {
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
         final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
 
-        btnExtra.setTextColor(Util.getColorAccent(getContext(), getActivity()));
+        btnExtra.setTextColor(Util.getColorAccent(getContext()));
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,7 +140,7 @@ public class GradesFragment extends Fragment {
         });
 
 
-        btnCancel.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
+        btnCancel.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext())));
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +171,7 @@ public class GradesFragment extends Fragment {
         bsd.setTitle(R.string.addGrade);
 
 
-        btnOK.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
+        btnOK.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext())));
 
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override

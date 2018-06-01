@@ -55,7 +55,7 @@ public class TasksFragment extends Fragment {
         subjectManager = SubjectManager.getInstance();
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAddTask);
-        fabAdd.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
+        fabAdd.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext())));
         fabAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 createInputDialog();
@@ -160,7 +160,7 @@ public class TasksFragment extends Fragment {
 
         FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
 
-        btnCancel.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
+        btnCancel.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext())));
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +172,7 @@ public class TasksFragment extends Fragment {
 
         FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
 
-        btnOK.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext(),getActivity())));
+        btnOK.setBackgroundTintList(ColorStateList.valueOf(Util.getColorPrimary(getContext())));
 
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override

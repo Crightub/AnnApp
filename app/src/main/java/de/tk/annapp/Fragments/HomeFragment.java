@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment {
 
         setTimeTable();
         System.out.println("HomeCreated");
-        Util.createPushNotification(this.getContext(), "AnnApp", "AnnApp", "Du hast die AnnApp\ngestartet!", R.drawable.ic_add, BitmapFactory.decodeResource(getResources(), R.drawable.ic_add));
+        Util.createPushNotification(this.getContext(), 0, "AnnApp", "Du hast die AnnApp\ngestartet!", R.drawable.ic_add, BitmapFactory.decodeResource(getResources(), R.drawable.ic_add));
 
 
         return root;
@@ -174,7 +174,7 @@ public class HomeFragment extends Fragment {
         }
 
 
-        color = new Util().getSubjectColor(getContext(), getActivity(), subject);
+        color = new Util().getSubjectColor(getContext(), subject);
 
         GradientDrawable shape = new GradientDrawable();
         shape.setCornerRadius(24);
@@ -208,7 +208,7 @@ public class HomeFragment extends Fragment {
 
         int colorSchemePosition = getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
 
-        color = new Util().getSubjectColor(getContext(), getActivity(), subject);
+        color = new Util().getSubjectColor(getContext(), subject);
 
         /*GradientDrawable shape =  new GradientDrawable();
         shape.setCornerRadius( 24 );

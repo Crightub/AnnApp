@@ -1,5 +1,6 @@
 package de.tk.annapp;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -41,19 +42,19 @@ public class MainActivity extends AppCompatActivity
         //Change the color on top of the toolbar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = MainActivity.this.getWindow();
-            window.setStatusBarColor(Util.getColorPrimaryDark(this.getApplicationContext(), MainActivity.this));
+            window.setStatusBarColor(Util.getColorPrimaryDark(this));
         }
 
         //Creates instance of SubjectManager
         subjectManager = SubjectManager.getInstance();
-        subjectManager.setContext(this.getApplicationContext());
-        subjectManager.setActivity(MainActivity.this);
+        subjectManager.setContext(this);
+
         subjectManager.setSchoolLessonSystem(null);
 
         subjectManager.load();
 
 
-        toolbar.setBackgroundColor(Util.getColorPrimary(this.getApplicationContext(), MainActivity.this));
+        toolbar.setBackgroundColor(Util.getColorPrimary(this));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navView = findViewById(R.id.nav_view);
-        navView.getHeaderView(0).setBackgroundColor(Util.getColorPrimary(this.getApplicationContext(), MainActivity.this));
+        navView.getHeaderView(0).setBackgroundColor(Util.getColorPrimary(this));
 
         /*Default Fragment:*/
         Fragment f = new HomeFragment();

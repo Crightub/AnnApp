@@ -103,7 +103,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             holder.subjectTxt.setVisibility(View.VISIBLE);
             holder.subjectTxt.setText(tasks.get(position + 1).getSubject().getName());
             holder.space.setVisibility(View.GONE);
-            holder.cardViewTask.setCardBackgroundColor(new Util().getSubjectColor(context, subjectManager.getActivity(), tasks.get(position + 1).getSubject()));
+            holder.cardViewTask.setCardBackgroundColor(new Util().getSubjectColor(context, tasks.get(position + 1).getSubject()));
             holder.subjectTxt.setTextColor(context.getColor(android.R.color.white));
             return;
         } else {

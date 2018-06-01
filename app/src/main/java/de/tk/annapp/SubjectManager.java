@@ -20,8 +20,6 @@ public class SubjectManager {
 
     String filename;
 
-    Activity activity;
-
     private SchoolLessonSystem schoolLessonSystem = null;
 
     //Contains all subjects
@@ -48,20 +46,12 @@ public class SubjectManager {
             Set s = new HashSet<Integer>();
             s.add(2);
             s.add(4);
-            int schoolstart = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("schoolstart", 480);
-            int lessonTime = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("lessonTime", 45);
-            int breakTime = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("breaktTime", 15);
+            int schoolstart = ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("schoolstart", 480);
+            int lessonTime = ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("lessonTime", 45);
+            int breakTime = ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("breaktTime", 15);
             setSchoolLessonSystem(new SchoolLessonSystem(schoolstart, lessonTime, breakTime, s));
         }
         this.schoolLessonSystem =schoolLessonSystem;
-    }
-
-    public void setActivity(Activity activity){
-        this.activity = activity;
-    }
-
-    public Activity getActivity(){
-        return activity;
     }
 
     public void setFilename(String filename){
@@ -74,6 +64,7 @@ public class SubjectManager {
         if(subjects.contains(subject))
             return;
         subjects.add(subject);
+        sortSubjects();
         save();
     }
 
@@ -143,7 +134,6 @@ public class SubjectManager {
             ObjectInputStream ois = new ObjectInputStream(context.openFileInput("AnnApp"));
             subjects = (ArrayList<Subject>) ois.readObject();
             days = (Day[]) ois.readObject();
-            sortSubjects();
             news = (ArrayList<News>) ois.readObject();
             ois.close();
         } catch (Exception e) {
