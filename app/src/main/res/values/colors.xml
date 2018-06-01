@@ -5,7 +5,9 @@
     <!--color name="colorPrimary">#00eaff</color>
     <color name="colorPrimaryDark">#6a00ff</color-->
     <color name="colorAccent">#2196f3</color>
-
+    <color name="lausap">#b714ae</color>
+    <color name="lausapd">#3e2723</color>
+    <color name="lausapa">#14b796</color>
     <color name="rvItemColor">#616161</color>
 
     <color name="bg_line">#E7E7E7</color>

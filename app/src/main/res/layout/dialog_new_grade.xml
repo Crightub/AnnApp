@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/colorPrimary">
+            android:background="?colorPrimary">
 
             <Spinner
                 android:id="@+id/subjectSelection"
@@ -27,7 +27,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:popupBackground="@color/colorPrimary" />
+                android:popupBackground="?colorPrimary" />
         </LinearLayout>
 
         <EditText
@@ -68,7 +68,7 @@
             android:layout_gravity="left"
             android:background="#00000000"
             android:text="erweitert"
-            android:textColor="@color/colorAccent" />
+            android:textColor="?colorAccent" />
 
         <LinearLayout
             android:id="@+id/extraLayout"

@@ -56,8 +56,8 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
                 intent.putExtra("title", holder.title.getText().toString());
                 intent.putExtra("text", holder.description.getText().toString());
 
-                intent.putExtra("colorPrimary", Util.getColorPrimary(context));
-                intent.putExtra("colorPrimaryDark", Util.getColorPrimaryDark(context));
+                //TODO DELETE intent.putExtra("colorPrimary", Util.getColorPrimary(context));
+                //TODO DELETE intent.putExtra("colorPrimaryDark", Util.getColorPrimaryDark(context));
 
                 context.startActivity(intent);
 

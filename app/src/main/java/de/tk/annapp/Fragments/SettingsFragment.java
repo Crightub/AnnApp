@@ -4,9 +4,11 @@ package de.tk.annapp.Fragments;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.IntentCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -196,7 +198,11 @@ public class SettingsFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0) != position) {
                     getActivity().getPreferences(MODE_PRIVATE).edit().putInt("colorSchemePosition", position).commit();
-                    getActivity().recreate();
+                    getActivity().finish();
+                    final Intent intent = getActivity().getIntent();
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    getActivity().startActivity(intent);
+                    /*getActivity().recreate();*/
                 }
             }
 

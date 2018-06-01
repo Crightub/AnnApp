@@ -32,7 +32,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
-                android:background="@color/colorAccent"
+                android:background="?colorAccent"
                 android:text="Diese Stunde"
                 android:textColor="#fff" />
 
@@ -43,7 +43,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="3dp"
                 android:layout_weight="1"
-                android:background="@color/colorAccent"
+                android:background="?colorAccent"
                 android:text="Fach"
                 android:textColor="#fff" />
         </LinearLayout>
@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_marginTop="24dp"
-            android:background="@color/colorPrimary"
+            android:background="?colorPrimary"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -50,7 +50,7 @@
             android:layout_gravity="left"
             android:background="#00000000"
             android:text="erweitert"
-            android:textColor="@color/colorAccent" />
+            android:textColor="?colorAccent" />
 
         <LinearLayout
             android:id="@+id/extraLayout"

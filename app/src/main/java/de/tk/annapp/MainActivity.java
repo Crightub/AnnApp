@@ -34,16 +34,14 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setTheme(R.style.AppTheme_green);
+        switch (getPreferences(MODE_PRIVATE).getInt("colorSchemePosition",0)){
+            case 0: break;
+            default:
+                setTheme(R.style.AppThemeColorful);
+        }
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-        //Change the color on top of the toolbar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = MainActivity.this.getWindow();
-            window.setStatusBarColor(Util.getColorPrimaryDark(this));
-        }
 
         //Creates instance of SubjectManager
         subjectManager = SubjectManager.getInstance();
@@ -53,17 +51,11 @@ public class MainActivity extends AppCompatActivity
 
         subjectManager.load();
 
-
-        toolbar.setBackgroundColor(Util.getColorPrimary(this));
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navView = findViewById(R.id.nav_view);
-        navView.getHeaderView(0).setBackgroundColor(Util.getColorPrimary(this));
 
         /*Default Fragment:*/
         Fragment f = new HomeFragment();

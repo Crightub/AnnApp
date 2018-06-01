@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -232,7 +233,10 @@ public class TimetableFragment extends Fragment {
 
         btn.setTextColor(getResources().getColor(android.R.color.white));
 
-        btn.setBackgroundColor(Util.getColorPrimary(getContext()));
+        TypedValue a = new TypedValue();
+        getContext().getTheme().resolveAttribute(android.R.attr.colorAccent, a, true);
+
+        btn.setBackgroundColor(a.data);
 
         btn.setTypeface(null, Typeface.BOLD);
 
@@ -323,32 +327,24 @@ public class TimetableFragment extends Fragment {
 
 
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
-        /*Color*/ btnOK.setBackgroundTintList(ColorStateList.valueOf(Util.getColorAccent(getContext())));
 
         final FloatingActionButton btnClear = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
-        /*Color*/ btnClear.setBackgroundTintList(ColorStateList.valueOf(Util.getColorAccent(getContext())));
 
         final EditText roomInput = (EditText) mView.findViewById(R.id.roomInput);
-        /*Color*/ roomInput.setBackgroundTintList(ColorStateList.valueOf(Util.getColorAccent(getContext())));
 
         final ImageView btnRoomHelp = (ImageView) mView.findViewById(R.id.btnRoomHelp);
 
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
-        /*Color*/ btnExtra.setTextColor(Util.getColorAccent(getContext()));
 
         final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
 
         final RadioButton radioBtn1 = mView.findViewById(R.id.rating_1);
-        /*Color*/ radioBtn1.setButtonTintList(ColorStateList.valueOf(Util.getColorAccent(getContext())));
 
         final RadioButton radioBtn2 = mView.findViewById(R.id.rating_2);
-        /*Color*/ radioBtn2.setButtonTintList(ColorStateList.valueOf(Util.getColorAccent(getContext())));
 
         final EditText teacherEdittext = mView.findViewById(R.id.teacherInput);
-        /*Color*/ teacherEdittext.setBackgroundTintList(ColorStateList.valueOf(Util.getColorAccent(getContext())));
 
         final EditText nameEdittext = mView.findViewById(R.id.subjectNameInput);
-        /*Color*/ nameEdittext.setBackgroundTintList(ColorStateList.valueOf(Util.getColorAccent(getContext())));
 
 
 
