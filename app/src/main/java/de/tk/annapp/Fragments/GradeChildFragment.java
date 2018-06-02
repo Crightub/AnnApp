@@ -23,6 +23,8 @@ public class GradeChildFragment extends Fragment {
 
     RecyclerView recyclerView;
 
+    public static final String TAG = "LessonGradeOverviewFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle args = getArguments();

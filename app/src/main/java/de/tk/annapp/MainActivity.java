@@ -1,11 +1,8 @@
 package de.tk.annapp;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,12 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import de.tk.annapp.Fragments.*;
 
@@ -28,6 +21,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private SubjectManager subjectManager;
+
+    private String currentFragmentTag= null;
+    private Bundle currentFragmentBundel = null;
 
 
     @Override
@@ -58,16 +54,10 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         /*Default Fragment:*/
-        Fragment f = new HomeFragment();
-        Bundle args = new Bundle();
-        f.setArguments(args);
-
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, f)
-                .commit();
+        if (savedInstanceState != null)
+            setFragment(savedInstanceState.getString("fragmentTag",HomeFragment.TAG));
+        else
+            setFragment(HomeFragment.TAG);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -118,34 +108,30 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Fragment fragment = null;
 
-
-        //detects which item was selected -> initiating inserting of the fragment
         if (id == R.id.nav_myday) {
-            fragment = new HomeFragment();
+            setFragment(HomeFragment.TAG);
         } else if (id == R.id.nav_timetable) {
-            fragment = new TimetableFragment();
+            setFragment(TimetableFragment.TAG);
         } else if (id == R.id.nav_grades) {
-            fragment = new GradesFragment();
+            setFragment(GradesFragment.TAG);
         } else if (id == R.id.nav_tasks) {
-            fragment = new TasksFragment();
+            setFragment(TasksFragment.TAG);
         } else if (id == R.id.nav_calendar) {
-            fragment = new CalendarFragment();
+            setFragment(CalendarFragment.TAG);
         } else if (id == R.id.nav_privattuition) {
-            fragment = new PrivateTuitionFragment();
+            setFragment(PrivateTuitionFragment.TAG);
         } else if (id == R.id.nav_saleofschoolsupplies) {
-            fragment = new SaleOfSchoolSuppliesFragment();
+            setFragment(SaleOfSchoolSuppliesFragment.TAG);
         } else if (id == R.id.nav_loststuff) {
-            fragment = new LostStuffFragment();
+            setFragment(LostStuffFragment.TAG);
         } else if (id == R.id.nav_annanews) {
-            fragment = new AnnanewsFragment();
+            setFragment(AnnanewsFragment.TAG);
         } else if (id == R.id.nav_settings) {
-            fragment = new SettingsFragment();
+            setFragment(SettingsFragment.TAG);
         } else if (id == R.id.nav_feedback) {
-            fragment = new FeedbackFragment();
+            setFragment(FeedbackFragment.TAG);
         } else if (id == R.id.nav_share){
-            //sharing stuff
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
             Intent i = new Intent(Intent.ACTION_SEND);
@@ -156,24 +142,65 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
-        if (fragment == null) {
-            System.out.println("Main Activity: Your button for the fragment has no fragment defined to put into the Layout");
-            return false;
-        }
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    public boolean setFragment(String tag){
+        return setFragment(tag,new Bundle());
+    }
 
+    public boolean setFragment(String tag, Bundle bundle){
+        if (tag==null) return false;
+        if(tag.equals(currentFragmentTag)) return true;
 
+        Fragment fragment = null;
+        switch (tag){
+            case HomeFragment.TAG:
+                fragment = new HomeFragment(); break;
+            case TimetableFragment.TAG:
+                fragment = new TimetableFragment(); break;
+            case GradesFragment.TAG:
+                fragment = new GradesFragment(); break;
+            case TasksFragment.TAG:
+                fragment = new TasksFragment(); break;
+            case CalendarFragment.TAG:
+                fragment = new CalendarFragment(); break;
+            case PrivateTuitionFragment.TAG:
+                fragment = new PrivateTuitionFragment();break;
+            case SaleOfSchoolSuppliesFragment.TAG:
+                fragment = new SaleOfSchoolSuppliesFragment(); break;
+            case LostStuffFragment.TAG:
+                fragment = new LostStuffFragment(); break;
+            case AnnanewsFragment.TAG:
+                fragment = new AnnanewsFragment(); break;
+            case SettingsFragment.TAG:
+                fragment = new SettingsFragment(); break;
+            case FeedbackFragment.TAG:
+                fragment = new FeedbackFragment();
+        }
+
+        if (fragment == null) {
+            System.out.println("Main Activity: Your button for the fragment has no fragment defined to put into the Layout");
+            return false;
+        }
+
+        fragment.setArguments(bundle);
+
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack(null)
+                .commit();
+        currentFragmentTag = tag;
+        return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("fragmentTag",currentFragmentTag );
+    }
 }

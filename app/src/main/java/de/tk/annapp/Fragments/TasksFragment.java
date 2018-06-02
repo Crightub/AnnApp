@@ -44,8 +44,8 @@ public class TasksFragment extends Fragment {
     View root;
     private SubjectManager subjectManager;
     RecyclerView recyclerView;
-    private Date selectedDate;
-    private boolean cal;
+
+    public static final String TAG = "TaskFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

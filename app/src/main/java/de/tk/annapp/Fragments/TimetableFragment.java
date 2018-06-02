@@ -70,6 +70,8 @@ public class TimetableFragment extends Fragment {
 
     SubjectManager subjectManager;
 
+    public static final String TAG = "TimetableFragment";
+
     public TimetableFragment() {
         // Required empty public constructor
     }

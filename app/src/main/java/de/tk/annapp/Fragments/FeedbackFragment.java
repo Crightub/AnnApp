@@ -21,6 +21,8 @@ import de.tk.annapp.R;
 public class FeedbackFragment extends Fragment {
     View root;
 
+    public static final String TAG = "FeedbackFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

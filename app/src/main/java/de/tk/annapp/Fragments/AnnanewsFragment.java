@@ -21,6 +21,8 @@ import de.tk.annapp.SubjectManager;
 public class AnnanewsFragment extends Fragment {
     View root;
 
+    public static final String TAG = "AnnanewsFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
