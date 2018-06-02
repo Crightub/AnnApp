@@ -25,6 +25,8 @@ public class NewsDetailFragment extends Fragment {
     String text;
     LinearLayout linearLayout;
 
+    public static final String TAG = "NewsFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

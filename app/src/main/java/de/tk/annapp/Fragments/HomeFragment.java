@@ -45,6 +45,8 @@ public class HomeFragment extends Fragment {
     View divider;
     View fragment;
 
+    public static final String TAG = "HomeFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

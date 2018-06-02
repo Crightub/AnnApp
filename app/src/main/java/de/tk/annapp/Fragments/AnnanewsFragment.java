@@ -47,6 +47,8 @@ public class AnnanewsFragment extends Fragment {
     private ArrayList<News> mFeedModelList;
     private SubjectManager subjectManager;
 
+    public static final String TAG = "AnnanewsFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

@@ -1,4 +1,4 @@
-package de.tk.annapp.Fragments;
+package de.tk.annapp;
 
 import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -8,9 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import de.tk.annapp.R;
-import de.tk.annapp.Util;
 
 public class NewsDetailActivity extends AppCompatActivity {
 

@@ -43,6 +43,8 @@ public class GradesFragment extends Fragment {
 
     RecyclerView recyclerView;
 
+    public static final String TAG = "GradeFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle(getString(R.string.grades));

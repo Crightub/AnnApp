@@ -51,20 +51,10 @@ public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectL
         holder.rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Fragment fragment = new GradeChildFragment();
-
                 Bundle args = new Bundle();
                 TextView subjectTextName = view.findViewById(R.id.item_subject_name);
                 args.putSerializable("subject", subjects.get(position));
-
-                fragment.setArguments(args);
-
-                // Insert the fragment by replacing any existing fragment
-                FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.content_frame, fragment, "GradeChildFragment")
-                        .commit();
+                ((MainActivity) context).setFragment(GradeChildFragment.TAG,args);
             }
         });
         holder.gradeTxt.setText( String.valueOf(subjects.get(position).getGradePointAverage()));

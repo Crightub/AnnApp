@@ -33,6 +33,8 @@ public class CalendarFragment extends Fragment {
     View root;
     CalendarView calendarView;
 
+    public static final String TAG = "CalendarFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

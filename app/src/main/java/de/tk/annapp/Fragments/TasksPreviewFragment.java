@@ -38,13 +38,13 @@ import de.tk.annapp.Util;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 
-
+//TODO Is this really necessary or can be channged to TaskFragment?
 public class TasksPreviewFragment extends Fragment {
     View root;
     private SubjectManager subjectManager;
     RecyclerView recyclerView;
-    private Date selectedDate;
-    private boolean cal;
+
+    public static final String TAG = "HomeTaskFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

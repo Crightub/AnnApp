@@ -46,6 +46,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
     View root;
 
+    public static final String TAG = "SettingsFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -198,11 +200,11 @@ public class SettingsFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0) != position) {
                     getActivity().getPreferences(MODE_PRIVATE).edit().putInt("colorSchemePosition", position).commit();
-                    getActivity().finish();
+                    /*getActivity().finish();
                     final Intent intent = getActivity().getIntent();
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    getActivity().startActivity(intent);
-                    /*getActivity().recreate();*/
+                    getActivity().startActivity(intent);*/
+                    getActivity().recreate();
                 }
             }
 

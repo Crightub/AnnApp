@@ -15,6 +15,8 @@ import de.tk.annapp.R;
 public class SaleOfSchoolSuppliesFragment extends Fragment {
     View root;
 
+    public static final String TAG = "SchoolSuppliesFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

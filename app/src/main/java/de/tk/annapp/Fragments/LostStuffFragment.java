@@ -20,6 +20,8 @@ public class LostStuffFragment extends Fragment {
     EditText lessonSubject;
     Button btn;
 
+    public static final String TAG = "LostStuffFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

@@ -15,6 +15,8 @@ import de.tk.annapp.R;
 public class PrivateTuitionFragment extends Fragment  {
     View root;
 
+    public static final String TAG = "TuitionFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

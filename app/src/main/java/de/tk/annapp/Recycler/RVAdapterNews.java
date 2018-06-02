@@ -12,11 +12,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import de.tk.annapp.Fragments.NewsDetailActivity;
+import de.tk.annapp.NewsDetailActivity;
 import de.tk.annapp.News;
 import de.tk.annapp.R;
 import de.tk.annapp.SubjectManager;
-import de.tk.annapp.Util;
 
 
 public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHolder> {
