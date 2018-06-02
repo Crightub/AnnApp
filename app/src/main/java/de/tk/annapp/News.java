@@ -8,11 +8,13 @@ import android.graphics.drawable.Drawable;
 
 public class News {
     private String title;
+    private String link;
     private String discription;
     private Drawable image;
 
-    public News(String title, String discription, Drawable image) {
+    public News(String title, String link , String discription, Drawable image) {
         this.title = title;
+        this.link = link;
         this.discription = discription;
         this.image = image;
     }

@@ -225,6 +225,10 @@ public class SubjectManager {
         this.news.add(news);
     }
 
+    public void setNews(ArrayList<News> news){
+        this.news = news;
+    }
+
     public void sortSubjects(){
         Collections.sort(subjects,
                 (o1, o2) -> o1.getName().compareTo(o2.getName()));

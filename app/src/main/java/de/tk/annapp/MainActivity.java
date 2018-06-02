@@ -35,8 +35,15 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         //setTheme(R.style.AppTheme_green);
         switch (getPreferences(MODE_PRIVATE).getInt("colorSchemePosition",0)){
-            case 0: break;
-            default:
+            case 0:
+                break;
+            case 1:
+                setTheme(R.style.AppThemeOrange);
+                break;
+            case 2:
+                setTheme(R.style.AppThemeBlue);
+                break;
+            case 3:
                 setTheme(R.style.AppThemeColorful);
         }
         setContentView(R.layout.activity_main);
