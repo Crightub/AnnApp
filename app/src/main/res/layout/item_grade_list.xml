@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appNs="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?backgroundColor">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,11 +17,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:clickable="false"
             android:textAlignment="viewStart"
-            android:textColor="@color/rvItemColor"
+            android:textColor="?defaultTextColor"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:clickable="false"/>
+            android:textStyle="bold" />
 
         <com.ms.square.android.expandabletextview.ExpandableTextView
             android:id="@+id/expandable_text_view"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="50dp"
                 android:layout_weight="1"
-                android:textColor="@color/rvItemColor"
+                android:textColor="?defaultTextColor"
                 android:textSize="16sp"
                 appNs:layout_constraintBottom_toBottomOf="parent"
                 appNs:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,8 @@
                 android:background="@android:color/transparent"
                 android:textAlignment="viewEnd"
                 appNs:layout_constraintBottom_toBottomOf="parent"
-                appNs:layout_constraintEnd_toEndOf="parent" />
+                appNs:layout_constraintEnd_toEndOf="parent"
+                android:tint="?defaultTextColor"/>
 
         </com.ms.square.android.expandabletextview.ExpandableTextView>
 
@@ -75,6 +76,7 @@
         appNs:layout_constraintEnd_toEndOf="@id/item_grade_button_edit"
         appNs:layout_constraintTop_toTopOf="parent"
         appNs:srcCompat="@drawable/ic_delete" />
+
     <ImageButton
         android:id="@+id/item_grade_button_edit"
         android:layout_width="wrap_content"

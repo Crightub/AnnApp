@@ -3,14 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00000000">
+    android:background="?backgroundColor">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:background="#ffffff"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,8 +34,7 @@
                 android:popupBackground="?colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
 
@@ -67,7 +65,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Name"
-                    android:inputType="textShortMessage" />
+                    android:inputType="textShortMessage"
+                    android:textColor="?defaultTextColor" />
 
             </RelativeLayout>
 
@@ -82,14 +81,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="2:1" />
+                    android:text="2:1"
+                    android:textColor="?defaultTextColor" />
 
                 <android.support.v7.widget.AppCompatRadioButton
                     android:id="@+id/rating_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="1:1" />
+                    android:text="1:1"
+                    android:textColor="?defaultTextColor" />
             </RadioGroup>
 
             <RelativeLayout
@@ -117,7 +118,8 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Raum"
-                android:inputType="textShortMessage" />
+                android:inputType="textShortMessage"
+                android:textColor="?defaultTextColor" />
 
             <ImageView
                 android:id="@+id/btnRoomHelp"

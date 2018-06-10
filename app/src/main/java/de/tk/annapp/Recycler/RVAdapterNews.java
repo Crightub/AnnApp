@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import de.tk.annapp.MainActivity;
 import de.tk.annapp.NewsDetailActivity;
 import de.tk.annapp.News;
 import de.tk.annapp.R;
@@ -54,6 +55,7 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
                 Intent intent = new Intent(context, NewsDetailActivity.class);
                 intent.putExtra("title", holder.title.getText().toString());
                 intent.putExtra("text", holder.description.getText().toString());
+                intent.putExtra("colorSchemePosition", ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("colorSchemePosition", 0));
 
                 //TODO DELETE intent.putExtra("colorPrimary", Util.getColorPrimary(context));
                 //TODO DELETE intent.putExtra("colorPrimaryDark", Util.getColorPrimaryDark(context));

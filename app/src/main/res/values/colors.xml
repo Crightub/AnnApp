@@ -18,6 +18,7 @@
     <color name="header_line_color">@android:color/holo_red_light</color>
 
     <color name="default_background_color">@color/cell_background_color</color>
+    <color name="dark_background_color">#212121</color>
     
     
     <!--Color Schemes for App-->

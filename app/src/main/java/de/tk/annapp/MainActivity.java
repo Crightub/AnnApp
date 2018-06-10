@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity
         //setTheme(R.style.AppTheme_green);
         switch (getPreferences(MODE_PRIVATE).getInt("colorSchemePosition",0)){
             case 0:
+                //TODO nur zum Anzeigen
+                //setTheme(R.style.Tim);
                 break;
             case 1:
                 setTheme(R.style.AppThemeOrange);
@@ -185,7 +187,9 @@ public class MainActivity extends AppCompatActivity
             case SettingsFragment.TAG:
                 fragment = new SettingsFragment(); break;
             case FeedbackFragment.TAG:
-                fragment = new FeedbackFragment();
+                fragment = new FeedbackFragment(); break;
+            case GradeChildFragment.TAG:
+                fragment = new GradeChildFragment();
         }
 
         if (fragment == null) {

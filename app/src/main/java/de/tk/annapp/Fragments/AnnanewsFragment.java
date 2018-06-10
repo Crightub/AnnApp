@@ -94,7 +94,7 @@ public class AnnanewsFragment extends Fragment {
                 return false;
 
             try {
-                if(!urlLink.startsWith("http://") && !urlLink.startsWith("https://"))
+                if (!urlLink.startsWith("http://") && !urlLink.startsWith("https://"))
                     urlLink = "http://" + urlLink;
 
                 URL url = new URL(urlLink);
@@ -134,11 +134,11 @@ public class AnnanewsFragment extends Fragment {
                 int eventType = xmlPullParser.getEventType();
 
                 String name = xmlPullParser.getName();
-                if(name == null)
+                if (name == null)
                     continue;
 
-                if(eventType == XmlPullParser.END_TAG) {
-                    if(name.equalsIgnoreCase("item")) {
+                if (eventType == XmlPullParser.END_TAG) {
+                    if (name.equalsIgnoreCase("item")) {
 
                         //TODO Testing
                         News item = new News(title, link, description, image);
@@ -154,7 +154,7 @@ public class AnnanewsFragment extends Fragment {
                 }
 
                 if (eventType == XmlPullParser.START_TAG) {
-                    if(name.equalsIgnoreCase("item")) {
+                    if (name.equalsIgnoreCase("item")) {
                         isItem = true;
                         continue;
                     }
@@ -176,7 +176,7 @@ public class AnnanewsFragment extends Fragment {
                 } else if (name.equalsIgnoreCase("description")) {
                     description = htmlToString(result);
                     System.out.println(result);
-                }else if (name.equalsIgnoreCase("content:encoded")) {
+                } else if (name.equalsIgnoreCase("content:encoded")) {
                     result = result.replace("<p><a href=\"", "");
                     String[] results = result.split("\\\"");
                     result = results[0];
@@ -185,11 +185,10 @@ public class AnnanewsFragment extends Fragment {
                 }
 
                 if (title != null && link != null && description != null && false) {
-                    if(isItem) {
+                    if (isItem) {
                         News item = new News(title, link, description, image);
                         items.add(item);
-                    }
-                    else {
+                    } else {
                         //mFeedTitle = title;
                         //mFeedLink = link;
                         //mFeedDescription = description;
@@ -209,8 +208,13 @@ public class AnnanewsFragment extends Fragment {
 
     public static Drawable drawableFromUrl(String url) throws IOException {
         Bitmap x;
+        HttpURLConnection connection;
 
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        try {
+            connection = (HttpURLConnection) new URL(url).openConnection();
+        } catch (Exception e) {
+            return null;
+        }
         connection.connect();
         InputStream input = connection.getInputStream();
 
@@ -218,12 +222,13 @@ public class AnnanewsFragment extends Fragment {
         return new BitmapDrawable(x);
     }
 
-    public String htmlToString(String string){
+    public String htmlToString(String string) {
         String edit;
         edit = string.replace("&#8220;", "“");
         edit = edit.replace("&#8221;", "”");
         edit = edit.replace("&#8216;", "‘");
         edit = edit.replace("&#8217;", "’");
+        edit = edit.replace("[&#8230;]", "!");
 
         return edit;
     }

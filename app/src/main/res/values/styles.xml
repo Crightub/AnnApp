@@ -17,6 +17,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="backgroundColor">@color/default_background_color</item>
+        <item name="defaultTextColor">#000000</item>
+        <item name="colorTimetableHeader">#616161</item>
         <item name="subject0">@color/colorPrimary</item>
         <item name="subject1">@color/colorPrimary</item>
         <item name="subject2">@color/colorPrimary</item>
@@ -38,6 +41,9 @@
         <item name="colorPrimary">@color/lausap</item>
         <item name="colorPrimaryDark">@color/lausapd</item>
         <item name="colorAccent">@color/lausapa</item>
+        <item name="backgroundColor">@color/dark_background_color</item>
+        <item name="defaultTextColor">#ffffff</item>
+        <item name="colorTimetableHeader">#616161</item>
         <item name="subject0">@color/lausapa</item>
         <item name="subject1">@color/lausapa</item>
         <item name="subject2">@color/lausapa</item>
@@ -59,7 +65,9 @@
         <item name="colorPrimary">@color/cs1.primary</item>
         <item name="colorPrimaryDark">@color/cs1.primaryDark</item>
         <item name="colorAccent">@color/cs1.accent</item>
-        <item name="colorAccent">@color/cs1.0</item>
+        <item name="backgroundColor">@color/dark_background_color</item>
+        <item name="defaultTextColor">#ffffff</item>
+        <item name="colorTimetableHeader">#616161</item>
         <item name="subject0">@color/cs1.0</item>
         <item name="subject1">@color/cs1.1</item>
         <item name="subject2">@color/cs1.2</item>
@@ -81,6 +89,9 @@
         <item name="colorPrimary">@color/cs2.primary</item>
         <item name="colorPrimaryDark">@color/cs2.primaryDark</item>
         <item name="colorAccent">@color/cs2.accent</item>
+        <item name="backgroundColor">@color/dark_background_color</item>
+        <item name="defaultTextColor">#ffffff</item>
+        <item name="colorTimetableHeader">#616161</item>
         <item name="subject0">@color/cs2.0</item>
         <item name="subject1">@color/cs2.1</item>
         <item name="subject2">@color/cs2.2</item>
@@ -102,6 +113,9 @@
         <item name="colorPrimary">@color/cs3.primary</item>
         <item name="colorPrimaryDark">@color/cs3.primaryDark</item>
         <item name="colorAccent">@color/cs3.accent</item>
+        <item name="backgroundColor">@color/dark_background_color</item>
+        <item name="defaultTextColor">#ffffff</item>
+        <item name="colorTimetableHeader">#616161</item>
         <item name="subject0">@color/cs3.0</item>
         <item name="subject1">@color/cs3.1</item>
         <item name="subject2">@color/cs3.2</item>
@@ -117,6 +131,31 @@
         <item name="subject12">@color/cs3.12</item>
         <item name="subject13">@color/cs3.13</item>
         <item name="subject14">@color/cs3.14</item>
+    </style>
+
+
+    <style name="Tim" parent="BasicTheme">
+        <item name="colorPrimary">#0277bd</item>
+        <item name="colorPrimaryDark">#0d47a1</item>
+        <item name="colorAccent">#80d8ff</item>
+        <item name="backgroundColor">@color/default_background_color</item>
+        <item name="defaultTextColor">#424242</item>
+        <item name="colorTimetableHeader">#616161</item>
+        <item name="subject0">#2962ff</item>
+        <item name="subject1">#448aff</item>
+        <item name="subject2">#0d47a1</item>
+        <item name="subject3">#42a5f5</item>
+        <item name="subject4">#1e88e5</item>
+        <item name="subject5">#00b0ff</item>
+        <item name="subject6">#80d8ff</item>
+        <item name="subject7">#0277bd</item>
+        <item name="subject8">#81d4fa</item>
+        <item name="subject9">#40c4ff</item>
+        <item name="subject10">#00e5ff</item>
+        <item name="subject11">#18ffff</item>
+        <item name="subject12">#00bcd4</item>
+        <item name="subject13">#4dd0e1</item>
+        <item name="subject14">#80deea</item>
     </style>
 
 <!--TODO SpinnerColor-->

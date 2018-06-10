@@ -7,6 +7,7 @@
     android:layout_margin="8dp"
     android:paddingEnd="20dp"
     android:paddingStart="10dp"
+    app:cardBackgroundColor="?backgroundColor"
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp">
 
@@ -23,7 +24,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textAlignment="viewStart"
-            android:textColor="@color/rvItemColor"
+            android:textColor="?defaultTextColor"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/item_subject_grade"
@@ -39,7 +40,7 @@
             android:layout_marginTop="8dp"
             android:text="16.0"
             android:textAlignment="viewEnd"
-            android:textColor="@color/rvItemColor"
+            android:textColor="?defaultTextColor"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -7,12 +7,15 @@
     android:background="#00000000">
 
 
-<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="24dp"
+        android:background="?backgroundColor"
         android:orientation="vertical"
-    android:background="#ffffff">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +45,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Aufgabe"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textColor="?defaultTextColor"
+            android:textColorHint="?defaultTextColor" />
 
         <Spinner
             android:id="@+id/spinner_task_input_time"

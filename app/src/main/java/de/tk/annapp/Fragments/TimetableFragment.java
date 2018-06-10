@@ -236,7 +236,7 @@ public class TimetableFragment extends Fragment {
         btn.setTextColor(getResources().getColor(android.R.color.white));
 
         TypedValue a = new TypedValue();
-        getContext().getTheme().resolveAttribute(android.R.attr.colorAccent, a, true);
+        getContext().getTheme().resolveAttribute(R.attr.colorTimetableHeader, a, true);
 
         btn.setBackgroundColor(a.data);
 
