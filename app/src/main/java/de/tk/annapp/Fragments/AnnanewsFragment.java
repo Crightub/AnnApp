@@ -1,9 +1,6 @@
 package de.tk.annapp.Fragments;
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,30 +9,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
-import de.tk.annapp.MainActivity;
 import de.tk.annapp.News;
 import de.tk.annapp.R;
 import de.tk.annapp.Recycler.RVAdapterNews;
-import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Tobi on 20.09.2017.
@@ -99,7 +87,7 @@ public class AnnanewsFragment extends Fragment {
 
                 URL url = new URL(urlLink);
                 InputStream inputStream = url.openConnection().getInputStream();
-                subjectManager.setNews(parseFeed(inputStream));
+                subjectManager.mergeNews(parseFeed(inputStream));
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Error", e);
@@ -115,16 +103,52 @@ public class AnnanewsFragment extends Fragment {
         }
     }
 
+    private String xmlcut(String content, String startTag, String endTag){
+        return content.substring(0,content.indexOf(startTag))+content.substring(content.indexOf(endTag,content.indexOf(startTag))+endTag.length(),content.length());
+    }
+
+    private String xmlget(String content, String startTag, String endTag){
+        String ret = content.substring(content.indexOf(startTag)+startTag.length());
+        return ret.substring(0,ret.indexOf(endTag));
+    }
+
     public ArrayList<News> parseFeed(InputStream inputStream) throws XmlPullParserException,
             IOException {
-        String title = null;
+        /*String title = null;
         String link = null;
         String description = null;
         Drawable image = null;
-        boolean isItem = false;
+        boolean isItem = false;*/
         ArrayList<News> items = new ArrayList<>();
+        java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
+        String content =  s.hasNext() ? s.next() : "";
+        content = content.replaceAll("\n","");
+        content = htmlToString(content);
+        inputStream.close();
+        while (content.contains("<item>")){
+            String item = xmlget(content,"<item>","</item>");
+            content = content.substring(content.indexOf("</item>")+"</item>".length());
+            String title = xmlget(item,"<title>","</title>");
+            String link = xmlget(item,"<link>","</link>");
+            String description = xmlget(item,"<description><![CDATA[","]]></description>");
+            String imageurl = item.contains("<content:encoded><![CDATA[<p><a href=\"") ? xmlget(item,"<content:encoded><![CDATA[<p><a href=\"","\">"):null;
+            String article = xmlget(item,"<content:encoded><![CDATA[","]]></content:encoded>");
+            article = article.replaceAll("</p><p>","\n\n");
+            while (article.contains("<a"))
+                article = xmlcut(article, "<a","</a>");
+            while (article.contains("<span"))
+                article = xmlcut(article, "<span","n></span>");
+            article = article.replaceAll("<p>","");
+            article = article.replaceAll("</p>","");
+            while (article.contains("<p "))
+                article = xmlcut(article,"<p ",">");
+            Drawable image = SubjectManager.getInstance().getFromURl(imageurl);
+            items.add(new News(title,link,description,article,imageurl,image));
+        }
+        return items;
 
-        try {
+
+        /*try {
             XmlPullParser xmlPullParser = Xml.newPullParser();
             xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             xmlPullParser.setInput(inputStream, null);
@@ -203,32 +227,18 @@ public class AnnanewsFragment extends Fragment {
             return items;
         } finally {
             inputStream.close();
-        }
-    }
-
-    public static Drawable drawableFromUrl(String url) throws IOException {
-        Bitmap x;
-        HttpURLConnection connection;
-
-        try {
-            connection = (HttpURLConnection) new URL(url).openConnection();
-        } catch (Exception e) {
-            return null;
-        }
-        connection.connect();
-        InputStream input = connection.getInputStream();
-
-        x = BitmapFactory.decodeStream(input);
-        return new BitmapDrawable(x);
+        }*/
     }
 
     public String htmlToString(String string) {
         String edit;
-        edit = string.replace("&#8220;", "“");
-        edit = edit.replace("&#8221;", "”");
-        edit = edit.replace("&#8216;", "‘");
-        edit = edit.replace("&#8217;", "’");
-        edit = edit.replace("[&#8230;]", "!");
+        edit = string.replaceAll("&#8220;", "“");
+        edit = edit.replaceAll("&#8221;", "”");
+        edit = edit.replaceAll("&#8216;", "‘");
+        edit = edit.replaceAll("&#8217;", "’");
+        edit = edit.replaceAll("&#8230;", "...");
+        edit = edit.replaceAll("&nbsp;", "");
+        edit = edit.replaceAll("&#8211;", "–");
 
         return edit;
     }

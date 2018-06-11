@@ -18,6 +18,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     TextView textView;
     ImageView imageViewToolbar;
     AppBarLayout appBarLayout;
+    News news;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,8 @@ public class NewsDetailActivity extends AppCompatActivity {
                 setTheme(R.style.AppThemeColorful);
         }
 
+        news = (News) bundle.getSerializable("news");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -67,11 +70,13 @@ public class NewsDetailActivity extends AppCompatActivity {
             window.setStatusBarColor(colorPrimaryDark.data);
         }
 
-        this.setTitle(bundle.getString("title"));
+        this.setTitle(news.getTitle());
         this.setTitleColor(android.R.color.white);
 
-        textView.setText(bundle.getString("text"));
-        System.out.println(bundle.getString("text"));
+        imageViewToolbar.setImageDrawable(SubjectManager.getInstance().getFromURl(news.getImageurl()));
+
+        textView.setText(news.getArticle());
+        System.out.println(news.getArticle());
 
 
     }

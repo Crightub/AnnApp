@@ -8,10 +8,17 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.TypedValue;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -150,53 +157,64 @@ public class Util {
         TypedValue a = new TypedValue();
 
         switch (index) {
-                case 0:
-                    context.getTheme().resolveAttribute(R.attr.subject0, a, true);
-                    break;
-                case 1:
-                    context.getTheme().resolveAttribute(R.attr.subject1, a, true);
-                    break;
-                case 2:
-                    context.getTheme().resolveAttribute(R.attr.subject2, a, true);
-                    break;
-                case 3:
-                    context.getTheme().resolveAttribute(R.attr.subject3, a, true);
-                    break;
-                case 4:
-                    context.getTheme().resolveAttribute(R.attr.subject4, a, true);
-                    break;
-                case 5:
-                    context.getTheme().resolveAttribute(R.attr.subject5, a, true);
-                    break;
-                case 6:
-                    context.getTheme().resolveAttribute(R.attr.subject6, a, true);
-                    break;
-                case 7:
-                    context.getTheme().resolveAttribute(R.attr.subject7, a, true);
-                    break;
-                case 8:
-                    context.getTheme().resolveAttribute(R.attr.subject8, a, true);
-                    break;
-                case 9:
-                    context.getTheme().resolveAttribute(R.attr.subject9, a, true);
-                    break;
-                case 10:
-                    context.getTheme().resolveAttribute(R.attr.subject10, a, true);
-                    break;
-                case 11:
-                    context.getTheme().resolveAttribute(R.attr.subject11, a, true);
-                    break;
-                case 12:
-                    context.getTheme().resolveAttribute(R.attr.subject12, a, true);
-                    break;
-                case 13:
-                    context.getTheme().resolveAttribute(R.attr.subject13, a, true);
-                    break;
-                case 14:
-                    context.getTheme().resolveAttribute(R.attr.subject14, a, true);
-                    break;
-            }
+            case 0:
+                context.getTheme().resolveAttribute(R.attr.subject0, a, true);
+                break;
+            case 1:
+                context.getTheme().resolveAttribute(R.attr.subject1, a, true);
+                break;
+            case 2:
+                context.getTheme().resolveAttribute(R.attr.subject2, a, true);
+                break;
+            case 3:
+                context.getTheme().resolveAttribute(R.attr.subject3, a, true);
+                break;
+            case 4:
+                context.getTheme().resolveAttribute(R.attr.subject4, a, true);
+                break;
+            case 5:
+                context.getTheme().resolveAttribute(R.attr.subject5, a, true);
+                break;
+            case 6:
+                context.getTheme().resolveAttribute(R.attr.subject6, a, true);
+                break;
+            case 7:
+                context.getTheme().resolveAttribute(R.attr.subject7, a, true);
+                break;
+            case 8:
+                context.getTheme().resolveAttribute(R.attr.subject8, a, true);
+                break;
+            case 9:
+                context.getTheme().resolveAttribute(R.attr.subject9, a, true);
+                break;
+            case 10:
+                context.getTheme().resolveAttribute(R.attr.subject10, a, true);
+                break;
+            case 11:
+                context.getTheme().resolveAttribute(R.attr.subject11, a, true);
+                break;
+            case 12:
+                context.getTheme().resolveAttribute(R.attr.subject12, a, true);
+                break;
+            case 13:
+                context.getTheme().resolveAttribute(R.attr.subject13, a, true);
+                break;
+            case 14:
+                context.getTheme().resolveAttribute(R.attr.subject14, a, true);
+                break;
+        }
         return a.data;
     }
 
+    public static Drawable drawableFromUrl(String url) throws Exception {
+        Bitmap x;
+        HttpURLConnection connection;
+
+        connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.connect();
+        InputStream input = connection.getInputStream();
+
+        x = BitmapFactory.decodeStream(input);
+        return new BitmapDrawable(x);
+    }
 }

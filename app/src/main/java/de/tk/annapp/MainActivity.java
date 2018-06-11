@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
         else if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+             super.onBackPressed();
         }
     }
 
@@ -172,6 +172,8 @@ public class MainActivity extends AppCompatActivity
                 fragment = new TimetableFragment(); break;
             case GradesFragment.TAG:
                 fragment = new GradesFragment(); break;
+            case GradeChildFragment.TAG:
+                fragment = new GradeChildFragment(); break;
             case TasksFragment.TAG:
                 fragment = new TasksFragment(); break;
             case CalendarFragment.TAG:
@@ -188,8 +190,6 @@ public class MainActivity extends AppCompatActivity
                 fragment = new SettingsFragment(); break;
             case FeedbackFragment.TAG:
                 fragment = new FeedbackFragment(); break;
-            case GradeChildFragment.TAG:
-                fragment = new GradeChildFragment();
         }
 
         if (fragment == null) {

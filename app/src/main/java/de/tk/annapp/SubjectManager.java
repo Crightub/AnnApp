@@ -3,14 +3,21 @@ package de.tk.annapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SubjectManager {
 
@@ -46,9 +53,9 @@ public class SubjectManager {
             Set s = new HashSet<Integer>();
             s.add(2);
             s.add(4);
-            int schoolstart = ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("schoolstart", 480);
-            int lessonTime = ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("lessonTime", 45);
-            int breakTime = ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("breaktTime", 15);
+            int schoolstart = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt("schoolstart", 480);
+            int lessonTime = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt("lessonTime", 45);
+            int breakTime = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt("breaktTime", 15);
             setSchoolLessonSystem(new SchoolLessonSystem(schoolstart, lessonTime, breakTime, s));
         }
         this.schoolLessonSystem =schoolLessonSystem;
@@ -70,10 +77,6 @@ public class SubjectManager {
 
     public ArrayList<News> getNews() {
         return news;
-    }
-
-    public void addTask(News news){
-        this.news.add(news);
     }
 
     public void removeSubject(Subject subject){
@@ -144,7 +147,7 @@ public class SubjectManager {
 
     public void save(){
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput("AnnApp", Context.MODE_PRIVATE));
+            ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput("AnnApp", MODE_PRIVATE));
             oos.writeObject(subjects);
             oos.writeObject(days);
             oos.writeObject(news);
@@ -221,12 +224,19 @@ public class SubjectManager {
         return news.size();
     }
 
-    public void addNews(News news){
-        this.news.add(news);
-    }
-
-    public void setNews(ArrayList<News> news){
-        this.news = news;
+    public void mergeNews(ArrayList<News> news){
+        ArrayList<News> reallyNewNews = new ArrayList<>();
+        for (News n : news) {
+            if (!this.news.contains(n)){
+                System.out.println(n);
+            reallyNewNews.add(n);
+            }else
+                for (int i =0;i<this.news.size();i++)
+                    if (this.news.get(i).equals(n))
+                        this.news.set(i, n);
+        }
+        reallyNewNews.addAll(this.news);
+        this.news = reallyNewNews;
     }
 
     public void sortSubjects(){
@@ -234,5 +244,25 @@ public class SubjectManager {
                 (o1, o2) -> o1.getName().compareTo(o2.getName()));
     }
 
+    public Drawable getFromURl(String url){
+        Drawable d = Drawable.createFromPath(context.getFilesDir().getAbsolutePath()+"/newsimage"+String.valueOf(url.hashCode()));
+        if (d==null)
+            System.out.println("Missing Image: \""+url+"\" ("+String.valueOf(url.hashCode())+")");
+        else
+            return d;
+        System.out.println("Image gets loaded \""+url+"\" ("+String.valueOf(url.hashCode())+")");
+        try {
+            d = Util.drawableFromUrl(url);
+            FileOutputStream fileOutStream = context.openFileOutput("newsimage"+String.valueOf(url.hashCode()), MODE_PRIVATE);
+            ((BitmapDrawable)d).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, fileOutStream);
+            fileOutStream.close();
+            System.out.println("Saved \""+url+"\" ("+String.valueOf(url.hashCode())+")" );
+            //System.out.println("Worked= : "+t2.toString());
+        } catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Failed saving image \""+url+"\" ("+String.valueOf(url.hashCode())+")");
+        }
+        return d;
+    }
 
 }

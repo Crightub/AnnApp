@@ -12,6 +12,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import de.tk.annapp.MainActivity;
 import de.tk.annapp.NewsDetailActivity;
 import de.tk.annapp.News;
@@ -23,10 +26,21 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
 
     Context context;
     SubjectManager subjectManager;
+    HashMap<Integer,Integer> old = new HashMap<Integer,Integer>();
 
     public RVAdapterNews(Context context) {
         this.context = context;
         subjectManager = SubjectManager.getInstance();
+    }
+
+    public void update(){
+        ArrayList<News> nn = subjectManager.getNews();
+        for (int i =0; i< nn.size();i++)
+            if (old.keySet().contains(nn.get(i).getLink().hashCode()))
+                if (old.get(nn.get(i).getLink().hashCode()).equals(nn.get(i).fullHashCode()))
+                    notifyItemChanged(i);
+            else
+                notifyItemInserted(i);
     }
 
     @NonNull
@@ -39,6 +53,7 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         News news = subjectManager.getOneNews(position);
+        old.put(news.getLink().hashCode(),news.fullHashCode());
         holder.title.setText(news.getTitle());
         holder.description.setText(news.getDiscription());
         holder.image.setImageDrawable(news.getImage());
@@ -53,15 +68,10 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, NewsDetailActivity.class);
-                intent.putExtra("title", holder.title.getText().toString());
-                intent.putExtra("text", holder.description.getText().toString());
+                intent.putExtra("news", news);
                 intent.putExtra("colorSchemePosition", ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("colorSchemePosition", 0));
 
-                //TODO DELETE intent.putExtra("colorPrimary", Util.getColorPrimary(context));
-                //TODO DELETE intent.putExtra("colorPrimaryDark", Util.getColorPrimaryDark(context));
-
                 context.startActivity(intent);
-
             }
         });
 
@@ -84,6 +94,7 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
         TextView description;
         ImageView image;
         ImageButton btn;
+        News news;
 
         NewsViewHolder(View itemView) {
             super(itemView);
