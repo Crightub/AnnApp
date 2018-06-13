@@ -54,7 +54,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="20dp"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_fehler_bild" />
+                app:srcCompat="@mipmap/ic_fehler_bild" />
 
             <TextView
                 android:id="@+id/card_news_discription"
