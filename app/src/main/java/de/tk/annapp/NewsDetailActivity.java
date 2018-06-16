@@ -1,5 +1,6 @@
 package de.tk.annapp;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -19,20 +20,17 @@ public class NewsDetailActivity extends AppCompatActivity {
     ImageView imageViewToolbar;
     AppBarLayout appBarLayout;
     News news;
+    int colorPrimary;
+    int colorAccent;
+    int colorPrimaryDark;
+    int defaultTextColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_detail);
-
-        textView = this.findViewById(R.id.textViewText);
-        imageViewToolbar = this.findViewById(R.id.imageViewToolbar);
-        appBarLayout = this.findViewById(R.id.appbar);
-
-        System.out.println("onCreateView");
-
         Bundle bundle = getIntent().getExtras();
-
+        this.setTheme(R.style.AppThemeColorful);
+        System.out.println("colorSchemePosition: "+bundle.getInt("colorSchemePosition"));
         switch (bundle.getInt("colorSchemePosition")){
             case 0:
                 //TODO nur zum Anzeigen
@@ -47,31 +45,45 @@ public class NewsDetailActivity extends AppCompatActivity {
             case 3:
                 setTheme(R.style.AppThemeColorful);
         }
+        setContentView(R.layout.activity_news_detail);
+
+        textView = this.findViewById(R.id.textViewText);
+        imageViewToolbar = this.findViewById(R.id.imageViewToolbar);
+        appBarLayout = this.findViewById(R.id.appbar);
+
+        System.out.println("onCreateView");
+
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        colorPrimary=typedValue.data;
+        getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+        colorPrimaryDark=typedValue.data;
+        getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
+        colorAccent=typedValue.data;
+        getTheme().resolveAttribute(R.attr.defaultTextColor, typedValue, true);
+        defaultTextColor=typedValue.data;
+
+
 
         news = (News) bundle.getSerializable("news");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getColor(android.R.color.white));
         setSupportActionBar(toolbar);
 
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
 
-        TypedValue colorPrimary = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimary, colorPrimary, true);
+        //CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
 
-        collapsingToolbarLayout.setContentScrimColor(colorPrimary.data);
-        appBarLayout.setBackgroundColor(colorPrimary.data);
-
-        TypedValue colorPrimaryDark = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimaryDark, colorPrimaryDark, true);
+        /*collapsingToolbarLayout.setContentScrimColor(colorPrimary);
+        appBarLayout.setBackgroundColor(colorPrimary);*/
 
         //Change the color on top of the toolbar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = NewsDetailActivity.this.getWindow();
-            window.setStatusBarColor(colorPrimaryDark.data);
-        }
+            window.setStatusBarColor(colorPrimaryDark);
+        }*/
 
         this.setTitle(news.getTitle());
-        this.setTitleColor(android.R.color.white);
 
         imageViewToolbar.setImageDrawable(SubjectManager.getInstance().getFromURl(news.getImageurl()));
 

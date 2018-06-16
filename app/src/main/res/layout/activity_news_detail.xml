@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_weight="1"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
+                >
 
 
             </android.support.v7.widget.Toolbar>
@@ -45,7 +45,8 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
+        android:background="?backgroundColor">
 
         <LinearLayout
             android:id="@+id/linearLayout"

@@ -65,8 +65,8 @@
         <item name="colorPrimary">@color/cs1.primary</item>
         <item name="colorPrimaryDark">@color/cs1.primaryDark</item>
         <item name="colorAccent">@color/cs1.accent</item>
-        <item name="backgroundColor">@color/dark_background_color</item>
-        <item name="defaultTextColor">#ffffff</item>
+        <item name="backgroundColor">@color/default_background_color</item>
+        <item name="defaultTextColor">#212121</item>
         <item name="colorTimetableHeader">#616161</item>
         <item name="subject0">@color/cs1.0</item>
         <item name="subject1">@color/cs1.1</item>
@@ -89,8 +89,8 @@
         <item name="colorPrimary">@color/cs2.primary</item>
         <item name="colorPrimaryDark">@color/cs2.primaryDark</item>
         <item name="colorAccent">@color/cs2.accent</item>
-        <item name="backgroundColor">@color/dark_background_color</item>
-        <item name="defaultTextColor">#ffffff</item>
+        <item name="backgroundColor">@color/default_background_color</item>
+        <item name="defaultTextColor">#212121</item>
         <item name="colorTimetableHeader">#616161</item>
         <item name="subject0">@color/cs2.0</item>
         <item name="subject1">@color/cs2.1</item>
@@ -160,13 +160,14 @@
 
 <!--TODO SpinnerColor-->
     <style name="MySpinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">?defaultTextColor</item>
     </style>
 
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 
     <style name="NewDialog">
         <!--item name="android:windowFrame">@null</item-->
