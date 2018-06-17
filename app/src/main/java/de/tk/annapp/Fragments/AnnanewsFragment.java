@@ -50,9 +50,6 @@ public class AnnanewsFragment extends Fragment {
 
         new FetchFeedTask().execute((Void) null);
 
-        //TODO nur zum testen
-        //subjectManager.addNews(new News("Supernatural", "link", "Ach ja… Sam und Dean Winchester, wer kennt die Beiden nicht? Zugegeben, die meisten unserer jüngeren Leser sollten die beiden tatsächlich nicht kennen, immerhin ist die Serie, in der die beiden eher ungleichen Brüder die Hauptrolle spielen, erst ab 16 freigegeben. Das ist wahrscheinlich auch besser so, denn Supernatural, so heißt die Serie, handelt von eben diesen Brüdern, die, seit ihre Mutter  von einem bösartigen Dämon getötet wurde, zusammen auf Dämonenjagd gehen, mit einem einzigen Ziel: Den Mörder ihrer Mutter zu finden und zu töten. Das allerdings gestaltet sich als schwierig, da ihr Vater, der die Beiden ausgebildet hat, spurlos verschwunden zu sein scheint.  Auf der Suche nach ihrem Vater und dem Dämon treffen sie auf einige „interessante“ Wesen, von Geistern bis zu Vampiren, die sie alle mehr oder weniger glamourös besiegen und damit nicht immer die Welt, aber zumindest einige amerikanische Kleinstädte vor dem Untergang retten.  Leider haben die beiden immer wieder mit Spannungen innerhalb ihrer kleinen Gruppe zu kämpfen, da Sam, der schon in seiner Jugend Probleme mit seinem Vater hatte, seinem Bruder immer wieder  vorwürft, zu loyal dem Vater gegenüber zu sein. In den späteren Staffeln wird die ganze Geschichte dann etwas größer und aufgebauschter, so schließt sich den beiden zum Beispiel ein Engel an, Dean verbringt 40 Jahre in der Hölle und sogar mit Gott knüpfen sie Kontakte.", getResources().getDrawable(R.drawable.supernatural)));
-
 
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -68,18 +65,22 @@ public class AnnanewsFragment extends Fragment {
 
     private class FetchFeedTask extends AsyncTask<Void, Void, Boolean> {
 
-        private String urlLink;
+        private String[] urlLinks = new String[1];
+
 
         @Override
         protected void onPreExecute() {
+            urlLinks[0] = "http://gym-anna.de/wordpress/?feed=rss2";
+            //urlLinks[1] = "url";
             mSwipeLayout.setRefreshing(true);
-            urlLink = "http://gym-anna.de/wordpress/?feed=rss2";
+            //urlLink = "http://gym-anna.de/wordpress/?feed=rss2";
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            if (TextUtils.isEmpty(urlLink))
-                return false;
+            for (String urlLink :
+                    urlLinks) {
+
 
             try {
                 if (!urlLink.startsWith("http://") && !urlLink.startsWith("https://"))
@@ -93,6 +94,9 @@ public class AnnanewsFragment extends Fragment {
                 Log.e(TAG, "Error", e);
             } catch (XmlPullParserException e) {
                 Log.e(TAG, "Error", e);
+            }
+            return false;
+
             }
             return false;
         }

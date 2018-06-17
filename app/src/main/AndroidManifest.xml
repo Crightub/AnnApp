@@ -3,8 +3,6 @@
     package="de.tk.annapp">
 
     <!--Permissions-->
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
 
